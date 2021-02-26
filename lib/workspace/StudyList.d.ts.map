@@ -1,1 +1,1 @@
-{"version":3,"file":"StudyList.d.ts","sourceRoot":"","sources":["../../src/lib/workspace/StudyList.tsx"],"names":[],"mappings":"AAOA,UAAU,KAAK;IACb,aAAa,EAAE,MAAM,CAAC;CACvB;AACD,wBAAgB,SAAS,CAAC,KAAK,EAAE,KAAK,eA0CrC"}
+{"version":3,"file":"StudyList.d.ts","sourceRoot":"","sources":["../../src/lib/workspace/StudyList.tsx"],"names":[],"mappings":"AAQA,UAAU,KAAK;IACb,aAAa,EAAE,MAAM,CAAC;CACvB;AACD,wBAAgB,SAAS,CAAC,KAAK,EAAE,KAAK,eA2CrC"}
