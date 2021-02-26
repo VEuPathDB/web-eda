@@ -1,0 +1,1 @@
+{"version":3,"file":"EDAWorkspace.d.ts","sourceRoot":"","sources":["../../src/lib/workspace/EDAWorkspace.tsx"],"names":[],"mappings":"AAQA,UAAU,KAAK;IACb,OAAO,EAAE,MAAM,CAAC;IAChB,SAAS,EAAE,MAAM,CAAC;IAClB,aAAa,EAAE,MAAM,CAAC;CACvB;AACD,wBAAgB,YAAY,CAAC,KAAK,EAAE,KAAK,eAiCxC"}

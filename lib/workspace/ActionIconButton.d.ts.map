@@ -1,0 +1,1 @@
+{"version":3,"file":"ActionIconButton.d.ts","sourceRoot":"","sources":["../../src/lib/workspace/ActionIconButton.tsx"],"names":[],"mappings":"AAIA,UAAU,KAAK;IACb,aAAa,EAAE,MAAM,CAAC;IACtB,SAAS,EAAE,MAAM,CAAC;IAClB,MAAM,EAAE,MAAM,IAAI,CAAC;CACpB;AAED,wBAAgB,gBAAgB,CAAC,KAAK,EAAE,KAAK,eAS5C"}
