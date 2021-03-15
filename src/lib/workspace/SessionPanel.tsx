@@ -9,6 +9,7 @@ import {
   RouteComponentProps,
   useRouteMatch,
 } from 'react-router';
+import { Link } from 'react-router-dom';
 import { SubsettingRoute } from './Subsetting';
 import { DefaultVariableRedirect } from './DefaultVariableRedirect';
 
@@ -71,7 +72,19 @@ export function SessionPanel(props: Props) {
       />
       <Route
         path={`${routeBase}/visualizations`}
-        component={() => <h3>TODO</h3>}
+        component={() => (
+          <div>
+            <h3>Viz picker TO DO</h3>
+            So here's a hardcoded list for now
+            <ul>
+              <li>
+                <Link to={`${routeBase}/vizualizations/hello-world`}>
+                  Hello World Histogram
+                </Link>
+              </li>
+            </ul>
+          </div>
+        )}
       />
     </div>
   );
