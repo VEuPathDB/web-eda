@@ -72,19 +72,35 @@ export function SessionPanel(props: Props) {
       />
       <Route
         path={`${routeBase}/visualizations`}
+        exact
         component={() => (
           <div>
             <h3>Viz picker TO DO</h3>
             So here's a hardcoded list for now
             <ul>
               <li>
-                <Link to={`${routeBase}/vizualizations/hello-world`}>
+                <Link to={`${routeBase}/visualizations/hello-world`}>
                   Hello World Histogram
                 </Link>
               </li>
             </ul>
           </div>
         )}
+      />
+      <Route
+        path={`${routeBase}/visualizations/:visualizationName`}
+        component={(
+          props: RouteComponentProps<{ visualizationName: string }>
+        ) => {
+          switch (props.match.params.visualizationName) {
+            case 'hello-world': {
+              return <Histogram />; // from visualizations/Histogram TBD
+            }
+            default: {
+              return <h3>Visualization not known or implemented</h3>;
+            }
+          }
+        }}
       />
     </div>
   );
