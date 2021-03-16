@@ -12,6 +12,7 @@ import {
 import { Link } from 'react-router-dom';
 import { SubsettingRoute } from './Subsetting';
 import { DefaultVariableRedirect } from './DefaultVariableRedirect';
+import VisualizationRoute from './VisualizationRoute';
 
 interface Props {
   sessionId: string;
@@ -91,16 +92,12 @@ export function SessionPanel(props: Props) {
         path={`${routeBase}/visualizations/:visualizationName`}
         component={(
           props: RouteComponentProps<{ visualizationName: string }>
-        ) => {
-          switch (props.match.params.visualizationName) {
-            case 'hello-world': {
-              return <Histogram />; // from visualizations/Histogram TBD
-            }
-            default: {
-              return <h3>Visualization not known or implemented</h3>;
-            }
-          }
-        }}
+        ) => (
+          <VisualizationRoute
+            sessionId={session.id}
+            visualizationName={props.match.params.visualizationName}
+          />
+        )}
       />
     </div>
   );
