@@ -78,6 +78,17 @@ export default function HistogramViz(props: Props) {
   return (
     <div style={{ position: 'relative' }}>
       <h2>Hello World</h2>
+      <div
+        className="VariableTreeClass"
+        style={{ width: '25%', float: 'left' }}
+      >
+        <VariableTree
+          entities={entities}
+          setFieldTree={setFieldTree}
+          onActiveFieldChange={onActiveFieldChange}
+          activeField={activeField}
+        />
+      </div>
       {data.pending && (
         <Loading style={{ position: 'absolute', top: '-1.5em' }} radius={2} />
       )}
