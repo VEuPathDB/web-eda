@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   StudyVariable,
   useSession,
@@ -12,6 +12,21 @@ import { startCase } from 'lodash';
 import { cx } from './Utils';
 import { usePromise } from '../core/hooks/promise';
 import { useHistory } from 'react-router';
+
+/*
+ * DKDK variable tree related ones
+ */
+//DKDK make css
+import './VariableTreeCSS.css';
+//DKDK variable tree component
+import { VariableTree, activeFieldProp } from './VariableTree';
+//DKDK utility functions to find field based on term (link)
+import {
+  findDefaultTreeVariable,
+  findDefaultActiveField,
+  returnFound,
+  searchParent,
+} from './UtilsFuncs';
 
 const variableKeys: (keyof StudyVariable)[] = [
   // 'displayName',
@@ -94,6 +109,54 @@ export function Variables(props: Props) {
     }, [session, subsettingClient, studyMetadata.id, entity.id])
   );
 
+  //DKDK make useStates for several parameters/props
+  const [activeEntity, setActiveEntity] = useState(entities[0]);
+  //DKDK find initial tree variable
+  const defaultActiveVariable = findDefaultTreeVariable(entities);
+  const defaultActiveField = findDefaultActiveField(defaultActiveVariable);
+  //DKDK make tree link work
+  const [activeVariable, setActiveVariable] = useState(defaultActiveVariable);
+
+  // // console.log('entities[0] = ', entities[0])
+  // console.log('defaultActiveVariable =', defaultActiveVariable);
+  // console.log("defaultActiveField = ", defaultActiveField);
+
+  // const [activeField, setActiveField] = useState<activeFieldProp | null>(null);
+  const [activeField, setActiveField] = useState<activeFieldProp | null>(
+    defaultActiveField
+  );
+  //DKDK get fieldTree from VariableTree component for changing distribution
+  const [fieldTree, setFieldTree] = useState({});
+  // const [activeVariable, setActiveVariable] = useState('');
+
+  //DKDK handling activeField - activeField is somehow not working yet
+  const onActiveFieldChange = (term: any) => {
+    // console.log('onActiveFieldChange data =', term)
+
+    //DKDK find entity for data and assign it to activeEntity - note that resultParent returns array
+    let resultParent = searchParent(term, entities);
+    // console.log('result = ', resultParent)
+    setActiveEntity(resultParent[0]);
+
+    //DKDK find and set variable from fieldTree's term (entities' id)
+    let resultVariable = returnFound(entities, { id: term });
+    if (Array.isArray(resultVariable)) {
+      setActiveVariable(resultVariable[0]);
+    } else {
+      setActiveVariable(resultVariable);
+    }
+
+    //DKDK find and set activeField from fieldTree's term
+    let resultActiveField = returnFound(fieldTree, { term: term });
+    if (Array.isArray(resultActiveField)) {
+      setActiveField(resultActiveField[0]);
+    } else {
+      setActiveField(resultActiveField);
+    }
+
+    // console.log('new activeField = ', activeField)
+  };
+
   if (session == null) return null;
 
   return (
@@ -166,13 +229,27 @@ export function Variables(props: Props) {
           ))}
         </dl>
         <h4>Distribution</h4>
+        {/* DKDK add variableTree here */}
+        <div
+          className="VariableTreeClass"
+          style={{ width: '25%', float: 'left' }}
+        >
+          <VariableTree
+            entities={entities}
+            setFieldTree={setFieldTree}
+            onActiveFieldChange={onActiveFieldChange}
+            activeField={activeField}
+          />
+        </div>
+
         <div className="filter-param">
           <Distribution
             filters={session.filters}
             onFiltersChange={setFilters}
             studyMetadata={studyMetadata}
-            entity={entity}
-            variable={variable}
+            //DKDK make link (for clicking variable) work
+            entity={activeEntity}
+            variable={activeVariable}
           />
         </div>
       </div>
