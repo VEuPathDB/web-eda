@@ -19,15 +19,8 @@ import { VariableLink } from '../core/components/VariableLink';
 //DKDK make css
 import './VariableTreeCSS.css';
 //DKDK variable tree component
-import { VariableTree, activeFieldProp } from './VariableTree';
+import { VariableTree } from './VariableTree';
 //DKDK utility functions to find field based on term (link)
-import {
-  findDefaultTreeVariable,
-  findDefaultActiveField,
-  returnFound,
-  searchParent,
-} from './UtilsFuncs';
-
 interface RouteProps {
   sessionId: string;
   entityId?: string;
