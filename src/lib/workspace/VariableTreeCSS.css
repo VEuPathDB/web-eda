@@ -1,0 +1,19 @@
+.wdk-Link.wdk-AttributeFilterFieldParent {
+  background-color: lightblue;
+  opacity: 1;
+}
+
+.EDAWorkspace-Variables .filter-param .field-detail {
+  width: 95%;
+  margin-left: 5%;
+  margin-right: 0;
+}
+
+.EDAWorkspace-Variables .wdk-AttributeFilterFieldItem__active {
+  background: #eaeaea;
+}
+
+/* DKDK for new variable layout - className has changed */
+.EDAWorkspace-Subsetting .wdk-AttributeFilterFieldItem__active {
+  background: #eaeaea;
+}
