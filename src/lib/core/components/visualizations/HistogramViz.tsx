@@ -49,15 +49,30 @@ export default function HistogramViz(props: Props) {
     [setEntity, setVariable]
   );
 
+  const [overlayEntity, setOverlayEntity] = useState<StudyEntity>();
+  const [overlayVariable, setOverlayVariable] = useState<StudyVariable>();
+
+  const onOverlayVariableChange = useCallback(
+    (newEntity: StudyEntity, newVariable: StudyVariable) => {
+      if (newEntity !== null) {
+        setOverlayEntity(newEntity);
+        if (newVariable !== null) {
+          setOverlayVariable(newVariable);
+        }
+      }
+    },
+    [setOverlayVariable]
+  );
+
   const getData = useCallback(
     async (dataParams?: GetDataParams): Promise<HistogramData> => {
       if (!variable || !entity)
-        return Promise.reject(new Error('Please choose a variable'));
+        return Promise.reject(new Error('Please choose a main variable'));
 
       if (variable && !isHistogramVariable(variable))
         return Promise.reject(
           new Error(
-            `Please choose another variable. '${variable.displayName}' is not suitable for histograms`
+            `Please choose another main variable. '${variable.displayName}' is not suitable for histograms`
           )
         );
 
@@ -66,6 +81,8 @@ export default function HistogramViz(props: Props) {
         sessionState.session?.filters ?? [],
         entity,
         variable as HistogramVariable,
+        overlayEntity,
+        overlayVariable,
         dataParams
       );
       const response =
@@ -78,18 +95,34 @@ export default function HistogramViz(props: Props) {
             );
       return histogramResponseToData(await response);
     },
-    [studyId, entity, variable, dataClient, sessionState.session?.filters]
+    [
+      studyId,
+      entity,
+      variable,
+      dataClient,
+      sessionState.session?.filters,
+      overlayEntity,
+      overlayVariable,
+    ]
   );
 
   const data = usePromise(getData);
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
       <div>
+        <h1>Histogram</h1>
         <h2>Choose the main variable</h2>
         <div style={{ height: 200, overflow: 'auto' }}>
           <VariableTree
             entities={entities}
             onVariableChange={onVariableChange}
+          />
+        </div>
+        <h2>Choose the overlay variable</h2>
+        <div style={{ height: 200, overflow: 'auto' }}>
+          <VariableTree
+            entities={entities}
+            onVariableChange={onOverlayVariableChange}
           />
         </div>
       </div>
@@ -181,6 +214,8 @@ function getRequestParams(
   filters: Filter[],
   entity: StudyEntity,
   variable: HistogramVariable,
+  overlayEntity?: StudyEntity,
+  overlayVariable?: StudyVariable, // TO DO: ?CategoricalVariable?
   dataParams?: GetDataParams
 ): NumericHistogramRequestParams | DateHistogramRequestParams {
   const binOption = dataParams?.binWidth
@@ -203,6 +238,13 @@ function getRequestParams(
         entityId: entity.id,
         variableId: variable.id,
       },
+      overlayVariable:
+        overlayEntity && overlayVariable
+          ? {
+              entityId: overlayEntity.id,
+              variableId: overlayVariable.id,
+            }
+          : undefined,
       ...binOption,
     },
   } as NumericHistogramRequestParams | DateHistogramRequestParams;
