@@ -19,6 +19,8 @@ import {
 import { PromiseType } from '../../types/utility';
 import { Filter } from '../../types/filter';
 import { HistogramVariable } from '../filter/types';
+import { isHistogramVariable } from '../filter/guards';
+import { VariableTree } from '../../../workspace/VariableTree';
 
 interface Props {
   studyMetadata: StudyMetadata;
@@ -31,34 +33,39 @@ export default function HistogramViz(props: Props) {
   const { id: studyId } = studyMetadata;
   const dataClient: DataClient = useDataClient();
 
+  // Entity and variable for main histogram x-axis variable
   const [entity, setEntity] = useState<StudyEntity>();
-  const [variable, setVariable] = useState<HistogramVariable>();
+  const [variable, setVariable] = useState<StudyVariable>();
 
-  useEffect(() => {
-    setEntity(entities[0]);
-  }, [entities, setEntity]);
-
-  useEffect(() => {
-    if (entity !== undefined) {
-      setVariable(
-        entity.variables.filter(
-          (variable: StudyVariable) =>
-            variable.type === 'number' && variable.dataShape === 'continuous'
-        )[0] as HistogramVariable
-      );
-    }
-  }, [entity, setVariable]);
+  const onVariableChange = useCallback(
+    (newEntity: StudyEntity, newVariable: StudyVariable) => {
+      if (newEntity !== null) {
+        setEntity(newEntity);
+        if (newVariable !== null) {
+          setVariable(newVariable);
+        }
+      }
+    },
+    [setEntity, setVariable]
+  );
 
   const getData = useCallback(
     async (dataParams?: GetDataParams): Promise<HistogramData> => {
       if (!variable || !entity)
-        return Promise.reject(new Error('no entity and variable chosen yet'));
+        return Promise.reject(new Error('Please choose a variable'));
+
+      if (variable && !isHistogramVariable(variable))
+        return Promise.reject(
+          new Error(
+            `Please choose another variable. '${variable.displayName}' is not suitable for histograms`
+          )
+        );
 
       const params = getRequestParams(
         studyId,
         sessionState.session?.filters ?? [],
         entity,
-        variable,
+        variable as HistogramVariable,
         dataParams
       );
       const response =
@@ -76,18 +83,15 @@ export default function HistogramViz(props: Props) {
 
   const data = usePromise(getData);
   return (
-    <div style={{ position: 'relative' }}>
-      <h2>Hello World</h2>
-      <div
-        className="VariableTreeClass"
-        style={{ width: '25%', float: 'left' }}
-      >
-        <VariableTree
-          entities={entities}
-          setFieldTree={setFieldTree}
-          onActiveFieldChange={onActiveFieldChange}
-          activeField={activeField}
-        />
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
+      <div>
+        <h2>Choose the main variable</h2>
+        <div style={{ height: 200, overflow: 'auto' }}>
+          <VariableTree
+            entities={entities}
+            onVariableChange={onVariableChange}
+          />
+        </div>
       </div>
       {data.pending && (
         <Loading style={{ position: 'absolute', top: '-1.5em' }} radius={2} />
