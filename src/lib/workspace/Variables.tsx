@@ -233,14 +233,7 @@ export function Variables(props: Props) {
         <div
           className="VariableTreeClass"
           style={{ width: '25%', float: 'left' }}
-        >
-          <VariableTree
-            entities={entities}
-            setFieldTree={setFieldTree}
-            onActiveFieldChange={onActiveFieldChange}
-            activeField={activeField}
-          />
-        </div>
+        ></div>
 
         <div className="filter-param">
           <Distribution

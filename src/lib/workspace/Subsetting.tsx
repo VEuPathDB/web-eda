@@ -6,7 +6,7 @@ import {
   useStudyMetadata,
 } from '../core';
 import { preorder } from '@veupathdb/wdk-client/lib/Utils/TreeUtils';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { cx } from './Utils';
 import { Variable } from './Variable';
@@ -19,15 +19,8 @@ import { VariableLink } from '../core/components/VariableLink';
 //DKDK make css
 import './VariableTreeCSS.css';
 //DKDK variable tree component
-import { VariableTree, activeFieldProp } from './VariableTree';
+import { VariableTree } from './VariableTree';
 //DKDK utility functions to find field based on term (link)
-import {
-  findDefaultTreeVariable,
-  findDefaultActiveField,
-  returnFound,
-  searchParent,
-} from './UtilsFuncs';
-
 interface RouteProps {
   sessionId: string;
   entityId?: string;
@@ -89,55 +82,20 @@ export function Subsetting(props: Props) {
     filteredCounts.value && filteredCounts.value[entity.id];
 
   //DKDK make useStates for several parameters/props
-  const [activeEntity, setActiveEntity] = useState(entities[0]);
-  //DKDK find initial tree variable
-  const defaultActiveVariable = findDefaultTreeVariable(entities);
-  const defaultActiveField = findDefaultActiveField(defaultActiveVariable);
-  //DKDK make tree link work
-  const [activeVariable, setActiveVariable] = useState(defaultActiveVariable);
+  const [activeEntity, setActiveEntity] = useState<StudyEntity>(entity);
+  const [activeVariable, setActiveVariable] = useState<StudyVariable>(variable);
 
-  // // console.log('entities[0] = ', entities[0])
-  // console.log('defaultActiveVariable =', defaultActiveVariable);
-  // console.log("defaultActiveField = ", defaultActiveField);
-
-  // const [activeField, setActiveField] = useState<activeFieldProp | null>(null);
-  const [activeField, setActiveField] = useState<activeFieldProp | null>(
-    defaultActiveField
+  const onVariableChange = useCallback(
+    (newEntity: StudyEntity, newVariable: StudyVariable) => {
+      if (newEntity !== null) {
+        setActiveEntity(newEntity);
+        if (newVariable !== null) {
+          setActiveVariable(newVariable);
+        }
+      }
+    },
+    [setActiveEntity, setActiveVariable]
   );
-  //DKDK get fieldTree from VariableTree component for changing distribution
-  const [fieldTree, setFieldTree] = useState({});
-  // const [activeVariable, setActiveVariable] = useState('');
-
-  //DKDK handling activeField - activeField is somehow not working yet
-  const onActiveFieldChange = (term: any) => {
-    // console.log('onActiveFieldChange data =', term)
-
-    //DKDK find entity for data and assign it to activeEntity - note that resultParent returns array
-    let resultParent = searchParent(term, entities);
-    // console.log('result = ', resultParent)
-    setActiveEntity(resultParent[0]);
-
-    //DKDK find and set variable from fieldTree's term (entities' id)
-    let resultVariable = returnFound(entities, { id: term });
-    // console.log('resultVariable =', resultVariable)
-    if (Array.isArray(resultVariable)) {
-      setActiveVariable(resultVariable[0]);
-    } else {
-      setActiveVariable(resultVariable);
-    }
-
-    //DKDK find and set activeField from fieldTree's term
-    let resultActiveField = returnFound(fieldTree, { term: term });
-    // console.log('resultActiveField =', resultActiveField)
-    if (Array.isArray(resultActiveField)) {
-      setActiveField(resultActiveField[1]);
-    } else {
-      setActiveField(resultActiveField);
-    }
-
-    // console.log('new activeVariable =', activeVariable)
-    // console.log('new activeField = ', activeField)
-  };
 
   return (
     <div className={cx('-Subsetting')}>
@@ -206,12 +164,7 @@ export function Subsetting(props: Props) {
         className="VariableTreeClass"
         style={{ width: '25%', float: 'left' }}
       >
-        <VariableTree
-          entities={entities}
-          setFieldTree={setFieldTree}
-          onActiveFieldChange={onActiveFieldChange}
-          activeField={activeField}
-        />
+        <VariableTree entities={entities} onVariableChange={onVariableChange} />
       </div>
 
       <div>
