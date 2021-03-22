@@ -13,9 +13,9 @@ export const HistogramConfig = t.intersection([
     type: t.literal('histogram'),
   }),
   t.partial({
-    independentVariable: StudyVariable,
+    independentVariable: StudyVariable, // TO DO: make this numeric/date continuous?
     independentVariableEntity: StudyEntity,
-    overlayVariable: StudyVariable,
+    overlayVariable: StudyVariable, // TO DO: make this categorical
     overlayVariableEntity: StudyEntity,
   }),
 ]);

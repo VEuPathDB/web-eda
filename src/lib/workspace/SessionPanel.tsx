@@ -76,11 +76,11 @@ export function SessionPanel(props: Props) {
         exact
         component={() => (
           <div>
-            <h3>Viz picker TO DO</h3>
+            <h3>Viz picker/adder TO DO</h3>
             So here's a hardcoded list for now
             <ul>
               <li>
-                <Link to={`${routeBase}/visualizations/hello-world`}>
+                <Link to={`${routeBase}/visualizations/1`}>
                   Hello World Histogram
                 </Link>
               </li>
@@ -89,13 +89,13 @@ export function SessionPanel(props: Props) {
         )}
       />
       <Route
-        path={`${routeBase}/visualizations/:visualizationName`}
+        path={`${routeBase}/visualizations/:visualizationId`}
         component={(
-          props: RouteComponentProps<{ visualizationName: string }>
+          props: RouteComponentProps<{ visualizationId: string }>
         ) => (
           <VisualizationRoute
             sessionId={session.id}
-            visualizationName={props.match.params.visualizationName}
+            visualizationId={props.match.params.visualizationId}
           />
         )}
       />

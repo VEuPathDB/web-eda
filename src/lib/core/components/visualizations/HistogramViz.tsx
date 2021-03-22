@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState } from 'react';
 import { SessionState, StudyEntity, StudyMetadata } from '../../../core';
 import Histogram, {
   HistogramProps,
@@ -21,48 +21,63 @@ import { Filter } from '../../types/filter';
 import { HistogramVariable } from '../filter/types';
 import { isHistogramVariable } from '../filter/guards';
 import { VariableTree } from '../../../workspace/VariableTree';
+import { HistogramConfig } from '../../types/visualization';
 
 interface Props {
   studyMetadata: StudyMetadata;
   sessionState: SessionState;
+  vizState: HistogramConfig;
+  onVizStateChange: (newState: HistogramConfig) => void;
   entities: StudyEntity[];
 }
 
 export default function HistogramViz(props: Props) {
-  const { entities, sessionState, studyMetadata } = props;
+  const {
+    entities,
+    sessionState,
+    vizState,
+    onVizStateChange,
+    studyMetadata,
+  } = props;
   const { id: studyId } = studyMetadata;
   const dataClient: DataClient = useDataClient();
 
   // Entity and variable for main histogram x-axis variable
-  const [entity, setEntity] = useState<StudyEntity>();
-  const [variable, setVariable] = useState<StudyVariable>();
+  const [variable, entity] = [
+    vizState.independentVariable,
+    vizState.independentVariableEntity,
+  ];
 
-  const onVariableChange = useCallback(
-    (newEntity: StudyEntity, newVariable: StudyVariable) => {
-      if (newEntity !== null) {
-        setEntity(newEntity);
-        if (newVariable !== null) {
-          setVariable(newVariable);
-        }
-      }
-    },
-    [setEntity, setVariable]
-  );
+  const onVariableChange = (
+    newEntity: StudyEntity,
+    newVariable: StudyVariable
+  ) => {
+    if (newEntity && newVariable) {
+      onVizStateChange({
+        ...vizState,
+        independentVariable: newVariable,
+        independentVariableEntity: newEntity,
+      });
+    }
+  };
 
-  const [overlayEntity, setOverlayEntity] = useState<StudyEntity>();
-  const [overlayVariable, setOverlayVariable] = useState<StudyVariable>();
-
-  const onOverlayVariableChange = useCallback(
-    (newEntity: StudyEntity, newVariable: StudyVariable) => {
-      if (newEntity !== null) {
-        setOverlayEntity(newEntity);
-        if (newVariable !== null) {
-          setOverlayVariable(newVariable);
-        }
-      }
-    },
-    [setOverlayVariable]
-  );
+  // Entity and variable for the first 'overlay' stratification
+  const [overlayVariable, overlayEntity] = [
+    vizState.overlayVariable,
+    vizState.overlayVariableEntity,
+  ];
+  const onOverlayVariableChange = (
+    newEntity: StudyEntity,
+    newVariable: StudyVariable
+  ) => {
+    if (newEntity && newVariable) {
+      onVizStateChange({
+        ...vizState,
+        overlayVariable: newVariable,
+        overlayVariableEntity: newEntity,
+      });
+    }
+  };
 
   const getData = useCallback(
     async (dataParams?: GetDataParams): Promise<HistogramData> => {
