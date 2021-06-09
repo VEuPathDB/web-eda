@@ -26,6 +26,7 @@ import { usePromise } from '../../../hooks/promise';
 import { useDataClient, useStudyMetadata } from '../../../hooks/workspace';
 import { Filter } from '../../../types/filter';
 import { Variable } from '../../../types/variable';
+import { DataElementConstraint } from '../../../types/visualization';
 import { findEntityAndVariable } from '../../../utils/study-metadata';
 import { isHistogramVariable } from '../../filter/guards';
 import { HistogramVariable } from '../../filter/types';
@@ -45,13 +46,7 @@ function GridComponent(props: VisualizationProps) {
 }
 
 function SelectorComponent() {
-  return (
-    <img
-      alt="Histogram"
-      style={{ height: '100%', width: '100%' }}
-      src={histogram}
-    />
-  );
+  return <img style={{ height: '100%', width: '100%' }} src={histogram} />;
 }
 
 function FullscreenComponent(props: VisualizationProps) {
@@ -198,15 +193,15 @@ function HistogramViz(props: Props) {
       const response = dataClient.getHistogram(computation.type, params);
       return histogramResponseToData(await response, xAxisVariable.type);
     }, [
+      studyId,
+      filters,
+      dataClient,
       vizConfig.xAxisVariable,
       vizConfig.enableOverlay,
       vizConfig.overlayVariable,
       vizConfig.binWidth,
       vizConfig.binWidthTimeUnit,
-      xAxisVariable,
-      studyId,
-      filters,
-      dataClient,
+      entities,
       computation.type,
     ])
   );
@@ -330,8 +325,8 @@ function HistogramPlotWithControls({
   const errorManagement = useMemo((): ErrorManagement => {
     return {
       errors: [],
-      addError: (_: Error) => {},
-      removeError: (_: Error) => {},
+      addError: (error: Error) => {},
+      removeError: (error: Error) => {},
       clearAllErrors: () => {},
     };
   }, []);

@@ -5,6 +5,7 @@ import { useRouteMatch } from 'react-router';
 import {
   DataClient,
   EDAWorkspaceContainer,
+  StudyEntity,
   StudyMetadata,
   SubsettingClient,
 } from '../core';

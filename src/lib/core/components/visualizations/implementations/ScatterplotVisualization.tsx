@@ -55,13 +55,7 @@ function SelectorComponent({ name }: SelectorProps) {
   const src =
     name === 'lineplot' ? line : name === 'densityplot' ? density : scatter;
 
-  return (
-    <img
-      alt="Scatter plot"
-      style={{ height: '100%', width: '100%' }}
-      src={src}
-    />
-  );
+  return <img style={{ height: '100%', width: '100%' }} src={src} />;
 }
 
 function FullscreenComponent(props: VisualizationProps) {
@@ -158,7 +152,7 @@ function ScatterplotViz(props: Props) {
         facetVariable,
       });
     },
-    [updateVizConfig]
+    [updateVizConfig, vizConfig]
   );
 
   const findVariable = useCallback(
@@ -178,7 +172,7 @@ function ScatterplotViz(props: Props) {
         valueSpecConfig: value,
       });
     },
-    [updateVizConfig]
+    [updateVizConfig, vizConfig]
   );
 
   const data = usePromise(
@@ -360,8 +354,8 @@ function ScatterplotViz(props: Props) {
               onValueSpecChange={onValueSpecChange}
               errorManagement={{
                 errors: [],
-                addError: (_: Error) => {},
-                removeError: (_: Error) => {},
+                addError: (error: Error) => {},
+                removeError: (error: Error) => {},
                 clearAllErrors: () => {},
               }}
               // new radio button
@@ -397,8 +391,8 @@ function ScatterplotWithControls({
   const errorManagement = useMemo((): ErrorManagement => {
     return {
       errors: [],
-      addError: (_: Error) => {},
-      removeError: (_: Error) => {},
+      addError: (error: Error) => {},
+      removeError: (error: Error) => {},
       clearAllErrors: () => {},
     };
   }, []);
@@ -660,7 +654,7 @@ function processInputData<T extends number | Date>(
 
       // check if this Y array consists of numbers & add type assertion
       if (isArrayOfNumbers(ySeriesValue)) {
-        if (index === 0) {
+        if (index == 0) {
           yMin = Math.min(...ySeriesValue);
           yMax = Math.max(...ySeriesValue);
         } else {

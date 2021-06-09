@@ -134,6 +134,8 @@ export function TableFilter({
       entity.id,
       variable.id,
       analysisState.analysis?.filters,
+      totalEntityCount,
+      filteredEntityCount,
       dataClient,
       studyMetadata.id,
     ])

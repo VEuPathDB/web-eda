@@ -16,6 +16,7 @@ import { useDataClient, useStudyMetadata } from '../../../hooks/workspace';
 import { Filter } from '../../../types/filter';
 import { PromiseType } from '../../../types/utility';
 import { Variable } from '../../../types/variable';
+import { isMosaicVariable, isTwoByTwoVariable } from '../../filter/guards';
 import { InputVariables } from '../InputVariables';
 import { VisualizationProps, VisualizationType } from '../VisualizationTypes';
 import contingency from './selectorIcons/contingency.svg';
@@ -61,13 +62,7 @@ function ContTableGridComponent(props: VisualizationProps) {
 }
 
 function ContTableSelectorComponent() {
-  return (
-    <img
-      alt="RxC contingency table"
-      style={{ height: '100%', width: '100%' }}
-      src={mosaic}
-    />
-  );
+  return <img style={{ height: '100%', width: '100%' }} src={mosaic} />;
 }
 
 function ContTableFullscreenComponent(props: VisualizationProps) {
@@ -79,13 +74,7 @@ function TwoByTwoGridComponent(props: VisualizationProps) {
 }
 
 function TwoByTwoSelectorComponent() {
-  return (
-    <img
-      alt="2x2 contingency table"
-      style={{ height: '100%', width: '100%' }}
-      src={contingency}
-    />
-  );
+  return <img style={{ height: '100%', width: '100%' }} src={contingency} />;
 }
 
 function TwoByTwoFullscreenComponent(props: VisualizationProps) {

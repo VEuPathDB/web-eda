@@ -35,9 +35,7 @@ function GridComponent(props: VisualizationProps) {
 }
 
 function SelectorComponent() {
-  return (
-    <img alt="Bar plot" style={{ height: '100%', width: '100%' }} src={bar} />
-  );
+  return <img style={{ height: '100%', width: '100%' }} src={bar} />;
 }
 
 function FullscreenComponent(props: VisualizationProps) {
@@ -125,7 +123,7 @@ function BarplotViz(props: Props) {
         facetVariable,
       });
     },
-    [updateVizConfig]
+    [updateVizConfig, vizConfig]
   );
 
   const findVariable = useCallback(
@@ -141,6 +139,7 @@ function BarplotViz(props: Props) {
   const data = usePromise(
     useCallback(async (): Promise<any> => {
       const xAxisVariable = findVariable(vizConfig.xAxisVariable);
+      const overlayVariable = findVariable(vizConfig.overlayVariable);
 
       // check variable inputs: this is necessary to prevent from data post
       if (vizConfig.xAxisVariable == null || xAxisVariable == null)
@@ -169,6 +168,7 @@ function BarplotViz(props: Props) {
       vizConfig,
       findVariable,
       computation.type,
+      visualization.type,
     ])
   );
 
@@ -301,15 +301,13 @@ function BarplotWithControls({
   data,
   vizType,
   ...BarplotControlsProps
-}: // eslint-disable-next-line @typescript-eslint/no-unused-vars
-BarplotWithControlsProps) {
+}: BarplotWithControlsProps) {
   // TODO Use UIState
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const errorManagement = useMemo((): ErrorManagement => {
     return {
       errors: [],
-      addError: (_: Error) => {},
-      removeError: (_: Error) => {},
+      addError: (error: Error) => {},
+      removeError: (error: Error) => {},
       clearAllErrors: () => {},
     };
   }, []);
@@ -352,7 +350,6 @@ export function barplotResponseToData(
 }
 
 // add an extended type
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type getRequestParamsProps = BarplotRequestParams & { vizType?: string };
 
 function getRequestParams(

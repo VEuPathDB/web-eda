@@ -10,12 +10,18 @@ interface Props {
   analysis: Analysis;
   setAnalysisName: (name: string) => void;
   copyAnalysis: () => Promise<{ id: string }>;
-  saveAnalysis: () => Promise<void>;
-  deleteAnalysis: () => Promise<void>;
+  saveAnalysis: () => void;
+  deleteAnalysis: () => void;
 }
 
 export function AnalysisSummary(props: Props) {
-  const { analysis, setAnalysisName, copyAnalysis, deleteAnalysis } = props;
+  const {
+    analysis,
+    setAnalysisName,
+    copyAnalysis,
+    saveAnalysis,
+    deleteAnalysis,
+  } = props;
   const history = useHistory();
   const { url } = useRouteMatch();
   const handleCopy = async () => {
