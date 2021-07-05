@@ -460,10 +460,10 @@ function HistogramPlotWithControls({
         displayLibraryControls={displayLibraryControls}
         opacity={opacity}
         orientation={histogramProps.orientation}
-        binWidth={data?.binWidth}
+        binWidth={data?.binWidth ?? 1}
         onBinWidthChange={handleBinWidthChange}
-        binWidthRange={data?.binWidthRange}
-        binWidthStep={data?.binWidthStep}
+        binWidthRange={data?.binWidthRange ?? { min: 1, max: 2 }}
+        binWidthStep={data?.binWidthStep ?? 1}
         errorManagement={errorManagement}
         independentAxisRange={uiState.independentAxisRange}
         onIndependentAxisRangeChange={handleIndependentAxisRangeChange}
