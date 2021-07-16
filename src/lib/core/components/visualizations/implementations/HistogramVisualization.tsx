@@ -311,6 +311,7 @@ function HistogramViz(props: Props) {
             findEntityAndVariable(entities, vizConfig.overlayVariable)?.variable
               .displayName
           }
+          adjustBinEndToEndOfDay
         />
       ) : (
         // thumbnail/grid view
@@ -335,6 +336,7 @@ function HistogramViz(props: Props) {
           dependentAxisLogScale={vizConfig.dependentAxisLogScale}
           interactive={false}
           showSpinner={data.pending}
+          adjustBinEndToEndOfDay
         />
       )}
     </div>
