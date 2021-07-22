@@ -426,6 +426,23 @@ function MosaicViz(props: Props) {
 
 type MosaicPlotWithControlsProps = MosaicProps;
 
+// Rudimentary function to break a string on spaces
+// attempting to get no more than `maxChars` characters in a line
+// Note that this uses `</br>` for breaks instead of `\n`
+const breakString = (str: string, maxChars: number): string => {
+  if (str.length > maxChars && str.includes(' ')) {
+    let index = str.lastIndexOf(' ', maxChars);
+    if (index === -1) index = str.indexOf(' ', maxChars + 1);
+    return (
+      str.substr(0, index) +
+      '</br>' +
+      breakString(str.substr(index + 1), maxChars)
+    );
+  } else {
+    return str;
+  }
+};
+
 function MosaicPlotWithControls({
   data,
   ...mosaicProps
@@ -441,11 +458,19 @@ function MosaicPlotWithControls({
   //   };
   // }, []);
 
+  const newData = data ? { ...data } : undefined;
+
+  if (newData) {
+    newData.dependentLabels = newData.dependentLabels.map(
+      (label) => '</br>' + breakString(label, 25)
+    );
+  }
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <Mosaic
         {...mosaicProps}
-        data={data}
+        data={newData}
         displayLibraryControls={displayLibraryControls}
       />
       {/* <MosaicControls
