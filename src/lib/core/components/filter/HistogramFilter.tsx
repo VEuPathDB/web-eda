@@ -539,6 +539,8 @@ function HistogramPlotWithControls({
           orientation: 'horizontal',
           verticalPaddingAdjustment: 20,
         }}
+        //DKDK pass defaultIndependentAxisRange
+        defaultIndependentAxisRange={defaultUIState.independentAxisRange}
       />
 
       <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -595,6 +597,9 @@ function HistogramPlotWithControls({
             range={uiState.independentAxisRange}
             onRangeChange={handleIndependentAxisRangeChange}
             valueType={data?.valueType}
+            //DKDK pass defaultIndependentAxisRange
+            defaultIndependentAxisRange={defaultUIState.independentAxisRange}
+            //DKDK currently Y-axis range does not use AxisRangeControl
           />
 
           <Button
