@@ -17,6 +17,7 @@ import {
 interface InputSpec {
   name: string;
   label: string;
+  wrapper?: React.FunctionComponent;
 }
 
 export interface Props {
@@ -180,22 +181,27 @@ export function InputVariables(props: Props) {
   return (
     <div>
       <div className={classes.inputs}>
-        {inputs.map((input, index) => (
-          <div key={input.name} className={classes.input}>
-            <div className={classes.label}>{input.label}</div>
-            <VariableTreeDropdown
-              rootEntity={entities[0]}
-              disabledVariables={disabledVariablesByInputIndex[index]}
-              starredVariables={starredVariables}
-              toggleStarredVariable={toggleStarredVariable}
-              entityId={values[input.name]?.entityId}
-              variableId={values[input.name]?.variableId}
-              onChange={(variable) => {
-                handleChange(input.name, variable);
-              }}
-            />
-          </div>
-        ))}
+        {inputs.map((input, index) => {
+          const Wrapper = input.wrapper ?? (({ children }) => <>{children}</>);
+          return (
+            <Wrapper>
+              <div key={input.name} className={classes.input}>
+                <div className={classes.label}>{input.label}</div>
+                <VariableTreeDropdown
+                  rootEntity={entities[0]}
+                  disabledVariables={disabledVariablesByInputIndex[index]}
+                  starredVariables={starredVariables}
+                  toggleStarredVariable={toggleStarredVariable}
+                  entityId={values[input.name]?.entityId}
+                  variableId={values[input.name]?.variableId}
+                  onChange={(variable) => {
+                    handleChange(input.name, variable);
+                  }}
+                />
+              </div>
+            </Wrapper>
+          );
+        })}
       </div>
       {/* <div className={`${classes.label} ${classes.dataLabel}`}>Data inputs</div> */}
     </div>
