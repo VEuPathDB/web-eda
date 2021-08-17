@@ -8,14 +8,13 @@ import {
   WorkspaceContext,
 } from '../context/WorkspaceContext';
 import { useStudyMetadata, useWdkStudyRecord } from '../hooks/study';
-import { ThemeProvider } from '@material-ui/styles';
+import { ThemeProvider } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core';
 import { workspaceTheme } from './workspaceTheme';
 
 const theme = createMuiTheme(workspaceTheme);
 export interface Props {
   studyId: string;
-  analysisId: string;
   children: React.ReactChild | React.ReactChild[];
   className?: string;
   analysisClient: AnalysisClient;
