@@ -23,6 +23,9 @@ export interface Props {
   onChange: (variable?: VariableDescriptor) => void;
   hideDisabledFields?: boolean;
   setHideDisabledFields?: (hide: boolean) => void;
+  //DKDK onHideVariableToggleChange
+  hideVariableToggleStatus?: boolean;
+  onHideVariableToggleChange?: (value: boolean) => void;
 }
 export function VariableTree(props: Props) {
   const {
@@ -35,6 +38,8 @@ export function VariableTree(props: Props) {
     onChange,
     hideDisabledFields = false,
     setHideDisabledFields = () => {},
+    //DKDK onHideToggleChange
+    onHideVariableToggleChange,
   } = props;
   const entities = useStudyEntities(rootEntity);
 
@@ -163,13 +168,25 @@ export function VariableTree(props: Props) {
       toggleStarredVariable={toggleStarredVariable}
       hideDisabledFields={hideDisabledFields}
       setHideDisabledFields={setHideDisabledFields}
+      //DKDK onHideVariableToggleChange
+      onHideVariableToggleChange={onHideVariableToggleChange}
     />
   );
 }
 
 export function VariableTreeDropdown(props: Props) {
-  const { rootEntity, entityId, variableId, onChange } = props;
-  const [hideDisabledFields, setHideDisabledFields] = useState(false);
+  //DKDK
+  const {
+    rootEntity,
+    entityId,
+    variableId,
+    onChange,
+    hideVariableToggleStatus,
+  } = props;
+  const [hideDisabledFields, setHideDisabledFields] = useState(
+    hideVariableToggleStatus
+  );
+
   const entities = useStudyEntities(rootEntity);
   const variable = entities
     .find((e) => e.id === entityId)

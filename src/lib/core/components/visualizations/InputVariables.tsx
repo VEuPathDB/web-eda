@@ -20,6 +20,9 @@ interface InputSpec {
   name: string;
   label: string;
   role: 'primary' | 'stratification';
+  //DKDK
+  hideVariableToggleStatus?: boolean;
+  onHideVariableToggleChange?: (value: boolean) => void;
 }
 
 export interface Props {
@@ -225,6 +228,9 @@ export function InputVariables(props: Props) {
               onChange={(variable) => {
                 handleChange(input.name, variable);
               }}
+              //DKDK check hide toggle change
+              hideVariableToggleStatus={input.hideVariableToggleStatus}
+              onHideVariableToggleChange={input.onHideVariableToggleChange}
             />
           </div>
         ))}

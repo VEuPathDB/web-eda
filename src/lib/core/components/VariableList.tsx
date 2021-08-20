@@ -85,6 +85,8 @@ interface VariableListProps {
   hideDisabledFields: boolean;
   setHideDisabledFields: (hide: boolean) => void;
   featuredFields: VariableField[];
+  //DKDK onHideToggleChange
+  onHideVariableToggleChange?: (value: boolean) => void;
 }
 
 interface getNodeSearchStringType {
@@ -115,6 +117,8 @@ export default function VariableList(props: VariableListProps) {
     toggleStarredVariable,
     hideDisabledFields,
     setHideDisabledFields,
+    //DKDK onHideVariableToggleChange
+    onHideVariableToggleChange,
   } = props;
   const [searchTerm, setSearchTerm] = useState<string>('');
   const getPathToField = useCallback(
@@ -379,6 +383,9 @@ export default function VariableList(props: VariableListProps) {
               type="button"
               onClick={() => {
                 setHideDisabledFields(!hideDisabledFields);
+                //DKDK onHideVariableToggleChange
+                if (onHideVariableToggleChange)
+                  onHideVariableToggleChange(!hideDisabledFields);
               }}
             >
               <Toggle on={hideDisabledFields} /> Only show compatible variables
@@ -386,7 +393,8 @@ export default function VariableList(props: VariableListProps) {
           </HtmlTooltip>
         </div>
       )}
-      {allowedFeaturedFields.length && (
+      {/* DKDK allowedFeaturedFields.length should have > 0 condition: otherwise, it prints 0 when .length = 0 */}
+      {allowedFeaturedFields.length > 0 && (
         <div className="FeaturedVariables">
           <details
             open={Options.featuredVariablesOpen}

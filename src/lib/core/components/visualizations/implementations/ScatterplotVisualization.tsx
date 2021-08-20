@@ -95,6 +95,10 @@ function FullscreenComponent(props: VisualizationProps) {
 function createDefaultConfig(): ScatterplotConfig {
   return {
     valueSpecConfig: 'Raw',
+    //DKDK set hideDisabledFields's default value for each
+    xAxisVariableHideToggle: false,
+    yAxisVariableHideToggle: false,
+    overlayVariableHideToggle: false,
   };
 }
 
@@ -107,6 +111,10 @@ export const ScatterplotConfig = t.partial({
   facetVariable: VariableDescriptor,
   valueSpecConfig: t.string,
   showMissingness: t.boolean,
+  //DKDK set hideDisabledFields's default value for each
+  xAxisVariableHideToggle: t.boolean,
+  yAxisVariableHideToggle: t.boolean,
+  overlayVariableHideToggle: t.boolean,
 });
 
 type Props = VisualizationProps & {
@@ -227,6 +235,36 @@ function ScatterplotViz(props: Props) {
     entities
   );
 
+  //DKDK check hide toggle change
+  const onHideToggleChangeX = useCallback(
+    (value: boolean) => {
+      updateVizConfig({
+        xAxisVariableHideToggle: value,
+      });
+    },
+    [updateVizConfig]
+  );
+
+  //DKDK check hide toggle change
+  const onHideToggleChangeY = useCallback(
+    (value: boolean) => {
+      updateVizConfig({
+        yAxisVariableHideToggle: value,
+      });
+    },
+    [updateVizConfig]
+  );
+
+  //DKDK check hide toggle change
+  const onHideToggleChangeOverlay = useCallback(
+    (value: boolean) => {
+      updateVizConfig({
+        overlayVariableHideToggle: value,
+      });
+    },
+    [updateVizConfig]
+  );
+
   const data = usePromise(
     useCallback(async (): Promise<PromiseXYPlotData | undefined> => {
       // check independentValueType/dependentValueType
@@ -292,6 +330,8 @@ function ScatterplotViz(props: Props) {
       overlayVariable,
       computation.type,
       visualization.type,
+      //DKDK
+      outputEntity,
     ])
   );
 
@@ -300,21 +340,31 @@ function ScatterplotViz(props: Props) {
       {fullscreen && (
         <div style={{ display: 'flex', alignItems: 'center', zIndex: 1 }}>
           <InputVariables
+            //DKDK use inputs' property for remembering the state of hide toggle status
             inputs={[
               {
                 name: 'xAxisVariable',
                 label: 'X-axis',
                 role: 'primary',
+                hideVariableToggleStatus:
+                  vizConfig.xAxisVariableHideToggle ?? false,
+                onHideVariableToggleChange: onHideToggleChangeX,
               },
               {
                 name: 'yAxisVariable',
                 label: 'Y-axis',
                 role: 'primary',
+                hideVariableToggleStatus:
+                  vizConfig.yAxisVariableHideToggle ?? false,
+                onHideVariableToggleChange: onHideToggleChangeY,
               },
               {
                 name: 'overlayVariable',
                 label: 'Overlay',
                 role: 'stratification',
+                hideVariableToggleStatus:
+                  vizConfig.overlayVariableHideToggle ?? false,
+                onHideVariableToggleChange: onHideToggleChangeOverlay,
               },
             ]}
             entities={entities}
