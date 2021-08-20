@@ -27,6 +27,8 @@ export const Visualization = intersection([
   }),
   partial({
     displayName: string,
+    //DKDKDK
+    buttonConfig: unknown,
   }),
 ]);
 

@@ -95,10 +95,6 @@ function FullscreenComponent(props: VisualizationProps) {
 function createDefaultConfig(): ScatterplotConfig {
   return {
     valueSpecConfig: 'Raw',
-    //DKDK set hideDisabledFields's default value for each
-    xAxisVariableHideToggle: false,
-    yAxisVariableHideToggle: false,
-    overlayVariableHideToggle: false,
   };
 }
 
@@ -111,7 +107,27 @@ export const ScatterplotConfig = t.partial({
   facetVariable: VariableDescriptor,
   valueSpecConfig: t.string,
   showMissingness: t.boolean,
-  //DKDK set hideDisabledFields's default value for each
+  // //DKDK set hideDisabledFields's default value for each
+  // xAxisVariableHideToggle: t.boolean,
+  // yAxisVariableHideToggle: t.boolean,
+  // overlayVariableHideToggle: t.boolean,
+});
+
+//DKDKDK
+function createDefaultButtonConfig(): showVariableButtonConfig {
+  return {
+    xAxisVariableHideToggle: false,
+    yAxisVariableHideToggle: false,
+    overlayVariableHideToggle: false,
+  };
+}
+
+//DKDKDK
+export type showVariableButtonConfig = t.TypeOf<
+  typeof showVariableButtonConfig
+>;
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const showVariableButtonConfig = t.partial({
   xAxisVariableHideToggle: t.boolean,
   yAxisVariableHideToggle: t.boolean,
   overlayVariableHideToggle: t.boolean,
@@ -162,6 +178,35 @@ function ScatterplotViz(props: Props) {
       }
     },
     [updateVisualization, visualization, vizConfig]
+  );
+
+  //DKDKDK
+  const vizButtonConfig = useMemo(() => {
+    return pipe(
+      showVariableButtonConfig.decode(visualization?.buttonConfig),
+      getOrElse(
+        (): t.TypeOf<typeof showVariableButtonConfig> =>
+          createDefaultButtonConfig()
+      )
+    );
+  }, [visualization.buttonConfig]);
+
+  console.log('vizButtonConfig =', vizButtonConfig);
+
+  //DKDKDK
+  const updateVizButtonConfig = useCallback(
+    (newConfig: Partial<showVariableButtonConfig>) => {
+      if (updateVisualization) {
+        updateVisualization({
+          ...visualization,
+          buttonConfig: {
+            ...vizButtonConfig,
+            ...newConfig,
+          },
+        });
+      }
+    },
+    [updateVisualization, visualization, vizButtonConfig]
   );
 
   // moved the location of this findEntityAndVariable
@@ -235,34 +280,48 @@ function ScatterplotViz(props: Props) {
     entities
   );
 
-  //DKDK check hide toggle change
+  //DKDKDK check hide toggle change
   const onHideToggleChangeX = useCallback(
     (value: boolean) => {
-      updateVizConfig({
+      updateVizButtonConfig({
         xAxisVariableHideToggle: value,
       });
     },
-    [updateVizConfig]
+    [updateVizButtonConfig]
   );
 
   //DKDK check hide toggle change
   const onHideToggleChangeY = useCallback(
     (value: boolean) => {
-      updateVizConfig({
+      updateVizButtonConfig({
         yAxisVariableHideToggle: value,
       });
     },
-    [updateVizConfig]
+    [updateVizButtonConfig]
   );
 
   //DKDK check hide toggle change
   const onHideToggleChangeOverlay = useCallback(
     (value: boolean) => {
-      updateVizConfig({
+      updateVizButtonConfig({
         overlayVariableHideToggle: value,
       });
     },
-    [updateVizConfig]
+    [updateVizButtonConfig]
+  );
+
+  //DKDK
+  console.log(
+    'vizButtonConfig.xAxisVariableHideToggle =',
+    vizButtonConfig.xAxisVariableHideToggle
+  );
+  console.log(
+    'vizButtonConfig.yAxisVariableHideToggle =',
+    vizButtonConfig.yAxisVariableHideToggle
+  );
+  console.log(
+    'vizButtonConfig.overlayVariableHideToggle =',
+    vizButtonConfig.overlayVariableHideToggle
   );
 
   const data = usePromise(
@@ -341,13 +400,39 @@ function ScatterplotViz(props: Props) {
         <div style={{ display: 'flex', alignItems: 'center', zIndex: 1 }}>
           <InputVariables
             //DKDK use inputs' property for remembering the state of hide toggle status
+            // inputs={[
+            //   {
+            //     name: 'xAxisVariable',
+            //     label: 'X-axis',
+            //     role: 'primary',
+            //     hideVariableToggleStatus:
+            //       vizConfig.xAxisVariableHideToggle ?? false,
+            //     onHideVariableToggleChange: onHideToggleChangeX,
+            //   },
+            //   {
+            //     name: 'yAxisVariable',
+            //     label: 'Y-axis',
+            //     role: 'primary',
+            //     hideVariableToggleStatus:
+            //       vizConfig.yAxisVariableHideToggle ?? false,
+            //     onHideVariableToggleChange: onHideToggleChangeY,
+            //   },
+            //   {
+            //     name: 'overlayVariable',
+            //     label: 'Overlay',
+            //     role: 'stratification',
+            //     hideVariableToggleStatus:
+            //       vizConfig.overlayVariableHideToggle ?? false,
+            //     onHideVariableToggleChange: onHideToggleChangeOverlay,
+            //   },
+            // ]}
             inputs={[
               {
                 name: 'xAxisVariable',
                 label: 'X-axis',
                 role: 'primary',
                 hideVariableToggleStatus:
-                  vizConfig.xAxisVariableHideToggle ?? false,
+                  vizButtonConfig.xAxisVariableHideToggle ?? false,
                 onHideVariableToggleChange: onHideToggleChangeX,
               },
               {
@@ -355,7 +440,7 @@ function ScatterplotViz(props: Props) {
                 label: 'Y-axis',
                 role: 'primary',
                 hideVariableToggleStatus:
-                  vizConfig.yAxisVariableHideToggle ?? false,
+                  vizButtonConfig.yAxisVariableHideToggle ?? false,
                 onHideVariableToggleChange: onHideToggleChangeY,
               },
               {
@@ -363,7 +448,7 @@ function ScatterplotViz(props: Props) {
                 label: 'Overlay',
                 role: 'stratification',
                 hideVariableToggleStatus:
-                  vizConfig.overlayVariableHideToggle ?? false,
+                  vizButtonConfig.overlayVariableHideToggle ?? false,
                 onHideVariableToggleChange: onHideToggleChangeOverlay,
               },
             ]}
