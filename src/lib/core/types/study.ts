@@ -20,6 +20,7 @@ export type StudyRecord = RecordInstance;
 export const VariableType = t.keyof({
   string: null,
   number: null,
+  integer: null,
   date: null,
   longitude: null,
 });
