@@ -171,64 +171,62 @@ export function MultiFilter(props: Props) {
   const leafSummariesPromise = usePromise(
     useCallback(() => {
       const otherFilters = JSON.parse(otherFiltersJson);
-      return Promise.all(
-        leaves.map((leaf) => {
-          const thisFilterWithoutLeaf = thisFilter && {
-            ...thisFilter,
-            subFilters: thisFilter.subFilters.filter(
-              (f) => f.variableId !== leaf.term
-            ),
+      return serialArrayPromise(leaves, (leaf) => {
+        const thisFilterWithoutLeaf = thisFilter && {
+          ...thisFilter,
+          subFilters: thisFilter.subFilters.filter(
+            (f) => f.variableId !== leaf.term
+          ),
+        };
+        return getDistribution(
+          {
+            entityId: entity.id,
+            variableId: leaf.term,
+            filters:
+              thisFilterWithoutLeaf == null ||
+              thisFilterWithoutLeaf.subFilters.length === 0 ||
+              thisFilterWithoutLeaf.operation === 'union'
+                ? otherFilters
+                : [...(otherFilters || []), thisFilterWithoutLeaf],
+          },
+          (filters) =>
+            subsettingClient.getDistribution(
+              studyMetadata.id,
+              entity.id,
+              leaf.term,
+              {
+                filters,
+                valueSpec: 'count',
+              }
+            )
+        ).then((distribution) => {
+          const fgValueByLabel = Object.fromEntries(
+            distribution.foreground.histogram.map(({ binLabel, value }) => [
+              binLabel,
+              value ?? 0,
+            ])
+          );
+          const bgValueByLabel = Object.fromEntries(
+            distribution.background.histogram.map(({ binLabel, value }) => [
+              binLabel,
+              value ?? 0,
+            ])
+          );
+          return {
+            term: leaf.term,
+            display: leaf.display,
+            valueCounts: Object.keys(bgValueByLabel).map((label) => ({
+              value: label,
+              count: bgValueByLabel[label],
+              filteredCount: fgValueByLabel[label] ?? 0,
+            })),
+            internalsCount:
+              distribution.background.statistics.numDistinctEntityRecords,
+            internalsFilteredCount:
+              distribution.foreground.statistics.numDistinctEntityRecords,
           };
-          return getDistribution(
-            {
-              entityId: entity.id,
-              variableId: leaf.term,
-              filters:
-                thisFilterWithoutLeaf == null ||
-                thisFilterWithoutLeaf.subFilters.length === 0 ||
-                thisFilterWithoutLeaf.operation === 'union'
-                  ? otherFilters
-                  : [...(otherFilters || []), thisFilterWithoutLeaf],
-            },
-            (filters) =>
-              subsettingClient.getDistribution(
-                studyMetadata.id,
-                entity.id,
-                leaf.term,
-                {
-                  filters,
-                  valueSpec: 'count',
-                }
-              )
-          ).then((distribution) => {
-            const fgValueByLabel = Object.fromEntries(
-              distribution.foreground.histogram.map(({ binLabel, value }) => [
-                binLabel,
-                value ?? 0,
-              ])
-            );
-            const bgValueByLabel = Object.fromEntries(
-              distribution.background.histogram.map(({ binLabel, value }) => [
-                binLabel,
-                value ?? 0,
-              ])
-            );
-            return {
-              term: leaf.term,
-              display: leaf.display,
-              valueCounts: Object.keys(bgValueByLabel).map((label) => ({
-                value: label,
-                count: bgValueByLabel[label],
-                filteredCount: fgValueByLabel[label] ?? 0,
-              })),
-              internalsCount:
-                distribution.background.statistics.numDistinctEntityRecords,
-              internalsFilteredCount:
-                distribution.foreground.statistics.numDistinctEntityRecords,
-            };
-          });
-        })
-      );
+        });
+      });
     }, [
       thisFilter,
       otherFiltersJson,
@@ -382,14 +380,15 @@ function findThisFilter(
 /**
  * Takes and array of data, and a function that operates on items from
  * that array and returns a Promise, and overall returns a promise of an array of results.
+ * Inspired by https://stackoverflow.com/questions/29880715/how-to-synchronize-a-sequence-of-promises/29906506#29906506
  *
  * @param array
  * @param fn
  */
-function seriallyProcessArray<D, R>(
+function serialArrayPromise<D, R>(
   array: Array<D>,
   fn: (item: D) => Promise<R>
-): Promise<R[] | void> {
+): Promise<R[] | undefined> {
   const results: Array<R> = [];
   return array.reduce(
     (p, item) =>
@@ -399,6 +398,6 @@ function seriallyProcessArray<D, R>(
           return results;
         })
       ),
-    Promise.resolve() as Promise<R[] | void>
+    Promise.resolve() as Promise<R[] | undefined>
   );
 }
