@@ -378,3 +378,27 @@ function findThisFilter(
       filter.type === 'multiFilter'
   );
 }
+
+/**
+ * Takes and array of data, and a function that operates on items from
+ * that array and returns a Promise, and overall returns a promise of an array of results.
+ *
+ * @param array
+ * @param fn
+ */
+function seriallyProcessArray<D, R>(
+  array: Array<D>,
+  fn: (item: D) => Promise<R>
+): Promise<R[] | void> {
+  const results: Array<R> = [];
+  return array.reduce(
+    (p, item) =>
+      p.then(() =>
+        fn(item).then((output) => {
+          results.push(output);
+          return results;
+        })
+      ),
+    Promise.resolve() as Promise<R[] | void>
+  );
+}
