@@ -58,6 +58,8 @@ import { useFindEntityAndVariable } from '../../../hooks/study';
 import { defaultIndependentAxisRange } from '../../../utils/default-independent-axis-range';
 import { VariablesByInputName } from '../../../utils/data-element-constraints';
 import PluginError from '../PluginError';
+import AxisRangeControl from '@veupathdb/components/lib/components/plotControls/AxisRangeControl';
+import { NumberOrDateRange, NumberRange } from '../../../types/general';
 
 type HistogramDataWithCoverageStatistics = HistogramData & CoverageStatistics;
 
@@ -107,6 +109,8 @@ const HistogramConfig = t.intersection([
     binWidth: t.number,
     binWidthTimeUnit: t.string, // TO DO: constrain to weeks, months etc like Unit from date-arithmetic and/or R
     showMissingness: t.boolean,
+    dependentAxisRange: NumberRange,
+    independentAxisRange: NumberOrDateRange,
   }),
 ]);
 
@@ -179,21 +183,29 @@ function HistogramViz(props: VisualizationProps) {
     [updateVizConfig]
   );
 
-  // prettier-ignore
-  const onChangeHandlerFactory = useCallback(
-    < ValueType,>(key: keyof HistogramConfig) => (newValue?: ValueType) => {
-      updateVizConfig({
-        [key]: newValue,
-      });
-    },
-    [updateVizConfig]
-  );
-  const onDependentAxisLogScaleChange = onChangeHandlerFactory<boolean>(
+  function useOnChangeHandlerFactory<ValueType>(key: keyof HistogramConfig) {
+    return useCallback(
+      (newValue?: ValueType) => {
+        updateVizConfig({ [key]: newValue });
+      },
+      [key]
+    );
+  }
+
+  const onDependentAxisLogScaleChange = useOnChangeHandlerFactory<boolean>(
     'dependentAxisLogScale'
   );
-  const onValueSpecChange = onChangeHandlerFactory<ValueSpec>('valueSpec');
-  const onShowMissingnessChange = onChangeHandlerFactory<boolean>(
+  const onValueSpecChange = useOnChangeHandlerFactory<ValueSpec>('valueSpec');
+  const onShowMissingnessChange = useOnChangeHandlerFactory<boolean>(
     'showMissingness'
+  );
+
+  const onDependentAxisChange = useOnChangeHandlerFactory<NumberOrDateRange>(
+    'dependentAxisRange'
+  );
+
+  const onIndependentAxisChange = useOnChangeHandlerFactory<NumberOrDateRange>(
+    'independentAxisRange'
   );
 
   const findEntityAndVariable = useFindEntityAndVariable(entities);
@@ -272,6 +284,8 @@ function HistogramViz(props: VisualizationProps) {
       vizConfig.facetVariable,
       vizConfig.valueSpec,
       vizConfig.showMissingness,
+      vizConfig.dependentAxisRange,
+      vizConfig.independentAxisRange,
       studyId,
       filters,
       dataClient,
@@ -359,6 +373,8 @@ function HistogramViz(props: VisualizationProps) {
         onBinWidthChange={onBinWidthChange}
         dependentAxisLogScale={vizConfig.dependentAxisLogScale}
         onDependentAxisLogScaleChange={onDependentAxisLogScaleChange}
+        onDependentAxisChange={onDependentAxisChange}
+        onIndependentAxisChange={onIndependentAxisChange}
         valueSpec={vizConfig.valueSpec}
         onValueSpecChange={onValueSpecChange}
         updateThumbnail={updateThumbnail}
@@ -376,9 +392,13 @@ function HistogramViz(props: VisualizationProps) {
         independentAxisVariable={vizConfig.xAxisVariable}
         independentAxisLabel={axisLabelWithUnit(xAxisVariable) ?? 'Main'}
         // variable's metadata-based independent axis range
-        independentAxisRange={defaultIndependentRange}
+        independentAxisRange={
+          vizConfig.independentAxisRange ?? defaultIndependentRange
+        }
         // add dependent axis range for better displaying tick labels in log-scale
-        dependentAxisRange={defaultDependentAxisRange}
+        dependentAxisRange={
+          vizConfig.dependentAxisRange ?? defaultDependentAxisRange
+        }
         interactive
         showSpinner={data.pending}
         filters={filters}
@@ -404,6 +424,8 @@ function HistogramViz(props: VisualizationProps) {
 type HistogramPlotWithControlsProps = HistogramProps & {
   onBinWidthChange: (newBinWidth: NumberOrTimeDelta) => void;
   onDependentAxisLogScaleChange: (newState?: boolean) => void;
+  onDependentAxisChange: (range?: NumberOrDateRange) => void;
+  onIndependentAxisChange: (range?: NumberOrDateRange) => void;
   filters?: Filter[];
   outputEntity?: StudyEntity;
   independentAxisVariable?: VariableDescriptor;
@@ -421,6 +443,8 @@ function HistogramPlotWithControls({
   error,
   onBinWidthChange,
   onDependentAxisLogScaleChange,
+  onDependentAxisChange,
+  onIndependentAxisChange,
   filters,
   completeCases,
   completeCasesAllVars,
@@ -517,6 +541,29 @@ function HistogramPlotWithControls({
               minHeight: widgetHeight,
             }}
           />
+          <AxisRangeControl
+            label="Range"
+            range={histogramProps.dependentAxisRange}
+            onRangeChange={onDependentAxisChange}
+            valueType="number"
+            containerStyles={{ minWidth: '400px' }}
+          />
+          {/* truncation notification */}
+          {/*truncatedIndependentAxisWarning ? (
+            <Notification
+              title={''}
+              text={truncatedIndependentAxisWarning}
+              // this was defined as LIGHT_BLUE
+              color={'#5586BE'}
+              onAcknowledgement={() => {
+                setTruncatedIndependentAxisWarning('');
+              }}
+              showWarningIcon={true}
+              containerStyles={{
+                maxWidth: data?.valueType === 'date' ? '34.5em' : '38.5em',
+              }}
+            />
+            ) : null*/}
           <RadioButtonGroup
             selectedOption={valueSpec}
             options={['count', 'proportion']}
@@ -550,6 +597,29 @@ function HistogramPlotWithControls({
               minHeight: widgetHeight,
             }}
           />
+          <AxisRangeControl
+            label="Range"
+            range={histogramProps.independentAxisRange}
+            onRangeChange={onIndependentAxisChange}
+            valueType={data?.valueType}
+            containerStyles={{ minWidth: '400px' }}
+          />
+          {/* truncation notification */}
+          {/*truncatedIndependentAxisWarning ? (
+            <Notification
+              title={''}
+              text={truncatedIndependentAxisWarning}
+              // this was defined as LIGHT_BLUE
+              color={'#5586BE'}
+              onAcknowledgement={() => {
+                setTruncatedIndependentAxisWarning('');
+              }}
+              showWarningIcon={true}
+              containerStyles={{
+                maxWidth: data?.valueType === 'date' ? '34.5em' : '38.5em',
+              }}
+            />
+            ) : null*/}
         </LabelledGroup>
       </div>
     </div>
@@ -635,6 +705,7 @@ function getRequestParams(
     valueSpec,
     overlayVariable,
     xAxisVariable,
+    independentAxisRange,
   } = vizConfig;
 
   const binSpec = binWidth
@@ -658,6 +729,10 @@ function getRequestParams(
       valueSpec,
       ...binSpec,
       showMissingness: vizConfig.showMissingness ? 'TRUE' : 'FALSE',
+      viewport: independentAxisRange && {
+        xMin: independentAxisRange.min,
+        xMax: independentAxisRange.max,
+      },
     },
   } as HistogramRequestParams;
 }
