@@ -4,6 +4,7 @@ import {
   Redirect,
   Route,
   RouteComponentProps,
+  useHistory,
   useLocation,
   useRouteMatch,
 } from 'react-router';
@@ -36,6 +37,8 @@ import { Loading } from '@veupathdb/wdk-client/lib/Components';
 import ShowHideVariableContextProvider from '../core/utils/show-hide-variable-context';
 import NotesTab from './NotesTab';
 import ShareFromAnalysis from './sharing/ShareFromAnalysis';
+import { TabbedDisplay } from '@veupathdb/core-components';
+import { Link } from 'react-router-dom';
 
 interface Props {
   analysisState: AnalysisState;
@@ -55,6 +58,7 @@ export function AnalysisPanel({
   hideCopyAndSave = false,
 }: Props) {
   const studyRecord = useStudyRecord();
+  const routerHistory = useHistory();
 
   const {
     status,
@@ -178,6 +182,39 @@ export function AnalysisPanel({
               />
             </div>
           )}
+        />
+        <TabbedDisplay
+          themeRole="primary"
+          tabs={[
+            {
+              displayName: 'View Study Details',
+              onSelect: () => routerHistory.push(`${routeBase}/details`),
+            },
+            {
+              displayName: 'Browse and Subset',
+              onSelect: () =>
+                routerHistory.push(`${routeBase}/variables${lastVarPath}`),
+            },
+            {
+              displayName: 'Visualize',
+              onSelect: () => {
+                const visualizationsURLFragment =
+                  routeBase +
+                  location.pathname
+                    .replace(routeBase, '')
+                    .startsWith('/visualizations')
+                    ? '/visualizations'
+                    : `/visualizations${lastVizPath}`;
+
+                routerHistory.push(routeBase + visualizationsURLFragment);
+              },
+            },
+            {
+              displayName: 'Notes',
+              onSelect: () => routerHistory.push(routeBase + '/notes'),
+            },
+            { displayName: 'Downloads' },
+          ]}
         />
         <WorkspaceNavigation
           heading={<></>}
