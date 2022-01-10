@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { uniq } from 'lodash';
 import {
   Redirect,
@@ -40,8 +40,7 @@ import { Loading } from '@veupathdb/wdk-client/lib/Components';
 import ShowHideVariableContextProvider from '../core/utils/show-hide-variable-context';
 import NotesTab from './NotesTab';
 import ShareFromAnalysis from './sharing/ShareFromAnalysis';
-import { TabbedDisplay } from '@veupathdb/core-components';
-import { Link } from 'react-router-dom';
+import { Card, TabbedDisplay } from '@veupathdb/core-components';
 import { Alert } from '@material-ui/lab';
 
 const AnalysisTabErrorBoundary = ({
@@ -130,6 +129,20 @@ export function AnalysisPanel({
     setLastVizPath('');
   }, [previousAnalysisId, analysisId]);
 
+  const activeTab = useMemo(
+    () =>
+      location.pathname.includes('details')
+        ? 'View Study Details'
+        : location.pathname.includes('variables')
+        ? 'Browse and Subset'
+        : location.pathname.includes('visualizations')
+        ? 'Visualize'
+        : location.pathname.includes('notes')
+        ? 'Notes'
+        : 'Downloads',
+    [location]
+  );
+
   useEffect(() => {
     const relativePath = location.pathname.replace(routeBase, '');
     if (relativePath.startsWith('/variables')) {
@@ -211,6 +224,7 @@ export function AnalysisPanel({
         />
         <TabbedDisplay
           themeRole="primary"
+          activeTab={activeTab}
           tabs={[
             {
               displayName: 'View Study Details',
@@ -239,7 +253,10 @@ export function AnalysisPanel({
               displayName: 'Notes',
               onSelect: () => routerHistory.push(routeBase + '/notes'),
             },
-            { displayName: 'Downloads' },
+            {
+              displayName: 'Downloads',
+              onSelect: () => console.log('Downloads Tab Selected'),
+            },
           ]}
         />
         <WorkspaceNavigation
