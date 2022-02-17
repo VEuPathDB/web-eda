@@ -24,10 +24,17 @@ export function findFirstVariable(variables: VariableTreeNode[]): Variable {
     throw new Error('Tree is broken: cannot determine root nodes.');
 
   // Traverse first branch of tree and find first non-category node
-  const variable = findFirstNonCategory(
-    groupBy(variables, (v) => v.parentId),
-    roots[0]
-  );
+  // If the branch only consists of the root, and the root is not a category, return the root variable.
+  const variable = roots
+    .map((root) =>
+      root.type !== 'category'
+        ? root
+        : findFirstNonCategory(
+            groupBy(variables, (v) => v.parentId),
+            root
+          )
+    )
+    .find((variable) => variable != null);
 
   // if no nodes have the specified parent, tree is broken because entity or category has no children
   if (variable == null) {
