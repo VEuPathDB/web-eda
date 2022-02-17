@@ -24,7 +24,7 @@ export function findFirstVariable(variables: VariableTreeNode[]): Variable {
     throw new Error('Tree is broken: cannot determine root nodes.');
 
   // Traverse first branch of tree and find first non-category node
-  // If the branch only consists of the root, and the root is not a category, return the root variable.
+  // If the root is not a category, then it is a variable. In this case, return the root variable.
   const variable = roots
     .map((root) =>
       root.type !== 'category'
