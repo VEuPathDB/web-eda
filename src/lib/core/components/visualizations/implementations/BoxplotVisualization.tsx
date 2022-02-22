@@ -68,10 +68,9 @@ import PlotLegend, {
 } from '@veupathdb/components/lib/components/plotControls/PlotLegend';
 import { ColorPaletteDefault } from '@veupathdb/components/lib/types/plots/addOns';
 import { NumberOrDateRange } from '@veupathdb/components/lib/types/general';
-//DKDK a custom hook to preserve the status of checked legend items
+// a custom hook to preserve the status of checked legend items
 import { useCheckedLegendItemsStatus } from '../../../hooks/checkedLegendItemsStatus';
 import { useVizConfig } from '../../../hooks/visualizations';
-import { MenuClassKey } from '@veupathdb/components/node_modules/@material-ui/core';
 
 type BoxplotData = { series: BoxplotSeries };
 
@@ -515,7 +514,6 @@ function BoxplotViz(props: VisualizationProps) {
     />
   );
 
-  //DKDK
   const legendNode = legendItems != null && !data.pending && data != null && (
     // add information legend box for Boxplot Viz: mean and median
     <div style={{ display: 'flex', flexDirection: 'column' }}>
