@@ -71,6 +71,7 @@ import { NumberOrDateRange } from '@veupathdb/components/lib/types/general';
 //DKDK a custom hook to preserve the status of checked legend items
 import { useCheckedLegendItemsStatus } from '../../../hooks/checkedLegendItemsStatus';
 import { useVizConfig } from '../../../hooks/visualizations';
+import { MenuClassKey } from '@veupathdb/components/node_modules/@material-ui/core';
 
 type BoxplotData = { series: BoxplotSeries };
 
@@ -514,13 +515,72 @@ function BoxplotViz(props: VisualizationProps) {
     />
   );
 
+  //DKDK
   const legendNode = legendItems != null && !data.pending && data != null && (
-    <PlotLegend
-      legendItems={legendItems}
-      checkedLegendItems={checkedLegendItems}
-      legendTitle={axisLabelWithUnit(overlayVariable)}
-      onCheckedLegendItemsChange={onCheckedLegendItemsChange}
-    />
+    // add information legend box for Boxplot Viz: mean and median
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <PlotLegend
+        legendItems={legendItems}
+        checkedLegendItems={checkedLegendItems}
+        legendTitle={axisLabelWithUnit(overlayVariable)}
+        onCheckedLegendItemsChange={onCheckedLegendItemsChange}
+      />
+      {/* display mean and median info under the custom legend */}
+      <div
+        style={{
+          display: 'inline-block', // for general usage (e.g., story)
+          border: '1px solid #dedede',
+          boxShadow: '1px 1px 4px #00000066',
+          marginTop: vizConfig.overlayVariable != null ? '2em' : 0,
+          padding: '1em',
+          minWidth: 250,
+        }}
+      >
+        <div
+          style={{
+            borderTop:
+              '2px dotted ' +
+              (vizConfig.overlayVariable != null
+                ? 'black'
+                : ColorPaletteDefault[0]),
+            position: 'relative',
+            width: '2.5em',
+          }}
+        >
+          <div
+            style={{
+              top: '-0.625em',
+              position: 'absolute',
+              marginLeft: '3.5em',
+            }}
+          >
+            Mean
+          </div>
+        </div>
+        <div
+          style={{
+            borderTop:
+              '2px solid ' +
+              (vizConfig.overlayVariable != null
+                ? 'black'
+                : ColorPaletteDefault[0]),
+            position: 'relative',
+            width: '2.5em',
+            marginTop: '1.3em',
+          }}
+        >
+          <div
+            style={{
+              top: '-0.625em',
+              position: 'absolute',
+              marginLeft: '3.5em',
+            }}
+          >
+            Median
+          </div>
+        </div>
+      </div>
+    </div>
   );
 
   const tableGroupNode = (
