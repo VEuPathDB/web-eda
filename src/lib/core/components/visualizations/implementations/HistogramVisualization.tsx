@@ -82,6 +82,7 @@ import { ColorPaletteDefault } from '@veupathdb/components/lib/types/plots/addOn
 import { EntityCounts } from '../../../hooks/entityCounts';
 //DKDK a custom hook to preserve the status of checked legend items
 import { useCheckedLegendItemsStatus } from '../../../hooks/checkedLegendItemsStatus';
+import { FloatingSwitch } from '@veupathdb/coreui';
 
 type HistogramDataWithCoverageStatistics = (
   | HistogramData
@@ -683,13 +684,19 @@ function HistogramPlotWithControls({
 
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <LabelledGroup label="Y-axis">
-          <Switch
-            label="Log scale"
-            state={histogramProps.dependentAxisLogScale}
-            onStateChange={onDependentAxisLogScaleChange}
-            containerStyles={{
-              minHeight: widgetHeight,
+          <FloatingSwitch
+            // After other components in this set of controls are converted to CoreUI, you wouldn't need these styleOverrides.
+            styleOverrides={{
+              container: {
+                fontFamily: 'Roboto',
+                fontWeight: 500,
+              },
             }}
+            themeRole="secondary"
+            labels={{ left: 'Log scale' }}
+            options={[false, true]}
+            selectedOption={histogramProps.dependentAxisLogScale ?? false}
+            onOptionChange={onDependentAxisLogScaleChange}
           />
           <RadioButtonGroup
             selectedOption={valueSpec}
