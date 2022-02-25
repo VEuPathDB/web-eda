@@ -1,7 +1,6 @@
 import SelectedRangeControl from '@veupathdb/components/lib/components/plotControls/SelectedRangeControl';
 import BinWidthControl from '@veupathdb/components/lib/components/plotControls/BinWidthControl';
 import AxisRangeControl from '@veupathdb/components/lib/components/plotControls/AxisRangeControl';
-import Switch from '@veupathdb/components/lib/components/widgets/Switch';
 import Button from '@veupathdb/components/lib/components/widgets/Button';
 import LabelledGroup from '@veupathdb/components/lib/components/widgets/LabelledGroup';
 import { NumberRangeInput } from '@veupathdb/components/lib/components/widgets/NumberAndDateRangeInputs';
@@ -24,7 +23,7 @@ import UnknownCount from '@veupathdb/wdk-client/lib/Components/AttributeFilter/U
 import { getOrElse } from 'fp-ts/lib/Either';
 import { pipe } from 'fp-ts/lib/function';
 import { number, partial, TypeOf, boolean, type, intersection } from 'io-ts';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { usePromise } from '../../hooks/promise';
 import { AnalysisState } from '../../hooks/analysis';
 import { useSubsettingClient } from '../../hooks/workspace';
@@ -44,6 +43,7 @@ import Notification from '@veupathdb/components/lib/components/widgets//Notifica
 import { variableDisplayWithUnit } from '../../utils/variable-display';
 // import variable's metadata-based independent axis range utils
 import { defaultIndependentAxisRange } from '../../utils/default-independent-axis-range';
+import { FloatingSwitch, colors } from '@veupathdb/coreui';
 
 type Props = {
   studyMetadata: StudyMetadata;
@@ -611,14 +611,21 @@ function HistogramPlotWithControls({
 
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <LabelledGroup label="Y-axis">
-          <Switch
-            label="Log scale"
-            state={uiState.dependentAxisLogScale}
-            onStateChange={handleDependentAxisLogScale}
-            containerStyles={{
-              paddingBottom: '0.3125em',
-              minHeight: widgetHeight,
+          <FloatingSwitch
+            // After other components in this set of controls are converted to CoreUI, you wouldn't need these styleOverrides.
+            styleOverrides={{
+              container: {
+                fontFamily: 'Roboto',
+                fontWeight: 500,
+                marginBottom: 5,
+              },
+              default: [{ labelColor: 'rgb(150, 150, 150)' }],
             }}
+            themeRole="secondary"
+            labels={{ left: 'Log scale' }}
+            options={[false, true]}
+            selectedOption={uiState.dependentAxisLogScale}
+            onOptionChange={handleDependentAxisLogScale}
           />
 
           <NumberRangeInput

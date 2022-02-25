@@ -64,6 +64,7 @@ import PlotLegend, {
 import { ColorPaletteDefault } from '@veupathdb/components/lib/types/plots/addOns';
 //DKDK a custom hook to preserve the status of checked legend items
 import { useCheckedLegendItemsStatus } from '../../../hooks/checkedLegendItemsStatus';
+import { FloatingSwitch } from '@veupathdb/coreui';
 
 type BarplotDataWithStatistics = (BarplotData | FacetedData<BarplotData>) &
   CoverageStatistics;
@@ -474,10 +475,19 @@ function BarplotViz(props: VisualizationProps) {
 
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <LabelledGroup label="Y-axis">
-          <Switch
-            label="Log Scale:"
-            state={vizConfig.dependentAxisLogScale}
-            onStateChange={onDependentAxisLogScaleChange}
+          <FloatingSwitch
+            // After other components in this set of controls are converted to CoreUI, you wouldn't need these styleOverrides.
+            styleOverrides={{
+              container: {
+                fontFamily: 'Roboto',
+                fontWeight: 500,
+              },
+            }}
+            themeRole="secondary"
+            labels={{ left: 'Log scale' }}
+            options={[false, true]}
+            selectedOption={vizConfig.dependentAxisLogScale}
+            onOptionChange={onDependentAxisLogScaleChange}
           />
           <RadioButtonGroup
             selectedOption={vizConfig.valueSpec}

@@ -3568,10 +3568,10 @@
     react-modal "^3.14.3"
     react-table "^7.7.0"
 
-"@veupathdb/coreui@^0.13.0":
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/@veupathdb/coreui/-/coreui-0.13.0.tgz#aa774e71c7963f0638814f6491cf6b20bd2faae7"
-  integrity sha512-MVHx601+EdtRAuZUilDRXOTR9nfpznzAxTOiNqYZ1HTsxgVK/fFXKVgP/VwRJJU9CQ8KHHHfYkg/HWB/U9IiLg==
+"@veupathdb/coreui@^0.15.1":
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/@veupathdb/coreui/-/coreui-0.15.1.tgz#55420da02a3019cee8a61bb2513c55c6c463eacc"
+  integrity sha512-Toe+YvwSxOGje6gu/sUtWI2zwDXgy1e9eja6Eu8VAtPDa7murGHckXJ0/Zby7a0xmc2P7B1jHDezp1K32WggnQ==
   dependencies:
     "@emotion/react" "^11.4.0"
     "@emotion/serialize" "^1.0.2"
