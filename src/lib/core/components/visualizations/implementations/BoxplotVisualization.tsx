@@ -75,6 +75,8 @@ type BoxplotData = { series: BoxplotSeries };
 // type of computedVariableMetadata for computation apps such as alphadiv and abundance
 type BoxplotComputedVariableMetadata = {
   computedVariableMetadata?: ComputedVariableMetadata;
+  // for alphadiv VariableCoverageTable
+  yVariableDetails?: VariableDescriptor;
 };
 
 // add type of computedVariableMetadata for computation apps such as alphadiv and abundance
@@ -565,8 +567,20 @@ function BoxplotViz(props: VisualizationProps) {
           {
             role: 'Y-axis',
             required: true,
-            display: variableDisplayWithUnit(yAxisVariable),
-            variable: vizConfig.yAxisVariable,
+            // for alphadiv VariableCoverageTable
+            display:
+              computation.descriptor.configuration != null &&
+              computation.descriptor.type === 'alphadiv'
+                ? data?.value?.computedVariableMetadata?.displayName != null
+                  ? data?.value?.computedVariableMetadata?.displayName[0]
+                  : computation.descriptor.type
+                : variableDisplayWithUnit(yAxisVariable),
+            // for alphadiv VariableCoverageTable
+            variable:
+              computation.descriptor.configuration != null &&
+              computation.descriptor.type === 'alphadiv'
+                ? data?.value?.yVariableDetails
+                : vizConfig.yAxisVariable,
           },
           {
             role: 'Overlay',
@@ -925,6 +939,8 @@ export function boxplotResponseToData(
     completeCasesAxesVars: response.boxplot.config.completeCasesAxesVars,
     // config.computedVariableMetadata should also be returned
     computedVariableMetadata: response.boxplot.config.computedVariableMetadata,
+    // for alphadiv VariableCoverageTable
+    yVariableDetails: response.boxplot.config.yVariableDetails,
   } as BoxplotDataWithCoverage;
 }
 

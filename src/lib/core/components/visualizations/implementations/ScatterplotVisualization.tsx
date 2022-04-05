@@ -145,6 +145,8 @@ export interface ScatterPlotDataWithCoverage extends CoverageStatistics {
   yMax: number | string | undefined;
   // add computedVariableMetadata for computation apps such as alphadiv and abundance
   computedVariableMetadata?: ComputedVariableMetadata;
+  // for alphadiv VariableCoverageTable
+  yVariableDetails?: VariableDescriptor;
 }
 
 // define ScatterPlotDataResponse
@@ -910,8 +912,20 @@ function ScatterplotViz(props: VisualizationProps) {
           {
             role: 'Y-axis',
             required: true,
-            display: variableDisplayWithUnit(yAxisVariable),
-            variable: vizConfig.yAxisVariable,
+            // for alphadiv VariableCoverageTable
+            display:
+              computation.descriptor.configuration != null &&
+              computation.descriptor.type === 'alphadiv'
+                ? data?.value?.computedVariableMetadata?.displayName != null
+                  ? data?.value?.computedVariableMetadata?.displayName[0]
+                  : computation.descriptor.type
+                : variableDisplayWithUnit(yAxisVariable),
+            // for alphadiv VariableCoverageTable
+            variable:
+              computation.descriptor.configuration != null &&
+              computation.descriptor.type === 'alphadiv'
+                ? data?.value?.yVariableDetails
+                : vizConfig.yAxisVariable,
           },
           {
             role: 'Overlay',
@@ -1492,6 +1506,8 @@ export function scatterplotResponseToData(
     // config.computedVariableMetadata should also be returned
     computedVariableMetadata:
       response.scatterplot.config.computedVariableMetadata,
+    // for alphadiv VariableCoverageTable
+    yVariableDetails: response.scatterplot.config.yVariableDetails,
   } as ScatterPlotDataWithCoverage;
 }
 
