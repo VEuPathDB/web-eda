@@ -6,13 +6,21 @@ import { CustomSectionSpec, InputSpec, InputVariables } from './InputVariables';
 import { VisualizationProps } from './VisualizationTypes';
 
 interface Props extends VisualizationProps {
+  /**
+   * Describes what inputs the user can configure.
+   */
   inputs: InputSpec[];
+  /**
+   * Custom input selectors
+   */
   customInputSections?: CustomSectionSpec[];
-  /** Name of input that determines the output entity */
-  outputEntitySelectorName: string; // XXX Should this be part of the inputSpec?
+  /**
+   * A function that returns the ID of the output entity for the visualization
+   */
+  outputEntitySelector: (selectedVariables: VariablesByInputName) => string;
 }
 
-export function StandardVisualization(props: Props) {
+export function StandardVsualization(props: Props) {
   const {
     inputs,
     starredVariables,
@@ -20,7 +28,7 @@ export function StandardVisualization(props: Props) {
     customInputSections,
     dataElementConstraints,
     dataElementDependencyOrder,
-    outputEntitySelectorName,
+    outputEntitySelector,
   } = props;
   const studyMetadata = useStudyMetadata();
   const entities = useStudyEntities(studyMetadata.rootEntity);
@@ -32,7 +40,10 @@ export function StandardVisualization(props: Props) {
   // FIXME This is derived from data
   // See https://github.com/VEuPathDB/web-eda/issues/580#issuecomment-1104362246
   const enableShowMissingnessToggle = true;
-  const outputEntity = undefined;
+
+  // Find output entity.
+  const outputEntityId = outputEntitySelector(selectedVariables);
+  const outputEntity = entities.find((e) => e.id === outputEntityId);
   return (
     <div>
       <InputVariables
