@@ -25,7 +25,7 @@ export type VisualizationDescriptor = TypeOf<typeof VisualizationDescriptor>;
 export const VisualizationDescriptor = intersection([
   type({
     type: string,
-    configuration: unknown,
+    configuration: record(string, unknown),
   }),
   partial({
     thumbnail: string,

@@ -18,7 +18,7 @@ export interface VisualizationProps {
   visualization: Visualization;
   dataElementConstraints?: Record<string, DataElementConstraint>[];
   dataElementDependencyOrder?: string[];
-  updateConfiguration: (configuration: unknown) => void;
+  updateConfiguration: (configuration: Record<string, unknown>) => void;
   updateThumbnail: (source: string) => void;
   computation: Computation;
   filters?: Filter[];
@@ -41,6 +41,6 @@ export interface IsEnabledInPickerParams {
 export interface VisualizationType {
   fullscreenComponent: React.ComponentType<VisualizationProps>;
   selectorComponent: React.ComponentType<SelectorProps>;
-  createDefaultConfig: () => unknown;
+  createDefaultConfig: () => Record<string, unknown>;
   isEnabledInPicker?: (props: IsEnabledInPickerParams) => boolean;
 }
