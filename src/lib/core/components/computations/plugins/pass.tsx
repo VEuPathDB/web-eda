@@ -23,7 +23,7 @@ export const plugin: ComputationPlugin = {
     lineplot: lineplotVisualization,
     'map-markers': mapVisualization,
     // placeholder for densityplot
-    // densityplot: scatterplotVisualization,
+    densityplot: testVisualization,
     barplot: barplotVisualization,
     boxplot: boxplotVisualization,
   },
