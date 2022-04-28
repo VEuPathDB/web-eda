@@ -61,9 +61,12 @@ const analysisCache: Record<string, Analysis | undefined> = {};
 
 export function usePreloadAnalysis() {
   const analysisClient = useAnalysisClient();
-  return async function preloadAnalysis(id: string) {
-    analysisCache[id] = await analysisClient.getAnalysis(id);
-  };
+  return useCallback(
+    async function preloadAnalysis(id: string) {
+      analysisCache[id] = await analysisClient.getAnalysis(id);
+    },
+    [analysisClient]
+  );
 }
 
 /**
@@ -153,73 +156,53 @@ export function useAnalysis(
 
   const useSetter = <T>(
     nestedValueLens: Lens<Analysis | NewAnalysis, T>,
-    analysis: NewAnalysis | Analysis | undefined,
     createAnalysis: (newAnalysis: NewAnalysis) => Promise<string | undefined>,
     createAnalysisOnChange = true
   ) =>
     useCallback(
-      async (nestedValue: T | ((nestedValue: T) => T)) => {
-        if (analysis == null)
-          throw new Error(
-            "Attempt to update an analysis that hasn't been loaded."
-          );
-
-        if (isNewAnalysis(analysis) && createAnalysisOnChange) {
-          return await createAnalysis(
-            updateAnalysis(analysis, nestedValueLens, nestedValue)
-          );
-        }
-
-        setCurrent((_a) => {
-          const newNestedValue =
-            typeof nestedValue === 'function'
-              ? (nestedValue as (nestedValue: T) => T)(nestedValueLens.get(_a))
-              : nestedValue;
-
-          return nestedValueLens.set(newNestedValue)(_a);
+      (nestedValue: T | ((nestedValue: T) => T)) => {
+        return new Promise<string | undefined>(function(resolve, reject) { 
+          setCurrent((analysis) => {
+            if (analysis == null) {
+              throw new Error(
+                "Attempt to update an analysis that hasn't been loaded."
+              );
+            }
+            const newAnalysis = updateAnalysis(analysis, nestedValueLens, nestedValue);
+            if (isNewAnalysis(analysis) && createAnalysisOnChange) {
+              createAnalysis(newAnalysis).then(resolve, reject);
+              return analysis;
+            }
+            resolve(undefined);
+            return newAnalysis;
+          });
+          setHasUnsavedChanges(true);
         });
-        setHasUnsavedChanges(true);
       },
-      [analysis, createAnalysis, nestedValueLens, createAnalysisOnChange]
+      [createAnalysis, nestedValueLens, createAnalysisOnChange]
     );
 
-  const setName = useSetter(analysisToNameLens, analysis, createAnalysis);
-  const setDescription = useSetter(
-    analysisToDescriptionLens,
-    analysis,
-    createAnalysis
-  );
-  const setNotes = useSetter(analysisToNotesLens, analysis, createAnalysis);
-  const setIsPublic = useSetter(
-    analysisToIsPublicLens,
-    analysis,
-    createAnalysis
-  );
-  const setFilters = useSetter(analysisToFiltersLens, analysis, createAnalysis);
-  const setComputations = useSetter(
-    analysisToComputationsLens,
-    analysis,
-    createAnalysis
-  );
+  const setName = useSetter(analysisToNameLens, createAnalysis);
+  const setDescription = useSetter(analysisToDescriptionLens, createAnalysis);
+  const setNotes = useSetter(analysisToNotesLens, createAnalysis);
+  const setIsPublic = useSetter(analysisToIsPublicLens, createAnalysis);
+  const setFilters = useSetter(analysisToFiltersLens, createAnalysis);
+  const setComputations = useSetter(analysisToComputationsLens, createAnalysis);
   const setDerivedVariables = useSetter(
     analysisToDerivedVariablesLens,
-    analysis,
     createAnalysis
   );
   const setStarredVariables = useSetter(
     analysisToStarredVariablesLens,
-    analysis,
     createAnalysis
   );
   const setVariableUISettings = useSetter(
     analysisToVariableUISettingsLens,
-    analysis,
     createAnalysis
   );
 
   const setDataTableConfig = useSetter(
     analysisToDataTableConfig,
-    analysis,
     createAnalysis
   );
 
