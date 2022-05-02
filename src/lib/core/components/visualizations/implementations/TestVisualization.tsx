@@ -1,19 +1,18 @@
-import { getOrElse } from 'fp-ts/lib/Either';
-import { number, record, string, type, TypeOf, undefined, union } from 'io-ts';
-import { capitalize, words } from 'lodash';
-import { useCallback, useMemo } from 'react';
-import { VariablesByInputName } from '../../../utils/data-element-constraints';
 import {
+  boolean,
+  number,
+  record,
+  string,
+  type,
+  TypeOf,
+  undefined,
+  union,
+} from 'io-ts';
+import {
+  makeStandardVisualizationComponent,
   StandardPlotProps,
-  StandardVsualization,
 } from '../StandardVisualization';
-import { VisualizationProps, VisualizationType } from '../VisualizationTypes';
-
-export const testVisualization: VisualizationType = {
-  selectorComponent: SelectorComponent,
-  fullscreenComponent: FullscreenComponent,
-  createDefaultConfig: () => ({}),
-};
+import { VisualizationType } from '../VisualizationTypes';
 
 function SelectorComponent() {
   return <div>Test in selector</div>;
@@ -21,6 +20,7 @@ function SelectorComponent() {
 
 const Config = type({
   count: number,
+  showMissingness: boolean,
   inputs: record(
     string,
     union([type({ entityId: string, variableId: string }), undefined])
@@ -29,34 +29,6 @@ const Config = type({
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 type Config = TypeOf<typeof Config>;
-
-const defaultConfig: Config = {
-  count: 0,
-  inputs: {},
-};
-
-async function getData(config: Config) {
-  console.log('get data');
-  return config.count;
-}
-
-function mapSelectedVariablesToConfig(
-  selectedVariables: VariablesByInputName,
-  config: Config
-): Config {
-  return {
-    ...config,
-    inputs: selectedVariables,
-  };
-}
-
-function mapConfigToSelectedVariables(config: Config) {
-  return config.inputs;
-}
-
-function outputEntitySelector() {
-  return 'foo';
-}
 
 function TestPlotComponent(props: StandardPlotProps<number, Config>) {
   const { vizConfig, updateVizConfig, data } = props;
@@ -77,26 +49,53 @@ function TestPlotComponent(props: StandardPlotProps<number, Config>) {
   );
 }
 
-function FullscreenComponent(props: VisualizationProps) {
-  const inputs = useMemo(() => {
-    return (
-      props.dataElementDependencyOrder?.map((name) => ({
-        name,
-        label: words(name.replace('Variable', '')).map(capitalize).join('-'),
-      })) ?? []
-    );
-  }, [props.dataElementDependencyOrder]);
-  return (
-    <StandardVsualization
-      {...props}
-      configDecoder={Config}
-      defaultConfig={defaultConfig}
-      inputs={inputs}
-      outputEntitySelector={outputEntitySelector}
-      mapConfigToSelectedVariables={mapConfigToSelectedVariables}
-      mapSelectedVariablesToConfig={mapSelectedVariablesToConfig}
-      getData={getData}
-      plotComponent={TestPlotComponent}
-    />
-  );
-}
+const FullscreenComponent = makeStandardVisualizationComponent('Test', {
+  configDecoder: type({
+    count: number,
+    showMissingness: boolean,
+    inputs: record(
+      string,
+      union([type({ entityId: string, variableId: string }), undefined])
+    ),
+  }),
+  defaultConfig: {
+    count: 0,
+    inputs: {},
+    showMissingness: false,
+  },
+  inputs: [
+    {
+      name: 'xAxisVariable',
+      label: 'X-axis',
+      role: 'axis',
+    },
+    {
+      name: 'overlayVariable',
+      label: 'Overlay',
+      role: 'stratification',
+    },
+    {
+      name: 'facetVariable',
+      label: 'Facet',
+      role: 'stratification',
+    },
+  ],
+  enableShowMissingnessToggle: (data) => data % 2 === 0,
+  outputEntitySelector: (selectedVariables) =>
+    selectedVariables.xAxisVariable?.entityId,
+  mapConfigToSelectedVariables: (config) => config.inputs,
+  mapSelectedVariablesToConfig: (inputs, config) => ({ ...config, inputs }),
+  mapShowMissingnessToConfig: (showMissingness, config) => ({
+    ...config,
+    showMissingness,
+  }),
+  mapConfigToShowMissingnes: (config) => config.showMissingness,
+  getData: async (config) => config.count,
+  plotComponent: TestPlotComponent,
+});
+
+export const testVisualization: VisualizationType = {
+  selectorComponent: SelectorComponent,
+  fullscreenComponent: FullscreenComponent,
+  createDefaultConfig: () => ({}),
+};

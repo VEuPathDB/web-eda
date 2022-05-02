@@ -30,6 +30,10 @@ interface StandardVsualizationProps<T, U> {
    */
   inputs: InputSpec[];
   /**
+   * Determine if the showMissingness toggle should be shown, based on data
+   */
+  enableShowMissingnessToggle?: (data: T) => boolean;
+  /**
    * Custom input selectors
    */
   customInputSections?: CustomSectionSpec[];
@@ -44,7 +48,9 @@ interface StandardVsualizationProps<T, U> {
   /**
    * A function that returns the ID of the output entity for the visualization
    */
-  outputEntitySelector: (selectedVariables: VariablesByInputName) => string;
+  outputEntitySelector: (
+    selectedVariables: VariablesByInputName
+  ) => string | undefined;
   /**
    * Map selected variables to a configuration object
    */
@@ -56,6 +62,14 @@ interface StandardVsualizationProps<T, U> {
    * Map configuration object to selected variables
    */
   mapConfigToSelectedVariables: (config: U) => VariablesByInputName;
+  /**
+   * Map selected variables to a configuration object
+   */
+  mapShowMissingnessToConfig?: (showMissingness: boolean, config: U) => U;
+  /**
+   * Map configuration object to selected variables
+   */
+  mapConfigToShowMissingnes?: (config: U) => boolean;
   /**
    * A function that take a vizConfig object and returns a Promise for data.
    */
@@ -75,6 +89,7 @@ interface Props<T, U>
 export function StandardVsualization<T, U extends Config>(props: Props<T, U>) {
   const {
     inputs,
+    enableShowMissingnessToggle,
     starredVariables,
     toggleStarredVariable,
     customInputSections,
@@ -87,18 +102,13 @@ export function StandardVsualization<T, U extends Config>(props: Props<T, U>) {
     plotComponent: PlotComponent,
     mapSelectedVariablesToConfig,
     mapConfigToSelectedVariables,
+    mapShowMissingnessToConfig,
+    mapConfigToShowMissingnes,
     configDecoder,
     defaultConfig,
   } = props;
   const studyMetadata = useStudyMetadata();
   const entities = useStudyEntities(studyMetadata.rootEntity);
-
-  const [showMissingness, setShowMissingness] = useState(false);
-
-  // useEffect(() => {
-  //   const partialConfig = mapInputsToConfig(selectedVariables);
-  //   updateConfiguration({ ...visualization.descriptor.configuration, ...partialConfig });
-  // }, [mapInputsToConfig, selectedVariables, updateConfiguration, visualization.descriptor.configuration]);
 
   // Get data whenever vizConfig changes
   const [data, setData] = useState<T>();
@@ -114,6 +124,21 @@ export function StandardVsualization<T, U extends Config>(props: Props<T, U>) {
   const selectedVariables = useMemo(
     () => mapConfigToSelectedVariables(vizConfig),
     [mapConfigToSelectedVariables, vizConfig]
+  );
+
+  const showMissingness = mapConfigToShowMissingnes
+    ? mapConfigToShowMissingnes(vizConfig)
+    : false;
+
+  const setShowMissingness = useCallback(
+    (showMissingness: boolean) => {
+      if (mapShowMissingnessToConfig) {
+        updateConfiguration(
+          mapShowMissingnessToConfig(showMissingness, vizConfig)
+        );
+      }
+    },
+    [mapShowMissingnessToConfig, updateConfiguration, vizConfig]
   );
 
   const handleSelectedVariablesChange = useCallback(
@@ -142,10 +167,6 @@ export function StandardVsualization<T, U extends Config>(props: Props<T, U>) {
     );
   }, [vizConfig]);
 
-  // FIXME This is derived from data
-  // See https://github.com/VEuPathDB/web-eda/issues/580#issuecomment-1104362246
-  const enableShowMissingnessToggle = true;
-
   // Find output entity.
   const outputEntityId = outputEntitySelector(selectedVariables);
   const outputEntity = entities.find((e) => e.id === outputEntityId);
@@ -170,7 +191,11 @@ export function StandardVsualization<T, U extends Config>(props: Props<T, U>) {
         dataElementDependencyOrder={dataElementDependencyOrder}
         starredVariables={starredVariables}
         toggleStarredVariable={toggleStarredVariable}
-        enableShowMissingnessToggle={enableShowMissingnessToggle}
+        enableShowMissingnessToggle={
+          data && enableShowMissingnessToggle
+            ? enableShowMissingnessToggle(data)
+            : false
+        }
         showMissingness={showMissingness}
         onShowMissingnessChange={setShowMissingness}
         outputEntity={outputEntity}
@@ -182,4 +207,15 @@ export function StandardVsualization<T, U extends Config>(props: Props<T, U>) {
       />
     </div>
   );
+}
+
+export function makeStandardVisualizationComponent<T, U extends Config>(
+  displayName: string,
+  config: StandardVsualizationProps<T, U>
+) {
+  function StandardVsualizationComponent(props: VisualizationProps) {
+    return <StandardVsualization {...props} {...config} />;
+  }
+  StandardVsualizationComponent.displayName = `StandardVisualization<${displayName}>`;
+  return StandardVsualizationComponent;
 }
