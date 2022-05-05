@@ -700,7 +700,20 @@ function BarplotViz(props: VisualizationProps) {
       </div>
 
       <PluginError error={data.error} outputSize={outputSize} />
-      <OutputEntityTitle entity={entity} outputSize={outputSize} />
+      {/* DKDK truncation warning sign */}
+      {/* <OutputEntityTitle entity={entity} outputSize={outputSize} /> */}
+      <OutputEntityTitle
+        entity={entity}
+        outputSize={outputSize}
+        // pass axisTruncationConfig as boolean array
+        axisTruncationConfig={[
+          truncationConfigIndependentAxisMin,
+          truncationConfigIndependentAxisMax,
+          truncationConfigDependentAxisMin,
+          truncationConfigDependentAxisMax,
+        ]}
+      />
+
       <PlotLayout
         isFaceted={isFaceted(data.value)}
         plotNode={plotNode}
