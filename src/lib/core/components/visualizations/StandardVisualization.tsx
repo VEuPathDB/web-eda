@@ -7,7 +7,6 @@ import {
   useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
 import { useStudyEntities } from '../../hooks/study';
@@ -150,13 +149,8 @@ export function StandardVsualization<T, U extends Config>(props: Props<T, U>) {
     [mapSelectedVariablesToConfig, updateConfiguration, vizConfig]
   );
 
-  const getDataRef = useRef(getData);
   useEffect(() => {
-    getDataRef.current = getData;
-  }, [getData]);
-
-  useEffect(() => {
-    getDataRef.current(vizConfig).then(
+    getData(vizConfig).then(
       (nextData) => {
         setDataError(undefined);
         setData(nextData);
@@ -165,7 +159,7 @@ export function StandardVsualization<T, U extends Config>(props: Props<T, U>) {
         setDataError(error);
       }
     );
-  }, [vizConfig]);
+  }, [getData, vizConfig]);
 
   // Find output entity.
   const outputEntityId = outputEntitySelector(selectedVariables);
