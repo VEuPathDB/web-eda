@@ -298,3 +298,21 @@ $data-table-inner-border: 1px solid #888;
     border-bottom: $data-table-inner-border;
   }
 }
+
+// boxplot stat table for alphadiv and abundance
+.BoxStatsTable {
+  @include data-table;
+  width: 750px;
+  min-width: 750px;
+
+  .percentage {
+    color: #333;
+    font-size: 0.85em;
+  }
+  th {
+    vertical-align: baseline;
+  }
+  th:first-of-type {
+    border-bottom: $data-table-inner-border;
+  }
+}

@@ -521,32 +521,61 @@ const BoxplotResponseData = array(
   ])
 );
 
-export type BoxplotResponse = TypeOf<typeof BoxplotResponse>;
-export const BoxplotResponse = type({
-  boxplot: type({
-    data: BoxplotResponseData,
-    // typing computedVariableMetadata for computation apps such as alphadiv and abundance
-    config: intersection([
+// boxplot stats table
+export type BoxplotStatsTable = TypeOf<typeof BoxplotStatsTable>;
+export const BoxplotStatsTable = array(
+  partial({
+    xVariableDetails: type({
+      variableId: string,
+      entityId: string,
+      value: string,
+    }),
+    facetVariableDetails: array(
       type({
-        completeCasesAllVars: number,
-        completeCasesAxesVars: number,
-        xVariableDetails: type({
-          variableId: string,
-          entityId: string,
+        variableId: string,
+        entityId: string,
+        value: string,
+      })
+    ),
+    parameter: union([number, array(number), nullType]),
+    pvalue: union([number, array(number), nullType]),
+    statistic: union([number, array(number), nullType]),
+    method: union([string, array(string), nullType]),
+    statsError: string,
+  })
+);
+
+export type BoxplotResponse = TypeOf<typeof BoxplotResponse>;
+export const BoxplotResponse = intersection([
+  type({
+    boxplot: type({
+      data: BoxplotResponseData,
+      // typing computedVariableMetadata for computation apps such as alphadiv and abundance
+      config: intersection([
+        type({
+          completeCasesAllVars: number,
+          completeCasesAxesVars: number,
+          xVariableDetails: type({
+            variableId: string,
+            entityId: string,
+          }),
+          yVariableDetails: type({
+            variableId: string,
+            entityId: string,
+          }),
         }),
-        yVariableDetails: type({
-          variableId: string,
-          entityId: string,
+        partial({
+          computedVariableMetadata: ComputedVariableMetadata,
         }),
-      }),
-      partial({
-        computedVariableMetadata: ComputedVariableMetadata,
-      }),
-    ]),
+      ]),
+    }),
+    sampleSizeTable: sampleSizeTableArray,
+    completeCasesTable: completeCasesTableArray,
   }),
-  sampleSizeTable: sampleSizeTableArray,
-  completeCasesTable: completeCasesTableArray,
-});
+  partial({
+    statsTable: BoxplotStatsTable,
+  }),
+]);
 
 export interface MapMarkersRequestParams {
   studyId: string;
