@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { PromiseHookState } from '../hooks/promise';
-import { Variable } from '../types/study';
+import { StudyEntity, Variable } from '../types/study';
 import { BoxplotDataWithCoverage } from './visualizations/implementations/BoxplotVisualization';
+import { BoxplotStatsTable } from '../api/DataClient/types';
+import { fixVarIdLabel } from '../utils/visualization';
 
 export interface Props {
   data: PromiseHookState<BoxplotDataWithCoverage | undefined>;
-  // descriptor?: any,
+  entities?: StudyEntity[];
+  descriptor?: { type: string; configuration: unknown };
   xAxisVariable?: Variable;
   overlayVariable?: Variable;
   facetVariable?: Variable;
@@ -13,11 +16,19 @@ export interface Props {
 
 export function BoxStatsTable({
   data,
-  // descriptor,
+  entities,
+  descriptor,
   xAxisVariable,
   overlayVariable,
   facetVariable,
 }: Props) {
+  const collectionVariableDetails = useMemo(
+    () =>
+      data?.value?.computedVariableMetadata?.collectionVariable
+        ?.collectionVariableDetails,
+    [data]
+  );
+
   return (
     <div
       className={'BoxStatsTable'}
@@ -33,10 +44,18 @@ export function BoxStatsTable({
             <th>{'p-value'}</th>
             <th>{'Method'}</th>
           </tr>
-          {data.value?.statsTable?.map((data: any) => (
+          {data.value?.statsTable?.map((data: BoxplotStatsTable) => (
             <tr>
               <td>
-                {overlayVariable != null
+                {descriptor?.type === 'abundance'
+                  ? collectionVariableDetails && entities
+                    ? fixVarIdLabel(
+                        data.xVariableDetails?.value ?? '',
+                        collectionVariableDetails,
+                        entities
+                      )
+                    : data.xVariableDetails?.value
+                  : overlayVariable != null
                   ? data.xVariableDetails?.value
                   : xAxisVariable?.displayName}
               </td>
@@ -48,17 +67,19 @@ export function BoxStatsTable({
                 </td>
               ) : null}
               <td>
-                {data.parameter != null && data.parameter.length !== 0
+                {data.parameter != null &&
+                (data.parameter as number[]).length !== 0
                   ? data.parameter
                   : 'N/A'}
               </td>
               <td>
-                {data.statistic != null && data.statistic.length !== 0
+                {data.statistic != null &&
+                (data.statistic as number[]).length !== 0
                   ? data.statistic
                   : 'N/A'}
               </td>
               <td>
-                {data.pvalue != null && data.pvalue.length !== 0
+                {data.pvalue != null && (data.pvalue as number[]).length !== 0
                   ? data.pvalue
                   : 'N/A'}
               </td>

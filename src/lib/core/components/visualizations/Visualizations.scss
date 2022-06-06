@@ -304,6 +304,8 @@ $data-table-inner-border: 1px solid #888;
   @include data-table;
   width: 750px;
   min-width: 750px;
+  max-height: 450px;
+  overflow-y: auto;
 
   .percentage {
     color: #333;

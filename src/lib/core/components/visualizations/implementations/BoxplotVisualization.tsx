@@ -84,7 +84,7 @@ type BoxplotComputedVariableMetadata = {
 
 // type of statsTable for computation apps such as alphadiv and abundance
 type BoxplotStatsTableType = {
-  statsTable?: BoxplotStatsTable;
+  statsTable?: BoxplotStatsTable[];
 };
 
 // add type of computedVariableMetadata for computation apps such as alphadiv and abundance
@@ -597,7 +597,8 @@ function BoxplotViz(props: VisualizationProps) {
               <>
                 <BoxStatsTable
                   data={data}
-                  // descriptor={computation.descriptor}
+                  entities={entities}
+                  descriptor={computation.descriptor}
                   xAxisVariable={xAxisVariable}
                   overlayVariable={overlayVariable}
                   facetVariable={facetVariable}

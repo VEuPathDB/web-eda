@@ -523,27 +523,25 @@ const BoxplotResponseData = array(
 
 // boxplot stats table
 export type BoxplotStatsTable = TypeOf<typeof BoxplotStatsTable>;
-export const BoxplotStatsTable = array(
-  partial({
-    xVariableDetails: type({
+export const BoxplotStatsTable = partial({
+  xVariableDetails: type({
+    variableId: string,
+    entityId: string,
+    value: string,
+  }),
+  facetVariableDetails: array(
+    type({
       variableId: string,
       entityId: string,
       value: string,
-    }),
-    facetVariableDetails: array(
-      type({
-        variableId: string,
-        entityId: string,
-        value: string,
-      })
-    ),
-    parameter: union([number, array(number), nullType]),
-    pvalue: union([number, array(number), nullType]),
-    statistic: union([number, array(number), nullType]),
-    method: union([string, array(string), nullType]),
-    statsError: string,
-  })
-);
+    })
+  ),
+  parameter: union([number, array(number), nullType]),
+  pvalue: union([number, array(number), nullType]),
+  statistic: union([number, array(number), nullType]),
+  method: union([string, array(string), nullType]),
+  statsError: string,
+});
 
 export type BoxplotResponse = TypeOf<typeof BoxplotResponse>;
 export const BoxplotResponse = intersection([
@@ -573,7 +571,7 @@ export const BoxplotResponse = intersection([
     completeCasesTable: completeCasesTableArray,
   }),
   partial({
-    statsTable: BoxplotStatsTable,
+    statsTable: array(BoxplotStatsTable),
   }),
 ]);
 
