@@ -561,7 +561,7 @@ function BoxplotViz(props: VisualizationProps) {
         themeRole="primary"
         tabs={[
           {
-            displayName: 'Mosaic',
+            displayName: 'Box plot',
             content: (
               <div style={{ marginTop: 15 }}>
                 <BoxplotWithControls
@@ -617,6 +617,7 @@ function BoxplotViz(props: VisualizationProps) {
                   xAxisVariable={xAxisVariable}
                   overlayVariable={overlayVariable}
                   facetVariable={facetVariable}
+                  independentAxisLabel={independentAxisLabel}
                 />
               </>
             ),

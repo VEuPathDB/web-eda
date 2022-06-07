@@ -12,6 +12,7 @@ export interface Props {
   xAxisVariable?: Variable;
   overlayVariable?: Variable;
   facetVariable?: Variable;
+  independentAxisLabel?: string;
 }
 
 export function BoxStatsTable({
@@ -21,6 +22,7 @@ export function BoxStatsTable({
   xAxisVariable,
   overlayVariable,
   facetVariable,
+  independentAxisLabel,
 }: Props) {
   const collectionVariableDetails = useMemo(
     () =>
@@ -48,7 +50,9 @@ export function BoxStatsTable({
             <tr>
               <td>
                 {descriptor?.type === 'abundance'
-                  ? collectionVariableDetails && entities
+                  ? overlayVariable == null
+                    ? independentAxisLabel
+                    : collectionVariableDetails && entities
                     ? fixVarIdLabel(
                         data.xVariableDetails?.value ?? '',
                         collectionVariableDetails,
