@@ -284,6 +284,34 @@ function LineplotViz(props: VisualizationProps) {
     setTruncatedDependentAxisWarning,
   ] = useState<string>('');
 
+  // use filters stringSet to make proportion array
+  const filteredProportionArray = useMemo(
+    () =>
+      filters?.flatMap((filter) => {
+        return filter.variableId === vizConfig.yAxisVariable?.variableId
+          ? filter.type === 'stringSet'
+            ? filter.stringSet
+            : []
+          : [];
+      }),
+    [filters, vizConfig.yAxisVariable]
+  );
+
+  // update numeratorValues and denominatorValues depending on filters and filteredProportionArray
+  useEffect(
+    () =>
+      updateVizConfig({
+        denominatorValues:
+          yAxisVariable != null
+            ? filteredProportionArray != null &&
+              filteredProportionArray.length > 0
+              ? filteredProportionArray
+              : yAxisVariable?.vocabulary
+            : undefined,
+      }),
+    [filters, filteredProportionArray]
+  );
+
   const handleInputVariableChange = useCallback(
     (selectedVariables: VariablesByInputName) => {
       const keepBin = isEqual(
@@ -321,8 +349,14 @@ function LineplotViz(props: VisualizationProps) {
           ? {}
           : {
               numeratorValues: undefined,
+              // change denominatorValues following filteredProportionArray
               denominatorValues:
-                yAxisVar != null ? yAxisVar.vocabulary : undefined,
+                yAxisVar != null
+                  ? filteredProportionArray != null &&
+                    filteredProportionArray.length > 0
+                    ? filteredProportionArray
+                    : yAxisVar.vocabulary
+                  : undefined,
             }),
       });
       // axis range control: close truncation warnings here
@@ -849,6 +883,11 @@ function LineplotViz(props: VisualizationProps) {
     </div>
   );
 
+  /**
+   * changed allowedValues to respect filters
+   * ideally, valuePicker component needs be changed to behave like Legend, e.g., disabling checkbox (grayed out) per filter
+   * but it is not that simple task, especially with upcoming release, so skipped it for now
+   */
   const proportionInputs = (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <RadioButtonGroup
@@ -883,7 +922,12 @@ function LineplotViz(props: VisualizationProps) {
             }}
           >
             <ValuePicker
-              allowedValues={yAxisVariable?.vocabulary}
+              allowedValues={
+                filteredProportionArray != null &&
+                filteredProportionArray.length > 0
+                  ? filteredProportionArray
+                  : yAxisVariable?.vocabulary
+              }
               selectedValues={vizConfig.numeratorValues}
               onSelectedValuesChange={onNumeratorValuesChange}
             />
@@ -899,7 +943,12 @@ function LineplotViz(props: VisualizationProps) {
             style={{ gridColumn: 2, gridRow: 3, justifyContent: 'center' }}
           >
             <ValuePicker
-              allowedValues={yAxisVariable?.vocabulary}
+              allowedValues={
+                filteredProportionArray != null &&
+                filteredProportionArray.length > 0
+                  ? filteredProportionArray
+                  : yAxisVariable?.vocabulary
+              }
               selectedValues={vizConfig.denominatorValues}
               onSelectedValuesChange={onDenominatorValuesChange}
             />
