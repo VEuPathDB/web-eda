@@ -885,7 +885,7 @@ function LineplotViz(props: VisualizationProps) {
 
   /**
    * changed allowedValues to respect filters
-   * ideally, valuePicker component needs be changed to behave like Legend, e.g., disabling checkbox (grayed out) per filter
+   * ideally, valuePicker component will need to be changed to behave like Legend, e.g., disabling checkbox (grayed out) per filter
    * but it is not that simple task, especially with upcoming release, so skipped it for now
    */
   const proportionInputs = (
