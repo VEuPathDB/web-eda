@@ -298,19 +298,29 @@ function LineplotViz(props: VisualizationProps) {
   );
 
   // update numeratorValues and denominatorValues depending on filters and filteredProportionArray
-  useEffect(
-    () =>
-      updateVizConfig({
-        denominatorValues:
-          yAxisVariable != null
-            ? filteredProportionArray != null &&
-              filteredProportionArray.length > 0
-              ? filteredProportionArray
-              : yAxisVariable?.vocabulary
-            : undefined,
-      }),
-    [filters, filteredProportionArray]
-  );
+  useEffect(() => {
+    updateVizConfig({
+      // handle edge case of numeratorValues when filters are changed without changing yAxisVariable
+      // e.g., switching from Viz to Browser and Subset, changing filters, and coming back to Viz
+      numeratorValues:
+        filteredProportionArray == null || filteredProportionArray.length === 0
+          ? vizConfig.numeratorValues
+          : vizConfig.numeratorValues != null
+          ? vizConfig.numeratorValues.every((value: string) =>
+              filteredProportionArray?.includes(value)
+            )
+            ? vizConfig.numeratorValues
+            : undefined
+          : undefined,
+      denominatorValues:
+        yAxisVariable != null
+          ? filteredProportionArray != null &&
+            filteredProportionArray.length > 0
+            ? filteredProportionArray
+            : yAxisVariable?.vocabulary
+          : undefined,
+    });
+  }, [filters, filteredProportionArray]);
 
   const handleInputVariableChange = useCallback(
     (selectedVariables: VariablesByInputName) => {
@@ -371,6 +381,7 @@ function LineplotViz(props: VisualizationProps) {
       vizConfig.binWidth,
       vizConfig.binWidthTimeUnit,
       findEntityAndVariable,
+      filteredProportionArray,
     ]
   );
 
