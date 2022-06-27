@@ -531,32 +531,59 @@ const BoxplotResponseData = array(
   ])
 );
 
-export type BoxplotResponse = TypeOf<typeof BoxplotResponse>;
-export const BoxplotResponse = type({
-  boxplot: type({
-    data: BoxplotResponseData,
-    // typing computedVariableMetadata for computation apps such as alphadiv and abundance
-    config: intersection([
-      type({
-        completeCasesAllVars: number,
-        completeCasesAxesVars: number,
-        xVariableDetails: type({
-          variableId: string,
-          entityId: string,
-        }),
-        yVariableDetails: type({
-          variableId: string,
-          entityId: string,
-        }),
-      }),
-      partial({
-        computedVariableMetadata: ComputedVariableMetadata,
-      }),
-    ]),
+// boxplot stats table
+export type BoxplotStatsTable = TypeOf<typeof BoxplotStatsTable>;
+export const BoxplotStatsTable = partial({
+  xVariableDetails: type({
+    variableId: string,
+    entityId: string,
+    value: string,
   }),
-  sampleSizeTable: sampleSizeTableArray,
-  completeCasesTable: completeCasesTableArray,
+  facetVariableDetails: array(
+    type({
+      variableId: string,
+      entityId: string,
+      value: string,
+    })
+  ),
+  parameter: union([number, array(number), nullType]),
+  pvalue: union([number, array(number), nullType]),
+  statistic: union([number, array(number), nullType]),
+  method: union([string, array(string), nullType]),
+  statsError: string,
 });
+
+export type BoxplotResponse = TypeOf<typeof BoxplotResponse>;
+export const BoxplotResponse = intersection([
+  type({
+    boxplot: type({
+      data: BoxplotResponseData,
+      // typing computedVariableMetadata for computation apps such as alphadiv and abundance
+      config: intersection([
+        type({
+          completeCasesAllVars: number,
+          completeCasesAxesVars: number,
+          xVariableDetails: type({
+            variableId: string,
+            entityId: string,
+          }),
+          yVariableDetails: type({
+            variableId: string,
+            entityId: string,
+          }),
+        }),
+        partial({
+          computedVariableMetadata: ComputedVariableMetadata,
+        }),
+      ]),
+    }),
+    sampleSizeTable: sampleSizeTableArray,
+    completeCasesTable: completeCasesTableArray,
+  }),
+  partial({
+    statsTable: array(BoxplotStatsTable),
+  }),
+]);
 
 export interface MapMarkersRequestParams {
   studyId: string;

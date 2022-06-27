@@ -75,6 +75,10 @@ import { useDefaultDependentAxisRange } from '../../../hooks/computeDefaultDepen
 import { findEntityAndVariable as findCollectionVariableEntityAndVariable } from '../../../utils/study-metadata';
 // type of computedVariableMetadata for computation apps such as alphadiv and abundance
 import { ComputedVariableMetadata } from '../../../api/DataClient/types';
+// boxplot stats table
+import { TabbedDisplay } from '@veupathdb/coreui';
+import { BoxplotStatsTable } from '../../../api/DataClient/types';
+import { BoxStatsTable } from '../../BoxStatsTable';
 
 type BoxplotData = { series: BoxplotSeries };
 // type of computedVariableMetadata for computation apps such as alphadiv and abundance
@@ -82,10 +86,17 @@ type BoxplotComputedVariableMetadata = {
   computedVariableMetadata?: ComputedVariableMetadata;
 };
 
+// type of statsTable for computation apps such as alphadiv and abundance
+type BoxplotStatsTableType = {
+  statsTable?: BoxplotStatsTable[];
+};
+
 // add type of computedVariableMetadata for computation apps such as alphadiv and abundance
 export type BoxplotDataWithCoverage = (BoxplotData | FacetedData<BoxplotData>) &
   CoverageStatistics &
-  BoxplotComputedVariableMetadata;
+  BoxplotComputedVariableMetadata &
+  // type of statsTable for computation apps such as alphadiv and abundance
+  BoxplotStatsTableType;
 
 const plotContainerStyles = {
   height: 450,
@@ -505,41 +516,115 @@ function BoxplotViz(props: VisualizationProps) {
         : variableDisplayWithUnit(yAxisVariable) ?? 'Y-axis'
       : variableDisplayWithUnit(yAxisVariable) ?? 'Y-axis';
 
-  const plotNode = (
-    <BoxplotWithControls
-      // data.value
-      data={data.value}
-      updateThumbnail={updateThumbnail}
-      containerStyles={!isFaceted(data.value) ? plotContainerStyles : undefined}
-      spacingOptions={!isFaceted(data.value) ? plotSpacingOptions : undefined}
-      orientation={'vertical'}
-      displayLegend={false}
-      // alphadiv abundance: set a independentAxisLabel condition for abundance
-      independentAxisLabel={independentAxisLabel}
-      dependentAxisLabel={dependentAxisLabel}
-      // show/hide independent/dependent axis tick label
-      showIndependentAxisTickLabel={true}
-      showDependentAxisTickLabel={true}
-      showMean={true}
-      interactive={!isFaceted(data.value) ? true : false}
-      showSpinner={data.pending || filteredCounts.pending}
-      showRawData={true}
-      legendTitle={variableDisplayWithUnit(overlayVariable)}
-      // for custom legend passing checked state in the  checkbox to PlotlyPlot
-      legendItems={legendItems}
-      checkedLegendItems={checkedLegendItems}
-      onCheckedLegendItemsChange={onCheckedLegendItemsChange}
-      // axis range control
-      vizConfig={vizConfig}
-      updateVizConfig={updateVizConfig}
-      // add dependent axis range for better displaying tick labels in log-scale
-      defaultDependentAxisRange={defaultDependentAxisRange}
-      // no need to pass dependentAxisRange
-      // pass useState of truncation warnings
-      truncatedDependentAxisWarning={truncatedDependentAxisWarning}
-      setTruncatedDependentAxisWarning={setTruncatedDependentAxisWarning}
-    />
-  );
+  const plotNode =
+    computation.descriptor.configuration == null ||
+    (computation.descriptor.configuration != null &&
+      computation.descriptor.type !== 'alphadiv' &&
+      computation.descriptor.type !== 'abundance') ? (
+      <BoxplotWithControls
+        // data.value
+        data={data.value}
+        updateThumbnail={updateThumbnail}
+        containerStyles={
+          !isFaceted(data.value) ? plotContainerStyles : undefined
+        }
+        spacingOptions={!isFaceted(data.value) ? plotSpacingOptions : undefined}
+        orientation={'vertical'}
+        displayLegend={false}
+        // alphadiv abundance: set a independentAxisLabel condition for abundance
+        independentAxisLabel={independentAxisLabel}
+        dependentAxisLabel={dependentAxisLabel}
+        // show/hide independent/dependent axis tick label
+        showIndependentAxisTickLabel={true}
+        showDependentAxisTickLabel={true}
+        showMean={true}
+        interactive={!isFaceted(data.value) ? true : false}
+        showSpinner={data.pending || filteredCounts.pending}
+        showRawData={true}
+        legendTitle={variableDisplayWithUnit(overlayVariable)}
+        // for custom legend passing checked state in the  checkbox to PlotlyPlot
+        legendItems={legendItems}
+        checkedLegendItems={checkedLegendItems}
+        onCheckedLegendItemsChange={onCheckedLegendItemsChange}
+        // axis range control
+        vizConfig={vizConfig}
+        updateVizConfig={updateVizConfig}
+        // add dependent axis range for better displaying tick labels in log-scale
+        defaultDependentAxisRange={defaultDependentAxisRange}
+        // no need to pass dependentAxisRange
+        // pass useState of truncation warnings
+        truncatedDependentAxisWarning={truncatedDependentAxisWarning}
+        setTruncatedDependentAxisWarning={setTruncatedDependentAxisWarning}
+      />
+    ) : (
+      <TabbedDisplay
+        themeRole="primary"
+        tabs={[
+          {
+            displayName: 'Box plot',
+            content: (
+              <div style={{ marginTop: 15 }}>
+                <BoxplotWithControls
+                  // data.value
+                  data={data.value}
+                  updateThumbnail={updateThumbnail}
+                  containerStyles={
+                    !isFaceted(data.value) ? plotContainerStyles : undefined
+                  }
+                  spacingOptions={
+                    !isFaceted(data.value) ? plotSpacingOptions : undefined
+                  }
+                  orientation={'vertical'}
+                  displayLegend={false}
+                  // alphadiv abundance: set a independentAxisLabel condition for abundance
+                  independentAxisLabel={independentAxisLabel}
+                  dependentAxisLabel={dependentAxisLabel}
+                  // show/hide independent/dependent axis tick label
+                  showIndependentAxisTickLabel={true}
+                  showDependentAxisTickLabel={true}
+                  showMean={true}
+                  interactive={!isFaceted(data.value) ? true : false}
+                  showSpinner={data.pending || filteredCounts.pending}
+                  showRawData={true}
+                  legendTitle={variableDisplayWithUnit(overlayVariable)}
+                  // for custom legend passing checked state in the  checkbox to PlotlyPlot
+                  legendItems={legendItems}
+                  checkedLegendItems={checkedLegendItems}
+                  onCheckedLegendItemsChange={onCheckedLegendItemsChange}
+                  // axis range control
+                  vizConfig={vizConfig}
+                  updateVizConfig={updateVizConfig}
+                  // add dependent axis range for better displaying tick labels in log-scale
+                  defaultDependentAxisRange={defaultDependentAxisRange}
+                  // no need to pass dependentAxisRange
+                  // pass useState of truncation warnings
+                  truncatedDependentAxisWarning={truncatedDependentAxisWarning}
+                  setTruncatedDependentAxisWarning={
+                    setTruncatedDependentAxisWarning
+                  }
+                />
+              </div>
+            ),
+          },
+          {
+            displayName: 'Statistics',
+            content: (
+              <>
+                <BoxStatsTable
+                  data={data}
+                  entities={entities}
+                  descriptor={computation.descriptor}
+                  xAxisVariable={xAxisVariable}
+                  overlayVariable={overlayVariable}
+                  facetVariable={facetVariable}
+                  independentAxisLabel={independentAxisLabel}
+                />
+              </>
+            ),
+          },
+        ]}
+      />
+    );
 
   const legendNode = legendItems != null && !data.pending && data != null && (
     <PlotLegend
@@ -987,6 +1072,8 @@ export function boxplotResponseToData(
     completeCasesAxesVars: response.boxplot.config.completeCasesAxesVars,
     // config.computedVariableMetadata should also be returned
     computedVariableMetadata: response.boxplot.config.computedVariableMetadata,
+    // add statsTable in the response for computation apps such as alphadiv and abundance
+    statsTable: response.statsTable,
   } as BoxplotDataWithCoverage;
 }
 
