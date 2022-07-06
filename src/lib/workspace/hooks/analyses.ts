@@ -23,7 +23,6 @@ export function useWorkspaceAnalysis(
   const analysisClient = useAnalysisClient();
 
   const history = useHistory();
-  const location = useLocation();
   const { url } = useRouteMatch();
 
   const preloadAnalysis = usePreloadAnalysis();
@@ -56,9 +55,9 @@ export function useWorkspaceAnalysis(
         await preloadAnalysis(analysisId);
         creatingAnalysis.current = false;
 
-        const subPath = findSubPath(newAnalysis, location, url);
+        const subPath = findSubPath(newAnalysis, history.location, url);
         const newLocation = {
-          ...location,
+          ...history.location,
           pathname: Path.resolve(url, '..', analysisId + subPath),
         };
 
@@ -66,7 +65,7 @@ export function useWorkspaceAnalysis(
         return analysisId;
       }
     },
-    [analysisClient, history, location, preloadAnalysis, url]
+    [analysisClient, history, preloadAnalysis, url]
   );
 
   return useAnalysis(defaultAnalysis, createAnalysis, analysisId);

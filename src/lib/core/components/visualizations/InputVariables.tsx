@@ -47,7 +47,7 @@ const sectionInfo: Record<string, SectionSpec> = {
   },
 };
 
-interface CustomSectionSpec extends SectionSpec {
+export interface CustomSectionSpec extends SectionSpec {
   content: ReactNode;
 }
 

@@ -327,7 +327,7 @@ function NewVisualizationPicker(props: Props) {
                           displayName: 'Unnamed visualization',
                           descriptor: {
                             type: vizOverview.name!,
-                            configuration: vizType?.createDefaultConfig(),
+                            configuration: vizType?.createDefaultConfig() ?? {},
                           },
                         })
                       );
@@ -393,7 +393,7 @@ function FullScreenVisualization(props: Props & { id: string }) {
   const constraints = overview?.dataElementConstraints;
   const dataElementDependencyOrder = overview?.dataElementDependencyOrder;
   const updateConfiguration = useCallback(
-    (configuration: unknown) => {
+    (configuration: Record<string, unknown>) => {
       updateVisualizations((visualizations) =>
         visualizations.map((v) =>
           v.visualizationId !== id
