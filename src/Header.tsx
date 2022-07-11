@@ -5,6 +5,7 @@ import { WdkDependenciesContext } from '@veupathdb/wdk-client/lib/Hooks/WdkDepen
 import { User } from '@veupathdb/wdk-client/lib/Utils/WdkUser';
 import { DevLoginFormContext } from '.';
 import { endpoint } from './constants';
+import SelectList from '@veupathdb/coreui/dist/components/inputs/SelectList';
 
 const buttonLinkStyle = {
   color: 'whitesmoke',
@@ -23,6 +24,11 @@ export default function Header() {
   const [user, setUser] = React.useState<User>();
   const [errorMsg, setErrorMsg] = React.useState<string>('');
   const { wdkService } = useNonNullableContext(WdkDependenciesContext);
+  const [value, setValue] = React.useState<string[]>([]);
+
+  const onChange = (value: string[]) => {
+    setValue(value);
+  };
 
   React.useEffect(() => {
     wdkService.getCurrentUser().then(setUser);
@@ -65,6 +71,19 @@ export default function Header() {
       <div
         style={{ fontSize: '1rem', padding: '1em 1em 0', position: 'relative' }}
       >
+        <SelectList
+          name="this is the name"
+          items={[
+            { display: 'A', value: 'A' },
+            { display: 'B', value: 'B' },
+            { display: 'C', value: 'C' },
+          ]}
+          value={value}
+          onChange={onChange}
+          buttonDisplayContent={
+            value.length ? value.join(', ') : 'Select your variable(s)'
+          }
+        />
         {user == null ? (
           <>Loading user...</>
         ) : user.isGuest ? (

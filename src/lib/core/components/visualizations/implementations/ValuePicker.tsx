@@ -3,6 +3,7 @@ import { CheckboxList } from '@veupathdb/wdk-client/lib/Components';
 import { isEqual, sortBy } from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
 import PopoverButton from '@veupathdb/components/lib/components/widgets/PopoverButton';
+import SelectList from '@veupathdb/coreui/dist/components/inputs/SelectList';
 
 export type ValuePickerProps = {
   allowedValues?: string[];
@@ -64,6 +65,40 @@ export function ValuePicker({
     </span>
   );
 
+  const popoverCustomizations = (
+    <div style={{ textAlign: 'center', padding: '.75em 0.25em 0.25em' }}>
+      <Button
+        type="button"
+        style={{ width: '40%', margin: '5px' }}
+        variant="outlined"
+        color="default"
+        size="small"
+        onClick={() => {
+          setCurrentlySelected(selectedValues);
+          onSelectedValuesChange([...selectedValues]);
+          /* spread to make intentionally referentially unequal to trigger update of selectedValuesSerialNumber */
+        }}
+      >
+        Cancel
+      </Button>
+      <Button
+        type="button"
+        style={{ width: '40%', margin: '5px' }}
+        variant="contained"
+        color="default"
+        size="small"
+        onClick={() =>
+          onSelectedValuesChange(
+            sortBy(currentlySelected, (val) => allowedValues.indexOf(val))
+          )
+        }
+        disabled={!isModified}
+      >
+        Save
+      </Button>
+    </div>
+  );
+
   return (
     <Tooltip
       title={isModified ? 'This item has unsaved changes' : ''}
@@ -71,47 +106,62 @@ export function ValuePicker({
       arrow={true}
     >
       <div>
-        <PopoverButton key={selectedValuesSerialNumber} label={label}>
-          <div style={{ padding: '.75em 0.25em 0.25em' }}>
-            <CheckboxList
-              items={items}
-              value={currentlySelected}
-              onChange={setCurrentlySelected}
-            />
-          </div>
-          <div style={{ textAlign: 'center', padding: '.75em 0.25em 0.25em' }}>
-            <Button
-              type="button"
-              style={{ width: '40%', margin: '5px' }}
-              variant="outlined"
-              color="default"
-              size="small"
-              onClick={() => {
-                setCurrentlySelected(selectedValues);
-                onSelectedValuesChange([...selectedValues]);
-                /* spread to make intentionally referentially unequal to trigger update of selectedValuesSerialNumber */
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="button"
-              style={{ width: '40%', margin: '5px' }}
-              variant="contained"
-              color="default"
-              size="small"
-              onClick={() =>
-                onSelectedValuesChange(
-                  sortBy(currentlySelected, (val) => allowedValues.indexOf(val))
-                )
-              }
-              disabled={!isModified}
-            >
-              Save
-            </Button>
-          </div>
-        </PopoverButton>
+        <SelectList
+          items={items}
+          value={currentlySelected}
+          onChange={setCurrentlySelected}
+          buttonDisplayContent={label}
+          // popoverCustomizations={popoverCustomizations}
+          onClose={() =>
+            onSelectedValuesChange(
+              sortBy(currentlySelected, (val) => allowedValues.indexOf(val))
+            )
+          }
+        />
       </div>
     </Tooltip>
   );
 }
+
+// {/* <div>
+// <PopoverButton key={selectedValuesSerialNumber} label={label}>
+//   <div style={{ padding: '.75em 0.25em 0.25em' }}>
+//     <CheckboxList
+//       items={items}
+//       value={currentlySelected}
+//       onChange={setCurrentlySelected}
+//     />
+//   </div>
+//   <div style={{ textAlign: 'center', padding: '.75em 0.25em 0.25em' }}>
+//     <Button
+//       type="button"
+//       style={{ width: '40%', margin: '5px' }}
+//       variant="outlined"
+//       color="default"
+//       size="small"
+//       onClick={() => {
+//         setCurrentlySelected(selectedValues);
+//         onSelectedValuesChange([...selectedValues]);
+//         /* spread to make intentionally referentially unequal to trigger update of selectedValuesSerialNumber */
+//       }}
+//     >
+//       Cancel
+//     </Button>
+//     <Button
+//       type="button"
+//       style={{ width: '40%', margin: '5px' }}
+//       variant="contained"
+//       color="default"
+//       size="small"
+//       onClick={() =>
+//         onSelectedValuesChange(
+//           sortBy(currentlySelected, (val) => allowedValues.indexOf(val))
+//         )
+//       }
+//       disabled={!isModified}
+//     >
+//       Save
+//     </Button>
+//   </div>
+// </PopoverButton>
+// </div> */}
