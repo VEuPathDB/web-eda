@@ -80,9 +80,7 @@ export default function Header() {
           ]}
           value={value}
           onChange={onChange}
-          buttonDisplayContent={
-            value.length ? value.join(', ') : 'Select your variable(s)'
-          }
+          defaultButtonDisplayContent={'Select your variable(s)'}
         />
         {user == null ? (
           <>Loading user...</>
