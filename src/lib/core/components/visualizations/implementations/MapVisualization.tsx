@@ -646,6 +646,8 @@ function MapViz(props: VisualizationProps) {
                     outputEntity?.displayNamePlural ?? outputEntity?.displayName
                   }`,
                   dependentAxisLogScale: vizConfig.dependentAxisLogScale,
+                  // pass proportionMode to ChartMarker
+                  proportionMode: proportionMode,
                 }
               : {})}
           />
