@@ -436,9 +436,7 @@ function ScatterplotViz(props: VisualizationProps<Options>) {
             : [],
           showMissingness: vizConfig.showMissingness ? 'TRUE' : 'FALSE',
         },
-        ...(computation.descriptor.configuration
-          ? { computeConfig: computation.descriptor.configuration }
-          : {}),
+        computeConfig: computation.descriptor.configuration,
       };
 
       const response = await dataClient.getVisualizationData(
@@ -1270,7 +1268,8 @@ function ScatterplotWithControls({
         vizConfig,
         {
           // truncation overrides for the axis minima for log scale
-          // only pass values that you want to take effect!
+          // only pass key/values that you want overridden
+          // (e.g. false values will override just as much as true)
           ...(vizConfig.independentAxisLogScale &&
           xMinMaxDataRange?.min != null &&
           xMinMaxDataRange.min <= 0
@@ -1471,7 +1470,7 @@ function ScatterplotWithControls({
             <Notification
               title={''}
               text={
-                'Nothing can be plotted with log scale because all values are negative or zero'
+                'Nothing can be plotted with log scale because all values are zero or negative'
               }
               color={'#5586BE'}
               onAcknowledgement={() =>
@@ -1564,7 +1563,7 @@ function ScatterplotWithControls({
             <Notification
               title={''}
               text={
-                'Nothing can be plotted with log scale because all values are negative or zero'
+                'Nothing can be plotted with log scale because all values are zero or negative'
               }
               color={'#5586BE'}
               onAcknowledgement={() =>

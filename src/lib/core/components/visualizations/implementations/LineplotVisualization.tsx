@@ -1245,19 +1245,19 @@ function LineplotWithControls({
     dismissedIndependentAllNegativeWarning,
     setDismissedIndependentAllNegativeWarning,
   ] = useState<boolean>(false);
-  const independentAllNegative =
+  const independentAllNegative = // or zero
     vizConfig.independentAxisLogScale &&
     xMinMaxDataRange?.max != null &&
-    xMinMaxDataRange.max < 0;
+    xMinMaxDataRange.max <= 0;
 
   const [
     dismissedDependentAllNegativeWarning,
     setDismissedDependentAllNegativeWarning,
   ] = useState<boolean>(false);
-  const dependentAllNegative =
+  const dependentAllNegative = // or zero
     vizConfig.dependentAxisLogScale &&
     yMinMaxDataRange?.max != null &&
-    yMinMaxDataRange.max < 0;
+    yMinMaxDataRange.max <= 0;
 
   return (
     <>
@@ -1316,7 +1316,7 @@ function LineplotWithControls({
             <Notification
               title={''}
               text={
-                'Nothing can be plotted with log scale because all values are negative or zero'
+                'Nothing can be plotted with log scale because all values are zero or negative'
               }
               color={'#5586BE'}
               onAcknowledgement={() =>
@@ -1446,7 +1446,7 @@ function LineplotWithControls({
             <Notification
               title={''}
               text={
-                'Nothing can be plotted with log scale because all values are negative or zero'
+                'Nothing can be plotted with log scale because all values are zero or negative'
               }
               color={'#5586BE'}
               onAcknowledgement={() =>
