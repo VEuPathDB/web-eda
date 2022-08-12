@@ -1,1 +1,1 @@
-export { MapVeuContainer } from './MapVeuContainer';
+export { MapVEuContainer } from './MapVEuContainer';

@@ -26,6 +26,7 @@ import { WorkspaceContainer } from './WorkspaceContainer';
 import { AnalysisPanel } from './AnalysisPanel';
 import { RecordController } from '@veupathdb/wdk-client/lib/Controllers';
 import { EDAWorkspaceHeading } from './EDAWorkspaceHeading';
+import { MapVEuFullscreen } from '../mapveu/MapVEuFullscreen';
 
 const theme = createTheme(workspaceTheme);
 
@@ -208,6 +209,28 @@ export function WorkspaceRouter({
                   recordClass="dataset"
                   primaryKey={props.match.params.studyId}
                 />
+              </WorkspaceContainer>
+            )}
+          />
+          <Route
+            path={[
+              `${path}/:studyId/:analysisId/fullscreen-map`,
+              `${path}/:studyId/new/fullscreen-map`,
+            ]}
+            render={(
+              props: RouteComponentProps<{
+                studyId: string;
+                analysisId?: string;
+              }>
+            ) => (
+              <WorkspaceContainer
+                {...props.match.params}
+                subsettingServiceUrl={subsettingServiceUrl}
+                dataServiceUrl={dataServiceUrl}
+                userServiceUrl={userServiceUrl}
+                downloadServiceUrl={downloadServiceUrl}
+              >
+                <MapVEuFullscreen />
               </WorkspaceContainer>
             )}
           />

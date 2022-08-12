@@ -8,6 +8,7 @@ import {
   useLocation,
   useRouteMatch,
 } from 'react-router';
+import { Link } from 'react-router-dom';
 
 // Functions
 import { cx } from './Utils';
@@ -132,9 +133,8 @@ export function AnalysisPanel({
   const [lastVarPath, setLastVarPath] = useState('');
   const [lastVizPath, setLastVizPath] = useState('');
   const [globalFiltersDialogOpen, setGlobalFiltersDialogOpen] = useState(false);
-  const [sharingModalVisible, setSharingModalVisible] = useState<boolean>(
-    false
-  );
+  const [sharingModalVisible, setSharingModalVisible] =
+    useState<boolean>(false);
 
   const permissionsValue = usePermissions();
   const approvalStatus: ApprovalStatus = permissionsValue.loading
@@ -246,16 +246,21 @@ export function AnalysisPanel({
                 variableId?: string;
               }>
             ) => (
-              <div className="Entities">
-                <EntityDiagram
-                  expanded
-                  orientation="horizontal"
-                  selectedEntity={props.match.params.entityId}
-                  selectedVariable={props.match.params.variableId}
-                  entityCounts={totalCounts.value}
-                  filteredEntityCounts={filteredCounts.value}
-                  filteredEntities={filteredEntities}
-                />
+              <div>
+                <Link to={`${routeBase}/fullscreen-map`}>
+                  <button style={{ padding: 5 }}>Open fullscreen map</button>
+                </Link>
+                <div className="Entities">
+                  <EntityDiagram
+                    expanded
+                    orientation="horizontal"
+                    selectedEntity={props.match.params.entityId}
+                    selectedVariable={props.match.params.variableId}
+                    entityCounts={totalCounts.value}
+                    filteredEntityCounts={filteredCounts.value}
+                    filteredEntities={filteredEntities}
+                  />
+                </div>
               </div>
             )}
           />

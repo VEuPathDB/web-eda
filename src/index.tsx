@@ -41,7 +41,7 @@ import {
 import { endpoint, rootElement, rootUrl } from './constants';
 import reportWebVitals from './reportWebVitals';
 import Header from './Header';
-import { MapVeuContainer } from './lib/mapveu';
+import { MapVEuContainer } from './lib/mapveu';
 import { WorkspaceRouter } from './lib/workspace/WorkspaceRouter';
 import UIThemeProvider from '@veupathdb/coreui/dist/components/theming/UIThemeProvider';
 
@@ -173,7 +173,7 @@ initialize({
     },
     {
       path: '/mapveu',
-      component: MapVeuContainer,
+      component: MapVEuContainer,
       exact: false,
     },
     ...routes,

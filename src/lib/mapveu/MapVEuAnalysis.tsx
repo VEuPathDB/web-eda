@@ -13,7 +13,7 @@ interface Props {
   analysisId: string;
   studyId: string;
 }
-export function MapVeuAnalysis(props: Props) {
+export function MapVEuAnalysis(props: Props) {
   const { analysisId } = props;
   const studyRecord = useStudyRecord();
   const studyMetadata = useStudyMetadata();
