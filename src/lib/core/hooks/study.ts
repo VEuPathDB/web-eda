@@ -12,7 +12,10 @@ import {
   getScopes,
   getNodeId,
 } from '@veupathdb/wdk-client/lib/Utils/CategoryUtils';
-import { AnswerJsonFormatConfig } from '@veupathdb/wdk-client/lib/Utils/WdkModel';
+import {
+  AnswerJsonFormatConfig,
+  RecordInstance,
+} from '@veupathdb/wdk-client/lib/Utils/WdkModel';
 
 // Definitions
 import {
@@ -32,7 +35,7 @@ import {
 } from '../utils/study-metadata';
 
 // Hooks
-import { useStudyRecord } from '..';
+import { useStudyRecord, useStudyRecordClass } from '..';
 
 const STUDY_RECORD_CLASS_NAME = 'dataset';
 
@@ -147,22 +150,25 @@ export function useWdkStudyRecords(
  * */
 export function useWdkStudyReleases(): Array<WdkStudyRelease> {
   const studyRecord = useStudyRecord();
+  const studyRecordClass = useStudyRecordClass();
+  const tableName = 'DownloadVersions';
 
   return (
-    useWdkService((wdkService) => {
-      return wdkService.getRecord(STUDY_RECORD_CLASS_NAME, studyRecord.id, {
-        tables: ['DownloadVersion'],
-      });
-    })?.tables['DownloadVersion'].map(
-      (release) => ({
-        // DAVE/JAMIE: I was sure if I could tell TS that these values
-        // would always be present.
+    useWdkService(async (wdkService) => {
+      if (studyRecordClass.tablesMap[tableName] == null) return;
+      const recordInstance = await wdkService.getRecord(
+        STUDY_RECORD_CLASS_NAME,
+        studyRecord.id,
+        {
+          tables: [tableName],
+        }
+      );
+      return recordInstance?.tables[tableName].map((release) => ({
         releaseNumber: release.build_number?.toString(),
         description: release.note?.toString(),
         date: release.release_date?.toString(),
-      }),
-      [studyRecord.id]
-    ) ?? []
+      }));
+    }) ?? []
   );
 }
 
