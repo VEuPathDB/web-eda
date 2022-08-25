@@ -238,7 +238,9 @@ export function InputVariables(props: Props) {
                 <h4>{sectionInfo[inputRole ?? 'default'].title}</h4>
               </div>
               {inputs
-                .filter((input) => input.role === inputRole)
+                .filter(
+                  (input) => input.role === inputRole && !input.readonlyValue
+                )
                 .map((input) => (
                   <div
                     key={input.name}
