@@ -174,7 +174,7 @@ function FullScreenMap(props: FullScreenComponentProps) {
     computationType: 'pass',
     markerType: appState.markerType,
     // Endpoint can't currently handle checkedLegendItems
-    // checkedLegendItems: appState.checkedLegendItems,
+    checkedLegendItems: appState.checkedLegendItems,
     //TO DO: maybe dependentAxisLogScale
   });
 
@@ -330,7 +330,6 @@ function FullScreenMap(props: FullScreenComponentProps) {
         animation={defaultAnimation}
         viewport={viewport}
         markers={markers}
-        mouseMode={mouseMode}
         flyToMarkers={
           markers &&
           markers.length > 0 &&
@@ -339,6 +338,9 @@ function FullScreenMap(props: FullScreenComponentProps) {
         flyToMarkersDelay={500}
         onBoundsChanged={setBoundsZoomLevel}
         onViewportChanged={onViewportChanged}
+        // show mouse tool
+        showMouseToolbar={true}
+        mouseMode={mouseMode}
         onMouseModeChange={onMouseModeChange}
       />
       {/* </div> */}
