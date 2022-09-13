@@ -5,13 +5,7 @@ import LinePlot, {
 } from '@veupathdb/components/lib/plots/LinePlot';
 
 import * as t from 'io-ts';
-import {
-  useCallback,
-  useMemo,
-  useState,
-  useEffect,
-  useDebugValue,
-} from 'react';
+import { useCallback, useMemo, useState, useEffect } from 'react';
 
 import DataClient, {
   LineplotRequestParams,
@@ -62,6 +56,7 @@ import {
   NumberOrTimeDelta,
   NumberOrTimeDeltaRange,
   TimeDelta,
+  NumberRange,
 } from '@veupathdb/components/lib/types/general';
 import {
   LinePlotDataSeries,
@@ -641,13 +636,21 @@ function LineplotViz(props: VisualizationProps) {
     [data]
   );
 
-  const defaultDependentAxisRange = useDefaultAxisRange(
+  let defaultDependentAxisRange = useDefaultAxisRange(
     yAxisVariable,
     data.value?.yMin,
     data.value?.yMinPos,
     data.value?.yMax,
     vizConfig.dependentAxisLogScale
   );
+
+  if (vizConfig.valueSpecConfig === 'Proportion')
+    if (vizConfig.dependentAxisLogScale)
+      defaultDependentAxisRange = {
+        min: data.value?.yMinPos,
+        max: 1,
+      } as NumberRange;
+    else defaultDependentAxisRange = { min: 0, max: 1 };
 
   // custom legend list
   const legendItems: LegendItemsProps[] = useMemo(() => {
