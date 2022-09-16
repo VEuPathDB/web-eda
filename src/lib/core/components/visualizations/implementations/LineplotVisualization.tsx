@@ -644,7 +644,7 @@ function LineplotViz(props: VisualizationProps) {
     vizConfig.dependentAxisLogScale
   );
 
-  if (vizConfig.valueSpecConfig === 'Proportion')
+  if (data.value != null && vizConfig.valueSpecConfig === 'Proportion')
     if (vizConfig.dependentAxisLogScale)
       defaultDependentAxisRange = {
         min: data.value?.yMinPos,
