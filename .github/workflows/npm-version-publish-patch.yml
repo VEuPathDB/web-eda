@@ -20,4 +20,4 @@ jobs:
         with:
           token: ${{ secrets.NPM_TOKEN }}
           access: public
-          tag: ${{ github.ref_name }}
+          tag: patch-${{ github.ref_name }}
