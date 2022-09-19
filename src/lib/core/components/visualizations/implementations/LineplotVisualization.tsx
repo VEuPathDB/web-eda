@@ -12,7 +12,7 @@ import DataClient, {
   LineplotResponse,
 } from '../../../api/DataClient';
 
-import { usePromise } from '../../../hooks/promise';
+import { usePromise, PromiseHookState } from '../../../hooks/promise';
 import { useUpdateThumbnailEffect } from '../../../hooks/thumbnails';
 import {
   useDataClient,
@@ -636,21 +636,13 @@ function LineplotViz(props: VisualizationProps) {
     [data]
   );
 
-  let defaultDependentAxisRange = useDefaultAxisRange(
+  // use a hook to handle default dependent axis range for Lineplot Viz Proportion
+  const defaultDependentAxisRange = useDefaultDependentAxisRangeProportion(
+    data,
     yAxisVariable,
-    data.value?.yMin,
-    data.value?.yMinPos,
-    data.value?.yMax,
-    vizConfig.dependentAxisLogScale
+    vizConfig.dependentAxisLogScale,
+    vizConfig.valueSpecConfig
   );
-
-  if (data.value != null && vizConfig.valueSpecConfig === 'Proportion')
-    if (vizConfig.dependentAxisLogScale)
-      defaultDependentAxisRange = {
-        min: data.value?.yMinPos,
-        max: 1,
-      } as NumberRange;
-    else defaultDependentAxisRange = { min: 0, max: 1 };
 
   // custom legend list
   const legendItems: LegendItemsProps[] = useMemo(() => {
@@ -2231,4 +2223,32 @@ function isSuitableCategoricalVariable(variable?: Variable): boolean {
     variable.vocabulary != null &&
     variable.distinctValuesCount != null
   );
+}
+
+/**
+ * A hook to handle default dependent axis range for Lineplot Viz Proportion
+ */
+function useDefaultDependentAxisRangeProportion(
+  data: PromiseHookState<LinePlotDataWithCoverage | undefined>,
+  yAxisVariable?: Variable,
+  dependentAxisLogScale?: boolean,
+  valueSpecConfig?: string
+) {
+  let defaultDependentAxisRange = useDefaultAxisRange(
+    yAxisVariable,
+    data.value?.yMin,
+    data.value?.yMinPos,
+    data.value?.yMax,
+    dependentAxisLogScale
+  );
+
+  if (data.value != null && valueSpecConfig === 'Proportion')
+    if (dependentAxisLogScale)
+      defaultDependentAxisRange = {
+        min: data.value?.yMinPos,
+        max: 1,
+      } as NumberRange;
+    else defaultDependentAxisRange = { min: 0, max: 1 };
+
+  return defaultDependentAxisRange;
 }
