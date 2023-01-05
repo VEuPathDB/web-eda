@@ -100,6 +100,7 @@ export function TableFilter({
           );
         }
       );
+      console.log({ distribution });
       const fgValueByLabel = Object.fromEntries(
         distribution.foreground.histogram.map(({ binLabel, value }) => [
           binLabel,

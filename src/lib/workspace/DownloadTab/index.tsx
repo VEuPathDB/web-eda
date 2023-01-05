@@ -120,6 +120,7 @@ export default function DownloadTab({
     const hasPermission =
       permission.permissions.perDataset[studyRecord.id[0].value]
         ?.actionAuthorization['resultsAll'];
+    console.log({ studyAccess, requestNeedsApproval, hasPermission });
     const requestElement = (
       <button className="link" style={{ padding: 0 }} onClick={handleClick}>
         request access

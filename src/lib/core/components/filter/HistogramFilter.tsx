@@ -167,6 +167,8 @@ export function HistogramFilter(props: Props) {
         }
       );
 
+      console.log({ distribution });
+
       const entityDisplayNamePlural =
         entity.displayNamePlural ?? entity.displayName;
 
