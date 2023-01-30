@@ -156,15 +156,19 @@ export function AbundanceConfiguration(props: ComputationConfigProps) {
   assertComputationWithConfig<AbundanceConfig>(computation, Computation);
 
   // Add visualization type specific computation configuration with plugin.additionalComputeConfig
-  // (for example, here scatterplot has as additional parameter that the boxplot does not need)
+  // (for example, here scatterplot and boxplot differ on the numberVariablesReturned param)
   // Only need to add this extra config when the config is empty.
-  const visualizationType = computation.visualizations.find(
+  const visualizationType: string = computation.visualizations.find(
     (viz) => viz.visualizationId === visualizationId
-  )?.descriptor.type;
+  )
+    ? computation.visualizations.find(
+        (viz) => viz.visualizationId === visualizationId
+      )!.descriptor.type
+    : '';
 
   if (!computation.descriptor.configuration) {
     computation.descriptor.configuration = {
-      ...plugin.visualizationPlugins[visualizationType as string]?.options
+      ...plugin.visualizationPlugins[visualizationType]?.options
         .additionalComputeConfig,
     };
   }
