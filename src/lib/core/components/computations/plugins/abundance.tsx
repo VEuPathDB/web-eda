@@ -26,6 +26,7 @@ export type AbundanceConfig = t.TypeOf<typeof AbundanceConfig>;
 export const AbundanceConfig = t.type({
   collectionVariable: VariableDescriptor,
   rankingMethod: t.string,
+  numberVariablesReturned: t.number,
 });
 
 export const plugin: ComputationPlugin = {
@@ -54,6 +55,9 @@ export const plugin: ComputationPlugin = {
         }
       },
       hideShowMissingnessToggle: true,
+      additionalComputeConfig: {
+        numberVariablesReturned: 10,
+      },
     }),
     scatterplot: scatterplotVisualization.withOptions({
       getComputedYAxisDetails(config) {
@@ -75,6 +79,9 @@ export const plugin: ComputationPlugin = {
         }
       },
       hideShowMissingnessToggle: true,
+      additionalComputeConfig: {
+        numberVariablesReturned: 8,
+      },
     }),
   },
 };
@@ -140,13 +147,28 @@ export function AbundanceConfiguration(props: ComputationConfigProps) {
     visualizationId,
   } = props;
   const studyMetadata = useStudyMetadata();
+
   // Include known collection variables in this array.
   const collections = useCollectionVariables(studyMetadata.rootEntity);
   if (collections.length === 0)
     throw new Error('Could not find any collections for this app.');
 
+  console.log(computation.descriptor.configuration);
+
   assertComputationWithConfig<AbundanceConfig>(computation, Computation);
+
+  // Add visualization type specific computation configuration with plugin.additionalComputeConfig
+  // (for example, here scatterplot has as additional parameter that the boxplot does not need)
+  const visualizationType = computation.visualizations.find(
+    (viz) => viz.visualizationId === visualizationId
+  )?.descriptor.type;
+  computation.descriptor.configuration = {
+    ...computation.descriptor.configuration,
+    ...plugin.visualizationPlugins[visualizationType as string]?.options
+      .additionalComputeConfig,
+  };
   const configuration = computation.descriptor.configuration;
+  console.log(configuration);
 
   const changeConfigHandler = useConfigChangeHandler<AbundanceConfig>(
     analysisState,
@@ -182,6 +204,7 @@ export function AbundanceConfiguration(props: ComputationConfigProps) {
       return configuration.rankingMethod;
     }
   }, [configuration]);
+
   return (
     <ComputationStepContainer
       computationStepInfo={{

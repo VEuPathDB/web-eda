@@ -229,6 +229,7 @@ interface Options extends LayoutOptions, TitleOptions, OverlayOptions {
   getComputedOverlayVariable?(config: unknown): VariableDescriptor | undefined;
   hideTrendlines?: boolean;
   hideLogScale?: boolean;
+  additionalComputeConfig?: unknown;
 }
 
 function ScatterplotViz(props: VisualizationProps<Options>) {
@@ -565,6 +566,8 @@ function ScatterplotViz(props: VisualizationProps<Options>) {
         valueSpecValue = 'bestFitLineWithRaw';
       }
 
+      console.log(computation.descriptor.configuration);
+
       // request params
       const params = {
         studyId,
@@ -580,7 +583,10 @@ function ScatterplotViz(props: VisualizationProps<Options>) {
             : undefined,
           showMissingness: vizConfig.showMissingness ? 'TRUE' : 'FALSE',
         },
-        computeConfig: computation.descriptor.configuration,
+        computeConfig: {
+          ...(computation.descriptor.configuration as object),
+          ...(options?.additionalComputeConfig as object),
+        },
       };
 
       const response = await dataClient.getVisualizationData(
@@ -1372,8 +1378,8 @@ function ScatterplotViz(props: VisualizationProps<Options>) {
   const [showBanner, setShowBanner] = useState(true);
 
   //DKDK
-  console.log('data =', data);
-  console.log('!showLogScaleBanner =', !showLogScaleBanner);
+  // console.log('data =', data);
+  // console.log('!showLogScaleBanner =', !showLogScaleBanner);
 
   const controlsNode = (
     <>

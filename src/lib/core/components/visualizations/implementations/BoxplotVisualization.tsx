@@ -125,6 +125,7 @@ interface Options
   getComputedYAxisDetails?: (
     computeConfig: unknown
   ) => ComputedVariableDetails | undefined;
+  additionalComputeConfig?: unknown;
 }
 
 export const boxplotVisualization = createVisualizationPlugin({
