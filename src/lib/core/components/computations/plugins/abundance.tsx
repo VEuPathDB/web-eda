@@ -162,11 +162,14 @@ export function AbundanceConfiguration(props: ComputationConfigProps) {
   const visualizationType = computation.visualizations.find(
     (viz) => viz.visualizationId === visualizationId
   )?.descriptor.type;
-  computation.descriptor.configuration = {
-    ...computation.descriptor.configuration,
-    ...plugin.visualizationPlugins[visualizationType as string]?.options
-      .additionalComputeConfig,
-  };
+
+  if (!computation.descriptor.configuration) {
+    computation.descriptor.configuration = {
+      ...plugin.visualizationPlugins[visualizationType as string]?.options
+        .additionalComputeConfig,
+    };
+  }
+
   const configuration = computation.descriptor.configuration;
   console.log(configuration);
 
