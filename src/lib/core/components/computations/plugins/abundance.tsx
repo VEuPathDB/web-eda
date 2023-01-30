@@ -153,12 +153,11 @@ export function AbundanceConfiguration(props: ComputationConfigProps) {
   if (collections.length === 0)
     throw new Error('Could not find any collections for this app.');
 
-  console.log(computation.descriptor.configuration);
-
   assertComputationWithConfig<AbundanceConfig>(computation, Computation);
 
   // Add visualization type specific computation configuration with plugin.additionalComputeConfig
   // (for example, here scatterplot has as additional parameter that the boxplot does not need)
+  // Only need to add this extra config when the config is empty.
   const visualizationType = computation.visualizations.find(
     (viz) => viz.visualizationId === visualizationId
   )?.descriptor.type;
@@ -171,7 +170,6 @@ export function AbundanceConfiguration(props: ComputationConfigProps) {
   }
 
   const configuration = computation.descriptor.configuration;
-  console.log(configuration);
 
   const changeConfigHandler = useConfigChangeHandler<AbundanceConfig>(
     analysisState,

@@ -566,8 +566,6 @@ function ScatterplotViz(props: VisualizationProps<Options>) {
         valueSpecValue = 'bestFitLineWithRaw';
       }
 
-      console.log(computation.descriptor.configuration);
-
       // request params
       const params = {
         studyId,
@@ -583,10 +581,7 @@ function ScatterplotViz(props: VisualizationProps<Options>) {
             : undefined,
           showMissingness: vizConfig.showMissingness ? 'TRUE' : 'FALSE',
         },
-        computeConfig: {
-          ...(computation.descriptor.configuration as object),
-          ...(options?.additionalComputeConfig as object),
-        },
+        computeConfig: computation.descriptor.configuration,
       };
 
       const response = await dataClient.getVisualizationData(
