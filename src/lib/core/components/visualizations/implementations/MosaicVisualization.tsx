@@ -761,6 +761,7 @@ const StatsCollapsibleBannerContent = () => {
         </tr>
         <tr>
           <td rowSpan={4}>
+            <br />
             <b>Rows (Y-axis):</b>
             <br />
             exposure/risk factor; <br />
@@ -822,6 +823,8 @@ const StatsCollapsibleBannerContent = () => {
       </table>
       <br />
       <b>All studies:</b>
+      <br />
+      <br />
       <ul>
         <li>
           <b>
@@ -867,6 +870,8 @@ const StatsCollapsibleBannerContent = () => {
       <br />
       <br />
       <u>Cross-sectional Studies:</u>
+      <br />
+      <br />
       <ul>
         <li>
           <b>
@@ -881,6 +886,7 @@ const StatsCollapsibleBannerContent = () => {
             <i>Prevalence</i>].
           </li>
         </ul>
+        <br />
         <li>
           <b>
             <i>Odds Ratio</i>
@@ -896,8 +902,10 @@ const StatsCollapsibleBannerContent = () => {
           </li>
         </ul>
       </ul>
-      {/* <br /> */}
+      <br />
       <u>Case-Control Studies:</u>
+      <br />
+      <br />
       <ul>
         <li>
           <b>
@@ -919,6 +927,8 @@ const StatsCollapsibleBannerContent = () => {
       <br />
       <br />
       <u>Cohort Studies and Randomized Controlled Trials:</u>
+      <br />
+      <br />
       <ul>
         <li>
           <b>
@@ -938,6 +948,8 @@ const StatsCollapsibleBannerContent = () => {
       </ul>
       <br />
       <b>Studies that investigate diagnostic test performance:</b>
+      <br />
+      <br />
       <ul>
         <li>
           <b>
@@ -952,7 +964,7 @@ const StatsCollapsibleBannerContent = () => {
             (X-axis) is present is [<i>Sensitivity</i>].
           </li>
         </ul>
-
+        <br />
         <li>
           <b>
             <i>Specificity</i>
@@ -966,7 +978,7 @@ const StatsCollapsibleBannerContent = () => {
             (X-axis) is absent is [<i>Specificity</i>].
           </li>
         </ul>
-
+        <br />
         <li>
           <b>
             <i>Positive Predictive Value</i>
@@ -981,7 +993,7 @@ const StatsCollapsibleBannerContent = () => {
             <i>Positive Predictive Value</i>].
           </li>
         </ul>
-
+        <br />
         <li>
           <b>
             <i>Negative Predictive Value</i>
