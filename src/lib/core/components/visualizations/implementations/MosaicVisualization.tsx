@@ -57,6 +57,7 @@ import FacetedMosaicPlot from '@veupathdb/components/lib/plots/facetedPlots/Face
 import { useVizConfig } from '../../../hooks/visualizations';
 import { createVisualizationPlugin } from '../VisualizationPlugin';
 import { LayoutOptions } from '../../layouts/types';
+import Banner from '@veupathdb/coreui/dist/components/banners/Banner';
 
 const plotContainerStyles = {
   width: 750,
@@ -514,75 +515,491 @@ function MosaicViz(props: Props<Options>) {
 
   const LayoutComponent = options?.layoutComponent ?? PlotLayout;
 
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
-      <div style={{ display: 'flex', alignItems: 'center', zIndex: 1 }}>
-        <InputVariables
-          inputs={[
-            {
-              name: 'xAxisVariable',
-              label: 'X-axis',
-              role: 'axis',
-            },
-            {
-              name: 'yAxisVariable',
-              label: 'Y-axis',
-              role: 'axis',
-            },
-            ...(options?.hideFacetInputs
-              ? []
-              : [
-                  {
-                    name: 'facetVariable',
-                    label: 'Facet',
-                    role: 'stratification',
-                  } as const,
-                ]),
-          ]}
-          entities={entities}
-          selectedVariables={{
-            xAxisVariable: vizConfig.xAxisVariable,
-            yAxisVariable: vizConfig.yAxisVariable,
-            facetVariable: vizConfig.facetVariable,
+  // testing collapsible banner
+  const MoreInfoBoxBanner = () => {
+    const tableCellStyle = {
+      border: '1px solid black',
+      borderSpacing: '0px',
+      width: '7em',
+    };
+
+    return (
+      <>
+        The shorthand "A, B, C, D" is used to refer to specific quadrants in the
+        2x2 table:
+        <table
+          style={{
+            borderCollapse: 'collapse',
+            marginTop: '1em',
+            textAlign: 'center',
           }}
-          onChange={handleInputVariableChange}
-          constraints={dataElementConstraints}
-          dataElementDependencyOrder={dataElementDependencyOrder}
-          starredVariables={starredVariables}
-          toggleStarredVariable={toggleStarredVariable}
-          enableShowMissingnessToggle={
-            facetVariable != null &&
-            data.value?.completeCasesAllVars !==
-              data.value?.completeCasesAxesVars
+        >
+          <tr>
+            <td style={{ width: '10em' }}>&nbsp;</td>
+            <td colSpan={3}>
+              <b>
+                Columns (X-axis):
+                <br />
+              </b>{' '}
+              outcome/disease status;
+              <br />
+              gold standard/reference test result
+            </td>
+          </tr>
+          <tr>
+            <td rowSpan={3}>
+              <b>Rows (Y-axis):</b>
+              <br />
+              exposure/risk factor; <br />
+              diagnostic test result
+            </td>
+            <td style={tableCellStyle}>&nbsp;</td>
+            <td style={tableCellStyle}>
+              <b>+</b>
+            </td>
+            <td style={tableCellStyle}>
+              <b>-</b>
+            </td>
+          </tr>
+          <tr>
+            <td style={tableCellStyle}>
+              <b>+</b>
+            </td>
+            <td style={tableCellStyle}>
+              <b>A</b>
+            </td>
+            <td style={tableCellStyle}>
+              <b>B</b>
+            </td>
+          </tr>
+          <tr>
+            <td style={tableCellStyle}>
+              <b>-</b>
+            </td>
+            <td style={tableCellStyle}>
+              <b>C</b>
+            </td>
+            <td style={tableCellStyle}>
+              <b>D</b>
+            </td>
+          </tr>
+        </table>
+        <br />
+        <b>
+          <i>If you want to investigate a measure of association:</i>
+        </b>
+        <ul>
+          <li>
+            Columns (X-axis): select a value for Quadrant A representing the
+            outcome or disease status of interest.
+          </li>
+          <li>
+            Rows (Y-axis): select a value for Quadrant A representing the
+            exposure or risk factor of interest.
+          </li>
+        </ul>
+        <br />
+        <b>
+          <i>If you want to investigate diagnostic test performance:</i>
+        </b>
+        <ul>
+          <li>
+            Columns (X-axis): select a value for Quadrant A representing a
+            positive result for the reference (gold standard) diagnostic test.
+          </li>
+          <li>
+            Rows (Y-axis): select values for Quadrant A representing a positive
+            result for the diagnostic test being evaluated.
+          </li>
+        </ul>
+      </>
+    );
+  };
+
+  return (
+    <>
+      {/* more information box banner */}
+      {isTwoByTwo && (
+        <div>
+          <Banner
+            banner={{
+              type: 'info',
+              // message is used as a basic text
+              message:
+                'Learn how to set up a 2x2 table in order for statistics to be calculated correctly.',
+              pinned: true,
+              intense: false,
+              additionalMessage: undefined,
+              // text for showMore link
+              showMoreLinkText: 'Read more...',
+              // text for showless link
+              showLessLinkText: 'Read less...',
+              // color for show more links
+              showMoreLinkColor: '#000000',
+              // is showMoreLink bold?
+              isShowMoreLinkBold: true,
+            }}
+            onClose={() => null}
+            // collapsible content: React.FC
+            CollapsibleContent={MoreInfoBoxBanner}
+          />
+        </div>
+      )}
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'flex', alignItems: 'center', zIndex: 1 }}>
+          <InputVariables
+            inputs={[
+              {
+                name: 'xAxisVariable',
+                label: 'X-axis',
+                role: 'axis',
+              },
+              {
+                name: 'yAxisVariable',
+                label: 'Y-axis',
+                role: 'axis',
+              },
+              ...(options?.hideFacetInputs
+                ? []
+                : [
+                    {
+                      name: 'facetVariable',
+                      label: 'Facet',
+                      role: 'stratification',
+                    } as const,
+                  ]),
+            ]}
+            entities={entities}
+            selectedVariables={{
+              xAxisVariable: vizConfig.xAxisVariable,
+              yAxisVariable: vizConfig.yAxisVariable,
+              facetVariable: vizConfig.facetVariable,
+            }}
+            onChange={handleInputVariableChange}
+            constraints={dataElementConstraints}
+            dataElementDependencyOrder={dataElementDependencyOrder}
+            starredVariables={starredVariables}
+            toggleStarredVariable={toggleStarredVariable}
+            enableShowMissingnessToggle={
+              facetVariable != null &&
+              data.value?.completeCasesAllVars !==
+                data.value?.completeCasesAxesVars
+            }
+            showMissingness={vizConfig.showMissingness}
+            // this can be used to show and hide no data control
+            onShowMissingnessChange={
+              computation.descriptor.type === 'pass'
+                ? onShowMissingnessChange
+                : undefined
+            }
+            outputEntity={outputEntity}
+          />
+        </div>
+
+        <PluginError error={data.error} outputSize={outputSize} />
+        <OutputEntityTitle entity={outputEntity} outputSize={outputSize} />
+        <LayoutComponent
+          isFaceted={isFaceted(data.value)}
+          plotNode={plotNode}
+          controlsNode={controlsNode}
+          tableGroupNode={tableGroupNode}
+          // statistics tab is disabled in 2x2, so no need to prompt for required inputs
+          showRequiredInputsPrompt={
+            !areRequiredInputsSelected &&
+            !(isTwoByTwo && activeTab === 'Statistics')
           }
-          showMissingness={vizConfig.showMissingness}
-          // this can be used to show and hide no data control
-          onShowMissingnessChange={
-            computation.descriptor.type === 'pass'
-              ? onShowMissingnessChange
-              : undefined
-          }
-          outputEntity={outputEntity}
+          isMosaicPlot={true}
         />
       </div>
-
-      <PluginError error={data.error} outputSize={outputSize} />
-      <OutputEntityTitle entity={outputEntity} outputSize={outputSize} />
-      <LayoutComponent
-        isFaceted={isFaceted(data.value)}
-        plotNode={plotNode}
-        controlsNode={controlsNode}
-        tableGroupNode={tableGroupNode}
-        // statistics tab is disabled in 2x2, so no need to prompt for required inputs
-        showRequiredInputsPrompt={
-          !areRequiredInputsSelected &&
-          !(isTwoByTwo && activeTab === 'Statistics')
-        }
-        isMosaicPlot={true}
-      />
-    </div>
+    </>
   );
 }
+
+// stats collapsible banner
+const StatsCollapsibleBannerContent = () => {
+  const tableCellStyleNormal = {
+    border: '1px solid black',
+    borderSpacing: '0px',
+    width: '7em',
+  };
+
+  const tableCellStyleMoreWidth = {
+    border: '1px solid black',
+    borderSpacing: '0px',
+    width: '8em',
+  };
+
+  const tableCellStyleBold = {
+    border: '1px solid black',
+    borderSpacing: '0px',
+    width: '7em',
+  };
+
+  return (
+    <div>
+      The appropriate measure of association or diagnostic test performance
+      depends on the study design. The shorthand "A, B, C, D" is used to refer
+      to specific quadrants in the 2x2 contingency table:
+      <table
+        style={{
+          borderCollapse: 'collapse',
+          marginTop: '1em',
+          textAlign: 'center',
+        }}
+      >
+        <tr>
+          <td style={{ width: '10em' }}>&nbsp;</td>
+          <td colSpan={4}>
+            <b>
+              Columns (X-axis):
+              <br />
+            </b>{' '}
+            outcome/disease status;
+            <br />
+            gold standard/reference test result
+          </td>
+        </tr>
+        <tr>
+          <td rowSpan={4}>
+            <b>Rows (Y-axis):</b>
+            <br />
+            exposure/risk factor; <br />
+            diagnostic test result
+          </td>
+          <td style={tableCellStyleBold}>&nbsp;</td>
+          <td style={tableCellStyleBold}>
+            <b>+</b>
+          </td>
+          <td style={tableCellStyleBold}>
+            <b>-</b>
+          </td>
+          <td style={tableCellStyleMoreWidth}>
+            <i>Row Totals</i>
+          </td>
+        </tr>
+        <tr>
+          <td style={tableCellStyleBold}>
+            <b>+</b>
+          </td>
+          <td style={tableCellStyleBold}>
+            <b>A</b>
+          </td>
+          <td style={tableCellStyleBold}>
+            <b>B</b>
+          </td>
+          <td style={tableCellStyleMoreWidth}>
+            <i>A + B</i>
+          </td>
+        </tr>
+        <tr>
+          <td style={tableCellStyleBold}>
+            <b>-</b>
+          </td>
+          <td style={tableCellStyleBold}>
+            <b>C</b>
+          </td>
+          <td style={tableCellStyleBold}>
+            <b>D</b>
+          </td>
+          <td style={tableCellStyleMoreWidth}>
+            <i>C + D</i>
+          </td>
+        </tr>
+        <tr>
+          <td style={tableCellStyleNormal}>
+            <i>Column Totals</i>
+          </td>
+          <td style={tableCellStyleNormal}>
+            <i>A + C</i>
+          </td>
+          <td style={tableCellStyleNormal}>
+            <i>B + D</i>
+          </td>
+          <td style={tableCellStyleMoreWidth}>
+            <i>n = A + B + C + D</i>
+          </td>
+        </tr>
+      </table>
+      <br />
+      <b>All studies:</b>
+      <ul>
+        <li>
+          <b>
+            <i>
+              Chi-squared Statistic (&chi;<sup>2</sup>)
+            </i>
+          </b>
+          : &Sigma; (O<sub>i</sub> - EO<sub>i</sub>)<sup>2</sup> / EO
+          <sub>i</sub>
+          <ul>
+            <li>
+              Tests whether there is an association between the two 2x2 table
+              variables.
+            </li>
+            <li>If sample sizes are small, use Fisher’s Exact Test.</li>
+            <li>
+              For more information, see:{' '}
+              <a
+                href="https://www.bmj.com/about-bmj/resources-readers/publications/statistics-square-one/8-chi-squared-tests"
+                target="_blank"
+              >
+                https://www.bmj.com/about-bmj/resources-readers/publications/statistics-square-one/8-chi-squared-tests
+              </a>
+            </li>
+          </ul>
+        </li>
+        <br />
+        <li>
+          <b>
+            <i>Fisher’s Exact Test</i>
+          </b>
+          : [ (A + B)! (C + D)! (A + C)! (B + D)! ] / ( A! B! C! D! n! )
+          <ul>
+            <li>
+              Tests whether there is an association between the two 2x2 table
+              variables.
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <br />
+      <b>Studies that use prevalence data:</b>
+      <br />
+      <br />
+      <u>Cross-sectional Studies:</u>
+      <ul>
+        <li>
+          <b>
+            <i>Prevalence</i>
+          </b>
+          : (A + C) / (A + B + C + D)
+        </li>
+        <ul>
+          <li>
+            The proportion of the population who have the disease specified in
+            the columns (X-axis) at the examined point in time was [
+            <i>Prevalence</i>].
+          </li>
+        </ul>
+        <li>
+          <b>
+            <i>Odds Ratio</i>
+          </b>
+          : (A / B) / (C / D)
+        </li>
+        <ul>
+          <li>
+            The odds of having the disease specified in the columns (X-axis) was
+            [<i>Odds Ratio</i>] times as high in those exposed to the potential
+            risk factor indicated in the rows (Y-axis), as compared to those
+            unexposed.
+          </li>
+        </ul>
+      </ul>
+      {/* <br /> */}
+      <u>Case-Control Studies:</u>
+      <ul>
+        <li>
+          <b>
+            <i>Odds Ratio</i>
+          </b>
+          : (A / B) / (C / D)
+        </li>
+        <ul>
+          <li>
+            The odds of having the disease specified in the columns (X-axis) was
+            [<i>Odds Ratio</i>] times as high in those exposed to the potential
+            risk factor indicated in the rows (Y-axis) in the time period of
+            interest, as compared to those unexposed.
+          </li>
+        </ul>
+      </ul>
+      <br />
+      <b>Studies that use incidence data:</b>
+      <br />
+      <br />
+      <u>Cohort Studies and Randomized Controlled Trials:</u>
+      <ul>
+        <li>
+          <b>
+            <i>Risk Ratio</i>
+          </b>{' '}
+          (for studies using a population at risk approach): [A / (A + B)] / [C
+          / (C + D)]
+        </li>
+        <ul>
+          <li>
+            The risk of having the disease specified in the columns (X-axis)
+            over the follow-up period was [<i>Risk Ratio</i>] times as high in
+            those exposed to the potential risk factor indicated in the rows
+            (Y-axis), as compared to those unexposed.
+          </li>
+        </ul>
+      </ul>
+      <br />
+      <b>Studies that investigate diagnostic test performance:</b>
+      <ul>
+        <li>
+          <b>
+            <i>Sensitivity</i>
+          </b>
+          : A / (A + C)
+        </li>
+        <ul>
+          <li>
+            The probability of being positive by the diagnostic test indicated
+            in the rows (Y-axis) when the disease specified in the columns
+            (X-axis) is present is [<i>Sensitivity</i>].
+          </li>
+        </ul>
+
+        <li>
+          <b>
+            <i>Specificity</i>
+          </b>
+          : D / (B + D)
+        </li>
+        <ul>
+          <li>
+            The probability of being negative by the diagnostic test indicated
+            in the rows (Y-axis) when the disease specified in the columns
+            (X-axis) is absent is [<i>Specificity</i>].
+          </li>
+        </ul>
+
+        <li>
+          <b>
+            <i>Positive Predictive Value</i>
+          </b>
+          : A / (A + B)
+        </li>
+        <ul>
+          <li>
+            The probability that a person testing positive by the diagnostic
+            test indicated in the rows (Y-axis) actually has the disease
+            specified in the columns (X-axis) is [
+            <i>Positive Predictive Value</i>].
+          </li>
+        </ul>
+
+        <li>
+          <b>
+            <i>Negative Predictive Value</i>
+          </b>
+          : D / (C + D)
+        </li>
+        <ul>
+          <li>
+            The probability that a person testing negative by the diagnostic
+            test indicated in the rows (Y-axis) does NOT actually have the
+            disease specified in the columns (X-axis) is [
+            <i>Negative Predictive Value</i>].
+          </li>
+        </ul>
+      </ul>
+    </div>
+  );
+};
 
 function TwoByTwoStats(props?: {
   pValue?: number | string;
@@ -601,6 +1018,29 @@ function TwoByTwoStats(props?: {
           width: '750px',
         }}
       >
+        {/* stats collapsible banner */}
+        <Banner
+          banner={{
+            type: 'info',
+            // message is used as a basic text
+            message:
+              'Learn about appropriate statistics for each study design.',
+            pinned: true,
+            intense: false,
+            additionalMessage: undefined,
+            // text for showMore link
+            showMoreLinkText: 'Read more...',
+            // text for showless link
+            showLessLinkText: 'Read less...',
+            // color for show more links
+            showMoreLinkColor: '#000000',
+            // is showMoreLink bold?
+            isShowMoreLinkBold: true,
+          }}
+          onClose={() => null}
+          // collapsible content: React.FC
+          CollapsibleContent={StatsCollapsibleBannerContent}
+        />
         <i>Stats table coming soon!</i>
       </div>
     );
