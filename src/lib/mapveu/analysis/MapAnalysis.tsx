@@ -122,7 +122,6 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
   const geoConfigs = useGeoConfig(studyEntities);
   const analysisState = useAnalysis(analysisId, 'pass-through');
   const geoConfig = geoConfigs[0];
-
   const [isVizSelectorVisible, setIsVizSelectorVisible] = useState(false);
 
   const selectedVariables = useMemo(
@@ -145,6 +144,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
     basicMarkerError,
     overlayError,
     totalEntityCount,
+    totalVisibleEntityCount,
   } = useMapMarkers({
     requireOverlay: false,
     boundsZoomLevel: appState.boundsZoomLevel,
@@ -318,7 +318,9 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
               <SemiTransparentBanner
                 onToggleExpand={() => setMapHeaderIsExpanded((c) => !c)}
                 isExpanded={mapHeaderIsExpanded}
-              />
+              >
+                <h1>ok</h1>
+              </SemiTransparentBanner>
               <MapVEuMap
                 height="100%"
                 width="100%"
@@ -337,7 +339,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                 showGrid={geoConfig?.zoomLevelToAggregationLevel !== null}
                 zoomLevelToGeohashLevel={geoConfig?.zoomLevelToAggregationLevel}
               />
-              <FloatingDiv
+              {/* <FloatingDiv
                 style={{
                   top: 350,
                   right: 50,
@@ -349,8 +351,8 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                     title={variable?.displayName}
                   />
                 )}
-              </FloatingDiv>
-              <FloatingDiv
+              </FloatingDiv> */}
+              {/* <FloatingDiv
                 style={{
                   top: 10,
                   left: 100,
@@ -413,8 +415,8 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                     )
                   )}
                 </ul>
-              </FloatingDiv>
-              <FloatingDiv
+              </FloatingDiv> */}
+              {/* <FloatingDiv
                 style={{
                   bottom: 10,
                   left: 100,
@@ -461,17 +463,17 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                     />
                   </div>
                 )}
-              </FloatingDiv>
-              {(basicMarkerError || overlayError) && (
+              </FloatingDiv> */}
+              {/* {(basicMarkerError || overlayError) && (
                 <FloatingDiv
                   style={{ top: undefined, bottom: 50, left: 100, right: 100 }}
                 >
                   {basicMarkerError && <div>{String(basicMarkerError)}</div>}
                   {overlayError && <div>{String(overlayError)}</div>}
                 </FloatingDiv>
-              )}
+              )} */}
             </div>
-            <FloatingDiv
+            {/* <FloatingDiv
               style={{
                 top: 100,
                 left: 100,
@@ -509,7 +511,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                   </div>
                 </>
               )}
-            </FloatingDiv>
+            </FloatingDiv> */}
             <NewVisualizationPickerModal
               visible={isVizSelectorVisible}
               onVisibleChange={setIsVizSelectorVisible}

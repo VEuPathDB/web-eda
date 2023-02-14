@@ -6,11 +6,13 @@ export type SemiTransparentBannerProps = {
   style?: React.CSSProperties;
   isExpanded: boolean;
   onToggleExpand: () => void;
+  children: React.ReactNode;
 };
 export function SemiTransparentBanner({
   isExpanded,
   style,
   onToggleExpand,
+  children,
 }: SemiTransparentBannerProps) {
   return (
     <div
@@ -18,9 +20,7 @@ export function SemiTransparentBanner({
         !isExpanded ? 'SemiTransparentBanner__collapsed' : ''
       }`}
     >
-      <div className={isExpanded ? '' : 'screenReaderOnly'}>
-        <h1>title</h1>
-      </div>
+      <div className={isExpanded ? '' : 'screenReaderOnly'}>{children}</div>
       <div className="ExpandToggleContainer">
         <button
           className={`ExpandToggleButton ${
