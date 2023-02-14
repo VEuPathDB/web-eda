@@ -54,6 +54,7 @@ import {
   useFieldTree,
   useFlattenedFields,
 } from '../../core/components/variableTrees/hooks';
+import { SemiTransparentBanner } from './SemiTransparentBanner';
 
 const mapStyle: React.CSSProperties = {
   zIndex: 1,
@@ -301,6 +302,8 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
     </>
   );
 
+  const [mapHeaderIsExpanded, setMapHeaderIsExpanded] = useState<boolean>(true);
+
   return (
     <PromiseResult state={appPromiseState}>
       {(app) => (
@@ -312,6 +315,10 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                 position: 'relative',
               }}
             >
+              <SemiTransparentBanner
+                onToggleExpand={() => setMapHeaderIsExpanded((c) => !c)}
+                isExpanded={mapHeaderIsExpanded}
+              />
               <MapVEuMap
                 height="100%"
                 width="100%"
@@ -332,7 +339,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
               />
               <FloatingDiv
                 style={{
-                  top: 50,
+                  top: 350,
                   right: 50,
                 }}
               >

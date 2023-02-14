@@ -60,6 +60,7 @@ export default function Header() {
         fontSize: '2.5em',
         fontWeight: 400,
         textAlign: 'left',
+        display: 'none',
       }}
     >
       {/* eslint-disable-next-line react/jsx-no-comment-textnodes */}
