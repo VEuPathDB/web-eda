@@ -62,6 +62,7 @@ a,
   margin-left: 0.5em;
   margin-right: 0;
 }
+
 .screenReaderOnly {
   /* TLDR: The [aria-label] attribute isn’t announced consistently 
   If text is not needed for sighted users, hide it this way. 

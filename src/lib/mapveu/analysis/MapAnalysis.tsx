@@ -55,6 +55,7 @@ import {
   useFlattenedFields,
 } from '../../core/components/variableTrees/hooks';
 import { SemiTransparentBanner } from './SemiTransparentBanner';
+import FilterChipList from '../../core/components/FilterChipList';
 
 const mapStyle: React.CSSProperties = {
   zIndex: 1,
@@ -123,7 +124,6 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
   const analysisState = useAnalysis(analysisId, 'pass-through');
   const geoConfig = geoConfigs[0];
   const [isVizSelectorVisible, setIsVizSelectorVisible] = useState(false);
-
   const selectedVariables = useMemo(
     () => ({
       overlay: appState.selectedOverlayVariable,
@@ -316,16 +316,20 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
               }}
             >
               <SemiTransparentBanner
-                onToggleExpand={() => setMapHeaderIsExpanded((c) => !c)}
+                analysisName={analysisState.analysis?.displayName}
                 isExpanded={mapHeaderIsExpanded}
-              >
-                <h1>ok</h1>
-              </SemiTransparentBanner>
+                onToggleExpand={() => setMapHeaderIsExpanded((c) => !c)}
+                studyName={studyRecord.displayName}
+                totalEntitesCount={totalEntityCount}
+                visibleEntitiesCount={totalVisibleEntityCount}
+              />
               <MapVEuMap
                 height="100%"
                 width="100%"
                 style={mapStyle}
-                showMouseToolbar
+                showMouseToolbar={false}
+                showZoomControl={false}
+                showLayerSelector={false}
                 showSpinner={pending}
                 animation={null}
                 viewport={appState.viewport}
