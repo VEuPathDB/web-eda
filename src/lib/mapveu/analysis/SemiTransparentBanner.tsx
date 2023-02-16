@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 import ArrowRight from '@veupathdb/coreui/dist/components/icons/ChevronRight';
 import Filter from '@veupathdb/coreui/dist/components/icons/Filter';
 import './SemiTransparentBanner.scss';
@@ -15,6 +15,7 @@ export type SemiTransparentBannerProps = {
   style?: React.CSSProperties;
   totalEntitesCount: number | undefined;
   visibleEntitiesCount: number | undefined;
+  filterList: () => ReactElement;
 };
 export function SemiTransparentBanner({
   analysisName,
@@ -24,6 +25,7 @@ export function SemiTransparentBanner({
   isExpanded,
   onToggleExpand,
   style,
+  filterList,
 }: SemiTransparentBannerProps) {
   return (
     /**
@@ -53,7 +55,11 @@ export function SemiTransparentBanner({
           <Logo />
         </div>
         <div>
-          <BannerContent studyName={studyName} analysisName={analysisName} />
+          <BannerContent
+            filterList={filterList}
+            studyName={studyName}
+            analysisName={analysisName}
+          />
         </div>
       </div>
       <div style={{ marginRight: '1rem', fontSize: 16 }}>
@@ -84,8 +90,13 @@ function Logo() {
 type BannerContentProps = {
   analysisName?: string;
   studyName: string;
+  filterList: () => ReactElement;
 };
-function BannerContent({ analysisName, studyName }: BannerContentProps) {
+function BannerContent({
+  analysisName,
+  filterList,
+  studyName,
+}: BannerContentProps) {
   return (
     <div
       style={{
@@ -132,13 +143,14 @@ function BannerContent({ analysisName, studyName }: BannerContentProps) {
             fontWeight: 'normal',
           }}
         >
-          <FiltersList
+          {filterList()}
+          {/* <FiltersList
             filters={Array(3)
               // filters={Array(8)
               // filters={Array(38)
               .fill(0)
               .map((i, idx) => i + idx)}
-          />
+          /> */}
         </div>
       </div>
     </div>

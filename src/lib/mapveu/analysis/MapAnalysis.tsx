@@ -27,7 +27,7 @@ import { Close, FilledButton, FloatingButton } from '@veupathdb/coreui';
 import { Visualization } from '../../core/types/visualization';
 import { useEntityCounts } from '../../core/hooks/entityCounts';
 import { Tooltip } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, useRouteMatch } from 'react-router-dom';
 import { ComputationPlugin } from '../../core/components/computations/Types';
 import { ZeroConfigWithButton } from '../../core/components/computations/ZeroConfiguration';
 import { histogramVisualization } from '../../core/components/visualizations/implementations/HistogramVisualization';
@@ -56,6 +56,7 @@ import {
 } from '../../core/components/variableTrees/hooks';
 import { SemiTransparentBanner } from './SemiTransparentBanner';
 import FilterChipList from '../../core/components/FilterChipList';
+import { VariableLinkConfig } from '../../core/components/VariableLink';
 
 const mapStyle: React.CSSProperties = {
   zIndex: 1,
@@ -304,6 +305,67 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
 
   const [mapHeaderIsExpanded, setMapHeaderIsExpanded] = useState<boolean>(true);
 
+  const { url: routeBase } = useRouteMatch();
+
+  const FilterChipListForHeader = () => {
+    const filters = analysisState.analysis?.descriptor.subset.descriptor;
+
+    const variableLinkConfig: VariableLinkConfig = {
+      type: 'link',
+      makeVariableLink: (value) => {
+        const { entityId, variableId } = value ?? {};
+        const linkBase = `${routeBase}/variables`;
+        if (entityId) {
+          if (variableId) {
+            return `${linkBase}/${entityId}/${variableId}`;
+          }
+          return `${linkBase}/${entityId}`;
+        }
+        return linkBase;
+      },
+    };
+
+    if (!studyEntities) return <></>;
+
+    return (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        className="FilterChips"
+      >
+        {filters && filters.length > 0 && (
+          <p
+            style={{
+              fontSize: 16,
+              margin: 0,
+              padding: 0,
+              fontWeight: 500,
+            }}
+          >
+            Filters:{' '}
+          </p>
+        )}
+        <FilterChipList
+          filters={filters}
+          removeFilter={(filter) =>
+            analysisState.analysis &&
+            analysisState.setFilters(
+              analysisState.analysis.descriptor.subset.descriptor.filter(
+                (f) => f !== filter
+              )
+            )
+          }
+          variableLinkConfig={variableLinkConfig}
+          entities={studyEntities}
+          // selectedEntityId={studyEntities.id}
+          // selectedVariableId={selectedVariables.id}
+        />
+      </div>
+    );
+  };
   return (
     <PromiseResult state={appPromiseState}>
       {(app) => (
@@ -322,6 +384,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                 studyName={studyRecord.displayName}
                 totalEntitesCount={totalEntityCount}
                 visibleEntitiesCount={totalVisibleEntityCount}
+                filterList={FilterChipListForHeader}
               />
               <MapVEuMap
                 height="100%"
@@ -343,7 +406,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                 showGrid={geoConfig?.zoomLevelToAggregationLevel !== null}
                 zoomLevelToGeohashLevel={geoConfig?.zoomLevelToAggregationLevel}
               />
-              {/* <FloatingDiv
+              <FloatingDiv
                 style={{
                   top: 350,
                   right: 50,
@@ -355,10 +418,10 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                     title={variable?.displayName}
                   />
                 )}
-              </FloatingDiv> */}
-              {/* <FloatingDiv
+              </FloatingDiv>
+              <FloatingDiv
                 style={{
-                  top: 10,
+                  top: 250,
                   left: 100,
                 }}
               >
@@ -419,8 +482,8 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                     )
                   )}
                 </ul>
-              </FloatingDiv> */}
-              {/* <FloatingDiv
+              </FloatingDiv>
+              <FloatingDiv
                 style={{
                   bottom: 10,
                   left: 100,
@@ -467,17 +530,17 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                     />
                   </div>
                 )}
-              </FloatingDiv> */}
-              {/* {(basicMarkerError || overlayError) && (
+              </FloatingDiv>
+              {(basicMarkerError || overlayError) && (
                 <FloatingDiv
                   style={{ top: undefined, bottom: 50, left: 100, right: 100 }}
                 >
                   {basicMarkerError && <div>{String(basicMarkerError)}</div>}
                   {overlayError && <div>{String(overlayError)}</div>}
                 </FloatingDiv>
-              )} */}
+              )}
             </div>
-            {/* <FloatingDiv
+            <FloatingDiv
               style={{
                 top: 100,
                 left: 100,
@@ -515,7 +578,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                   </div>
                 </>
               )}
-            </FloatingDiv> */}
+            </FloatingDiv>
             <NewVisualizationPickerModal
               visible={isVizSelectorVisible}
               onVisibleChange={setIsVizSelectorVisible}
