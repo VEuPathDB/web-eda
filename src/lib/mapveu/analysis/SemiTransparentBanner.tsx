@@ -129,7 +129,6 @@ function BannerContent({ analysisName, studyName }: BannerContentProps) {
           style={{
             display: 'flex',
             justifyContent: 'center',
-            marginTop: '0.5rem',
             fontWeight: 'normal',
           }}
         >
@@ -181,7 +180,6 @@ function ExpandCollapseButton({
           {isExpanded ? 'Close' : 'Open'} header.
         </span>
       </button>
-      <div className="ExpandToggleContainer__HoverIndicator" aria-hidden></div>
     </div>
   );
 }
