@@ -336,18 +336,15 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
         }}
         className="FilterChips"
       >
-        {filters && filters.length > 0 && (
-          <p
-            style={{
-              fontSize: 16,
-              margin: 0,
-              padding: 0,
-              fontWeight: 500,
-            }}
-          >
-            Filters:{' '}
-          </p>
-        )}
+        <p
+          style={{
+            fontSize: 16,
+            margin: 0,
+            padding: '0 2px',
+          }}
+        >
+          {filters?.length === 0 ? `No filters applied.` : `Filters:`}
+        </p>
         <FilterChipList
           filters={filters}
           removeFilter={(filter) =>
@@ -366,6 +363,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
       </div>
     );
   };
+
   return (
     <PromiseResult state={appPromiseState}>
       {(app) => (
@@ -385,6 +383,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                 totalEntitesCount={totalEntityCount}
                 visibleEntitiesCount={totalVisibleEntityCount}
                 filterList={FilterChipListForHeader}
+                onAnalysisNameEdit={analysisState.setName}
               />
               <MapVEuMap
                 height="100%"

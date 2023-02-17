@@ -6,26 +6,30 @@ import { safeHtml } from '@veupathdb/wdk-client/lib/Utils/ComponentUtils';
 import { Chip, FilledButton, Pencil } from '@veupathdb/coreui';
 import { ChevronLeft, ChevronRight } from '@material-ui/icons';
 import FilterChipList from '../../core/components/FilterChipList';
+import { SaveableTextEditor } from '@veupathdb/wdk-client/lib/Components';
+import { ANALYSIS_NAME_MAX_LENGTH } from '../../core/utils/analysis';
 
 export type SemiTransparentBannerProps = {
   analysisName?: string;
+  filterList: () => ReactElement;
   isExpanded: boolean;
+  onAnalysisNameEdit: (newName: string) => void;
   onToggleExpand: () => void;
   studyName: string;
   style?: React.CSSProperties;
   totalEntitesCount: number | undefined;
   visibleEntitiesCount: number | undefined;
-  filterList: () => ReactElement;
 };
 export function SemiTransparentBanner({
   analysisName,
+  filterList,
+  isExpanded,
+  onAnalysisNameEdit,
+  onToggleExpand,
   studyName,
+  style,
   totalEntitesCount,
   visibleEntitiesCount,
-  isExpanded,
-  onToggleExpand,
-  style,
-  filterList,
 }: SemiTransparentBannerProps) {
   return (
     /**
@@ -59,6 +63,7 @@ export function SemiTransparentBanner({
             filterList={filterList}
             studyName={studyName}
             analysisName={analysisName}
+            onAnalysisNameEdit={onAnalysisNameEdit}
           />
         </div>
       </div>
@@ -91,12 +96,16 @@ type BannerContentProps = {
   analysisName?: string;
   studyName: string;
   filterList: () => ReactElement;
+  onAnalysisNameEdit: (newName: string) => void;
 };
 function BannerContent({
   analysisName,
   filterList,
   studyName,
+  onAnalysisNameEdit,
 }: BannerContentProps) {
+  if (!analysisName) return <></>;
+
   return (
     <div
       style={{
@@ -122,18 +131,38 @@ function BannerContent({
             paddingBottom: '0.5rem',
           }}
         >
-          <h1
+          <div
             style={{
-              fontSize: '19px',
-              fontStyle: 'italic',
-              padding: 0,
+              fontSize: 19,
             }}
           >
-            {safeHtml(studyName, { style: { fontWeight: 'bold' } })}:{' '}
-            <span>{analysisName}</span>
-          </h1>
-          <div style={{ display: 'flex', marginLeft: '0.5rem' }}>
-            <Pencil aria-hidden fontSize={19} fill="#6C8A9A" />
+            <SaveableTextEditor
+              displayValue={(value: string, handleEdit: () => void) => {
+                return (
+                  <h1
+                    onClick={handleEdit}
+                    style={{
+                      fontStyle: 'italic',
+                      padding: 0,
+                      fontSize: 19,
+                    }}
+                  >
+                    <span
+                      // This allows users to highlight the study name,
+                      // without editing the analysis name.
+                      onClick={(e) => e.stopPropagation()}
+                      style={{ cursor: 'default' }}
+                    >
+                      {safeHtml(studyName, { style: { fontWeight: 'bold' } })}:{' '}
+                    </span>
+                    <span>{analysisName}</span>
+                  </h1>
+                );
+              }}
+              value={analysisName}
+              onSave={onAnalysisNameEdit}
+              maxLength={ANALYSIS_NAME_MAX_LENGTH}
+            />
           </div>
         </div>
         <div
@@ -144,13 +173,6 @@ function BannerContent({
           }}
         >
           {filterList()}
-          {/* <FiltersList
-            filters={Array(3)
-              // filters={Array(8)
-              // filters={Array(38)
-              .fill(0)
-              .map((i, idx) => i + idx)}
-          /> */}
         </div>
       </div>
     </div>
