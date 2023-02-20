@@ -131,7 +131,6 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
     }),
     [appState.selectedOverlayVariable]
   );
-
   const findEntityAndVariable = useFindEntityAndVariable();
   const { entity, variable } =
     findEntityAndVariable(selectedVariables.overlay) ?? {};
@@ -305,23 +304,13 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
 
   const [mapHeaderIsExpanded, setMapHeaderIsExpanded] = useState<boolean>(true);
 
-  const { url: routeBase } = useRouteMatch();
-
   const FilterChipListForHeader = () => {
     const filters = analysisState.analysis?.descriptor.subset.descriptor;
 
     const variableLinkConfig: VariableLinkConfig = {
-      type: 'link',
-      makeVariableLink: (value) => {
-        const { entityId, variableId } = value ?? {};
-        const linkBase = `${routeBase}/variables`;
-        if (entityId) {
-          if (variableId) {
-            return `${linkBase}/${entityId}/${variableId}`;
-          }
-          return `${linkBase}/${entityId}`;
-        }
-        return linkBase;
+      type: 'button',
+      onClick(value) {
+        alert(`No implementation yet! ${JSON.stringify(value)}`);
       },
     };
 
@@ -345,21 +334,23 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
         >
           {filters?.length === 0 ? `No filters applied.` : `Filters:`}
         </p>
-        <FilterChipList
-          filters={filters}
-          removeFilter={(filter) =>
-            analysisState.analysis &&
-            analysisState.setFilters(
-              analysisState.analysis.descriptor.subset.descriptor.filter(
-                (f) => f !== filter
+        <div>
+          <FilterChipList
+            filters={filters}
+            removeFilter={(filter) =>
+              analysisState.analysis &&
+              analysisState.setFilters(
+                analysisState.analysis.descriptor.subset.descriptor.filter(
+                  (f) => f !== filter
+                )
               )
-            )
-          }
-          variableLinkConfig={variableLinkConfig}
-          entities={studyEntities}
-          // selectedEntityId={studyEntities.id}
-          // selectedVariableId={selectedVariables.id}
-        />
+            }
+            variableLinkConfig={variableLinkConfig}
+            entities={studyEntities}
+            // selectedEntityId={studyEntities.id}
+            // selectedVariableId={selectedVariables.id}
+          />
+        </div>
       </div>
     );
   };
@@ -377,13 +368,13 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
             >
               <SemiTransparentBanner
                 analysisName={analysisState.analysis?.displayName}
+                filterList={FilterChipListForHeader}
                 isExpanded={mapHeaderIsExpanded}
+                onAnalysisNameEdit={analysisState.setName}
                 onToggleExpand={() => setMapHeaderIsExpanded((c) => !c)}
                 studyName={studyRecord.displayName}
                 totalEntitesCount={totalEntityCount}
                 visibleEntitiesCount={totalVisibleEntityCount}
-                filterList={FilterChipListForHeader}
-                onAnalysisNameEdit={analysisState.setName}
               />
               <MapVEuMap
                 height="100%"
