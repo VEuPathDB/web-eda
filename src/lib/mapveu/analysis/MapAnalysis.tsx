@@ -26,7 +26,7 @@ import {
 import { Close, FilledButton, FloatingButton } from '@veupathdb/coreui';
 import { Visualization } from '../../core/types/visualization';
 import { useEntityCounts } from '../../core/hooks/entityCounts';
-import { Tooltip } from '@material-ui/core';
+import { makeStyles, Tooltip } from '@material-ui/core';
 import { Link, useRouteMatch } from 'react-router-dom';
 import { ComputationPlugin } from '../../core/components/computations/Types';
 import { ZeroConfigWithButton } from '../../core/components/computations/ZeroConfiguration';
@@ -54,7 +54,7 @@ import {
   useFieldTree,
   useFlattenedFields,
 } from '../../core/components/variableTrees/hooks';
-import { SemiTransparentBanner } from './SemiTransparentBanner';
+import { LogoProps, SemiTransparentBanner } from './SemiTransparentBanner';
 import FilterChipList from '../../core/components/FilterChipList';
 import { VariableLinkConfig } from '../../core/components/VariableLink';
 
@@ -89,6 +89,7 @@ const plugin: ComputationPlugin = {
 interface Props {
   analysisId: string;
   studyId: string;
+  logoProps: LogoProps;
 }
 
 export function MapAnalysis(props: Props) {
@@ -157,6 +158,15 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
     checkedLegendItems: undefined,
     //TO DO: maybe dependentAxisLogScale
   });
+
+  // Material UI CSS declarations
+  const useStyles = makeStyles((theme) => ({
+    chipListLabel: {
+      margin: '-2px 5px 5px 5px',
+      fontSize: '16px',
+      fontWeight: 500,
+    },
+  }));
 
   const finalMarkers = useMemo(() => markers || [], [markers]);
 
@@ -303,6 +313,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
   );
 
   const [mapHeaderIsExpanded, setMapHeaderIsExpanded] = useState<boolean>(true);
+  const classes = useStyles();
 
   const FilterChipListForHeader = () => {
     const filters = analysisState.analysis?.descriptor.subset.descriptor;
@@ -322,16 +333,11 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
+          minHeight: 30,
         }}
         className="FilterChips"
       >
-        <p
-          style={{
-            fontSize: 16,
-            margin: 0,
-            padding: '0 2px',
-          }}
-        >
+        <p className={classes.chipListLabel}>
           {filters?.length === 0 ? `No filters applied.` : `Filters:`}
         </p>
         <div>
@@ -370,6 +376,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                 analysisName={analysisState.analysis?.displayName}
                 filterList={FilterChipListForHeader}
                 isExpanded={mapHeaderIsExpanded}
+                logoProps={props.logoProps}
                 onAnalysisNameEdit={analysisState.setName}
                 onToggleExpand={() => setMapHeaderIsExpanded((c) => !c)}
                 studyName={studyRecord.displayName}

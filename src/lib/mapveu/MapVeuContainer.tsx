@@ -20,13 +20,15 @@ import {
 } from '../core/hooks/client';
 
 import './MapVEu.scss';
+import { LogoProps } from './analysis/SemiTransparentBanner';
 
 interface Props {
   singleAppMode?: string;
+  logoProps: LogoProps;
 }
 
 export function MapVeuContainer(props: Props) {
-  const { singleAppMode } = props;
+  const { singleAppMode, logoProps } = props;
   const edaClient = useConfiguredSubsettingClient('/eda-subsetting-service');
   const dataClient = useConfiguredDataClient('/eda-data-service');
   const computeClient = useConfiguredComputeClient('/eda-data-service');
@@ -42,7 +44,10 @@ export function MapVeuContainer(props: Props) {
         <Route
           path={`${path}/:studyId/:analysisId`}
           render={(
-            props: RouteComponentProps<{ studyId: string; analysisId: string }>
+            props: RouteComponentProps<{
+              analysisId: string;
+              studyId: string;
+            }>
           ) => (
             <EDAWorkspaceContainer
               studyId={props.match.params.studyId}
@@ -55,6 +60,7 @@ export function MapVeuContainer(props: Props) {
             >
               <MapAnalysis
                 analysisId={props.match.params.analysisId}
+                logoProps={logoProps}
                 studyId={props.match.params.studyId}
               />
             </EDAWorkspaceContainer>

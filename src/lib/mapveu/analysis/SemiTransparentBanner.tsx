@@ -19,6 +19,7 @@ export type SemiTransparentBannerProps = {
   style?: React.CSSProperties;
   totalEntitesCount: number | undefined;
   visibleEntitiesCount: number | undefined;
+  logoProps: LogoProps;
 };
 export function SemiTransparentBanner({
   analysisName,
@@ -30,6 +31,7 @@ export function SemiTransparentBanner({
   style,
   totalEntitesCount,
   visibleEntitiesCount,
+  logoProps,
 }: SemiTransparentBannerProps) {
   return (
     /**
@@ -56,7 +58,11 @@ export function SemiTransparentBanner({
         }`}
       >
         <div style={{ margin: '0 1.5rem 0 1.5rem' }}>
-          <Logo />
+          <Logo
+            siteName={logoProps.src}
+            href={logoProps.href}
+            src={logoProps.src}
+          />
         </div>
         <div>
           <BannerContent
@@ -80,13 +86,18 @@ export function SemiTransparentBanner({
   );
 }
 
-function Logo() {
+export type LogoProps = {
+  href: string;
+  src: string;
+  siteName: string;
+};
+function Logo({ href, siteName, src }: LogoProps) {
   return (
-    <a href="https://google.com">
+    <a href={href}>
       <img
-        style={{ borderRadius: '50%' }}
-        src="https://via.placeholder.com/50.png"
-        alt="Site Name Here"
+        style={{ borderRadius: '50%', height: 65 }}
+        src={src}
+        alt={siteName}
       />
     </a>
   );
@@ -128,7 +139,6 @@ function BannerContent({
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            paddingBottom: '0.5rem',
           }}
         >
           <div
@@ -143,7 +153,7 @@ function BannerContent({
                     onClick={handleEdit}
                     style={{
                       fontStyle: 'italic',
-                      padding: 0,
+                      padding: '10px 0',
                       fontSize: 19,
                     }}
                   >
@@ -214,55 +224,6 @@ function ExpandCollapseButton({
           {isExpanded ? 'Close' : 'Open'} header.
         </span>
       </button>
-    </div>
-  );
-}
-
-type FiltersListProps = {
-  filters: number[];
-};
-function FiltersList({ filters }: FiltersListProps) {
-  if (!filters || filters.length < 1) {
-    return <p>No filters applied.</p>;
-  }
-  return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <p style={{ margin: 0, fontSize: '17px', fontWeight: 500 }}>
-        Filters{filters.length > 5 && ` (${filters.length})`}:{' '}
-      </p>
-      <div
-        style={{
-          maxHeight: 50,
-          overflow: 'scroll',
-        }}
-      >
-        <ul
-          style={{
-            listStyleType: 'none',
-            display: 'flex',
-            flexFlow: 'wrap row',
-            margin: 0,
-            padding: '0.25rem 0',
-          }}
-        >
-          {filters.map((i) => (
-            <li
-              style={{
-                margin: '0 0.25rem',
-              }}
-              key={i}
-            >
-              <Chip text={`Filter Number: ${i + 1}`} />
-            </li>
-          ))}
-        </ul>
-      </div>
     </div>
   );
 }

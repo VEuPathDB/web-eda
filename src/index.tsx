@@ -194,7 +194,17 @@ initialize({
     },
     {
       path: '/mapveu',
-      component: () => <MapVeuContainer singleAppMode={singleAppMode} />,
+      component: () => (
+        <MapVeuContainer
+          logoProps={{
+            href: 'https://veupathdb.org',
+            src:
+              'https://veupathdb.org/veupathdb/images/VEuPathDB/icons-footer/vectorbase.png',
+            siteName: 'VectorBase',
+          }}
+          singleAppMode={singleAppMode}
+        />
+      ),
       exact: false,
       rootClassNameModifier: 'MapVEu',
     },
