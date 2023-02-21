@@ -207,6 +207,7 @@ initialize({
       ),
       exact: false,
       rootClassNameModifier: 'MapVEu',
+      isFullscreen: true,
     },
     ...routes,
   ],
