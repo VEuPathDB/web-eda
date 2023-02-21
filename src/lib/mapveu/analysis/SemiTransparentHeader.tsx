@@ -90,8 +90,8 @@ type BannerContentProps = {
 function BannerContent({
   analysisName = '',
   filterList,
-  studyName,
   onAnalysisNameEdit,
+  studyName,
 }: BannerContentProps) {
   const bannerContent = makeClassNameHelper('BannerContent');
 
@@ -117,9 +117,9 @@ function BannerContent({
               </h1>
             );
           }}
-          value={analysisName}
-          onSave={onAnalysisNameEdit}
           maxLength={ANALYSIS_NAME_MAX_LENGTH}
+          onSave={onAnalysisNameEdit}
+          value={analysisName}
         />
       </div>
       {filterList}
