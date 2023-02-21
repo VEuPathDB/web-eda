@@ -8,11 +8,17 @@ import { SaveableTextEditor } from '@veupathdb/wdk-client/lib/Components';
 import { ANALYSIS_NAME_MAX_LENGTH } from '../../core/utils/analysis';
 import './SemiTransparentHeader.scss';
 
+export type SemiTransparentHeaderLogoProps = {
+  href: string;
+  siteName: string;
+  src: string;
+};
+
 export type SemiTransparentHeaderProps = {
   analysisName?: string;
   filterList?: ReactElement;
   isExpanded: boolean;
-  logoProps: LogoProps;
+  logoProps: SemiTransparentHeaderLogoProps;
   onAnalysisNameEdit: (newName: string) => void;
   onToggleExpand: () => void;
   studyName: string;
@@ -51,23 +57,19 @@ export function SemiTransparentHeader({
           isExpanded ? '' : 'screenReaderOnly'
         }`}
       >
-        <div style={{ margin: '0 1.5rem 0 1.5rem' }}>
-          <Logo
-            siteName={logoProps.src}
-            href={logoProps.href}
-            src={logoProps.src}
-          />
+        <div className={semiTransparentHeader('__LogoContainer')}>
+          <a href={logoProps.href}>
+            <img src={logoProps.src} alt={logoProps.siteName} />
+          </a>
         </div>
-        <div>
-          <BannerContent
-            filterList={filterList}
-            studyName={studyName}
-            analysisName={analysisName}
-            onAnalysisNameEdit={onAnalysisNameEdit}
-          />
-        </div>
+        <BannerContent
+          filterList={filterList}
+          studyName={studyName}
+          analysisName={analysisName}
+          onAnalysisNameEdit={onAnalysisNameEdit}
+        />
       </div>
-      <div style={{ marginRight: '1rem', fontSize: 16 }}>
+      <div className={semiTransparentHeader('__SampleCounter')}>
         <p>
           {visibleEntitiesCount} of {totalEntitesCount} samples visible
         </p>
@@ -77,23 +79,6 @@ export function SemiTransparentHeader({
         onToggleExpand={onToggleExpand}
       />
     </header>
-  );
-}
-
-export type LogoProps = {
-  href: string;
-  src: string;
-  siteName: string;
-};
-function Logo({ href, siteName, src }: LogoProps) {
-  return (
-    <a href={href}>
-      <img
-        style={{ borderRadius: '50%', height: 65 }}
-        src={src}
-        alt={siteName}
-      />
-    </a>
   );
 }
 
@@ -111,74 +96,36 @@ function BannerContent({
 }: BannerContentProps) {
   if (!analysisName) return <></>;
 
+  const bannerContent = makeClassNameHelper('BannerContent');
+
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'flex-start',
-        }}
-      >
-        <div
-          style={{
-            cursor: 'pointer',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+    <div className={bannerContent()}>
+      <div className={bannerContent('__SaveableTextEditorContainer')}>
+        <SaveableTextEditor
+          displayValue={(value: string, handleEdit: () => void) => {
+            return (
+              <h1
+                className={bannerContent('__AnalysisTitle')}
+                onClick={handleEdit}
+              >
+                <span
+                  // This allows users to highlight the study name,
+                  // without editing the analysis name.
+                  onClick={(e) => e.stopPropagation()}
+                  style={{ cursor: 'default' }}
+                >
+                  {safeHtml(studyName, { style: { fontWeight: 'bold' } })}:{' '}
+                </span>
+                <span>{analysisName}</span>
+              </h1>
+            );
           }}
-        >
-          <div
-            style={{
-              fontSize: 19,
-            }}
-          >
-            <SaveableTextEditor
-              displayValue={(value: string, handleEdit: () => void) => {
-                return (
-                  <h1
-                    onClick={handleEdit}
-                    style={{
-                      fontStyle: 'italic',
-                      padding: '10px 0',
-                      fontSize: 19,
-                    }}
-                  >
-                    <span
-                      // This allows users to highlight the study name,
-                      // without editing the analysis name.
-                      onClick={(e) => e.stopPropagation()}
-                      style={{ cursor: 'default' }}
-                    >
-                      {safeHtml(studyName, { style: { fontWeight: 'bold' } })}:{' '}
-                    </span>
-                    <span>{analysisName}</span>
-                  </h1>
-                );
-              }}
-              value={analysisName}
-              onSave={onAnalysisNameEdit}
-              maxLength={ANALYSIS_NAME_MAX_LENGTH}
-            />
-          </div>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            fontWeight: 'normal',
-          }}
-        >
-          {filterList}
-        </div>
+          value={analysisName}
+          onSave={onAnalysisNameEdit}
+          maxLength={ANALYSIS_NAME_MAX_LENGTH}
+        />
       </div>
+      {filterList}
     </div>
   );
 }

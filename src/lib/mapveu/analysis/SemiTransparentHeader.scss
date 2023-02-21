@@ -6,13 +6,21 @@ $header-background: rgba(255, 255, 255, 0.8);
   background: $header-background;
   display: flex;
   justify-content: space-between;
-  min-height: $header-height; // Filters chips stack, so the header can grow taller.
+  // Filters chips stack, so the header will grow taller.
+  min-height: $header-height;
   position: absolute;
   right: 0;
   top: 0;
   transition: all 0.1s ease;
   width: 100%;
   z-index: 10;
+
+  &--collapsed {
+    // The header gets out of the way by tucking itself
+    // 110px above the viewport's top.
+    background: none;
+    top: -110px;
+  }
 
   &__Contents {
     align-items: center;
@@ -21,11 +29,35 @@ $header-background: rgba(255, 255, 255, 0.8);
     margin-bottom: 0.5rem;
   }
 
-  &--collapsed {
-    // The header gets out of the way by tucking itself
-    // 110px above viewport.
-    background: none;
-    top: -110px;
+  &__LogoContainer {
+    margin: 0 1.5rem;
+    img {
+      border-radius: 50%;
+      height: 65px;
+    }
+  }
+
+  &__SampleCounter {
+    margin-right: 1.5rem;
+    font-size: 16px;
+  }
+}
+
+.BannerContent {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+
+  &__SaveableTextEditorContainer {
+    cursor: text;
+    font-size: 19px;
+  }
+
+  &__AnalysisTitle {
+    font-style: italic;
+    padding: 10px 0;
+    font-size: 19px;
   }
 }
 

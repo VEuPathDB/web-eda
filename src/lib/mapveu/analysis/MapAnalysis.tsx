@@ -54,7 +54,10 @@ import {
   useFieldTree,
   useFlattenedFields,
 } from '../../core/components/variableTrees/hooks';
-import { LogoProps, SemiTransparentHeader } from './SemiTransparentHeader';
+import {
+  SemiTransparentHeaderLogoProps,
+  SemiTransparentHeader,
+} from './SemiTransparentHeader';
 import FilterChipList from '../../core/components/FilterChipList';
 import { VariableLinkConfig } from '../../core/components/VariableLink';
 
@@ -89,7 +92,7 @@ const plugin: ComputationPlugin = {
 interface Props {
   analysisId: string;
   studyId: string;
-  logoProps: LogoProps;
+  logoProps: SemiTransparentHeaderLogoProps;
 }
 
 export function MapAnalysis(props: Props) {

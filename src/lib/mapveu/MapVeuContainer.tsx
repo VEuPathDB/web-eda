@@ -20,11 +20,11 @@ import {
 } from '../core/hooks/client';
 
 import './MapVEu.scss';
-import { LogoProps } from './analysis/SemiTransparentHeader';
+import { SemiTransparentHeaderLogoProps } from './analysis/SemiTransparentHeader';
 
 interface Props {
   singleAppMode?: string;
-  logoProps: LogoProps;
+  logoProps: SemiTransparentHeaderLogoProps;
 }
 
 export function MapVeuContainer(props: Props) {
