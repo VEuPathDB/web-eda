@@ -20,7 +20,7 @@ import {
 } from '../core/hooks/client';
 
 import './MapVEu.scss';
-import { LogoProps } from './analysis/SemiTransparentBanner';
+import { LogoProps } from './analysis/SemiTransparentHeader';
 
 interface Props {
   singleAppMode?: string;

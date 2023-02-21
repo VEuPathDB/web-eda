@@ -27,7 +27,7 @@ import { Close, FilledButton, FloatingButton } from '@veupathdb/coreui';
 import { Visualization } from '../../core/types/visualization';
 import { useEntityCounts } from '../../core/hooks/entityCounts';
 import { makeStyles, Tooltip } from '@material-ui/core';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ComputationPlugin } from '../../core/components/computations/Types';
 import { ZeroConfigWithButton } from '../../core/components/computations/ZeroConfiguration';
 import { histogramVisualization } from '../../core/components/visualizations/implementations/HistogramVisualization';
@@ -54,7 +54,7 @@ import {
   useFieldTree,
   useFlattenedFields,
 } from '../../core/components/variableTrees/hooks';
-import { LogoProps, SemiTransparentBanner } from './SemiTransparentBanner';
+import { LogoProps, SemiTransparentHeader } from './SemiTransparentHeader';
 import FilterChipList from '../../core/components/FilterChipList';
 import { VariableLinkConfig } from '../../core/components/VariableLink';
 
@@ -372,9 +372,9 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                 position: 'relative',
               }}
             >
-              <SemiTransparentBanner
+              <SemiTransparentHeader
                 analysisName={analysisState.analysis?.displayName}
-                filterList={FilterChipListForHeader}
+                filterList={<FilterChipListForHeader />}
                 isExpanded={mapHeaderIsExpanded}
                 logoProps={props.logoProps}
                 onAnalysisNameEdit={analysisState.setName}

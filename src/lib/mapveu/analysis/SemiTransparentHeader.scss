@@ -1,0 +1,78 @@
+$header-height: 110px;
+$header-background: rgba(255, 255, 255, 0.8);
+
+.SemiTransparentHeader {
+  align-items: center;
+  background: $header-background;
+  display: flex;
+  justify-content: space-between;
+  min-height: $header-height; // Filters chips stack, so the header can grow taller.
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: all 0.1s ease;
+  width: 100%;
+  z-index: 10;
+
+  &__Contents {
+    align-items: center;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 0.5rem;
+  }
+
+  &--collapsed {
+    // The header gets out of the way by tucking itself
+    // 110px above viewport.
+    background: none;
+    top: -110px;
+  }
+}
+
+.ExpandToggleContainer {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  // Stick the expand button in the viewport's center.
+  bottom: -25px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  .ExpandToggleButton {
+    align-items: center;
+    background: $header-background;
+    border: none;
+    display: flex;
+    height: 50px;
+    justify-content: center;
+    margin-right: 0;
+    position: absolute;
+    width: 60px;
+    z-index: 10;
+
+    &--collapsed {
+      margin-top: 50px;
+    }
+
+    &__SvgContainer {
+      border: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 60px;
+      height: 40px;
+      fill: #000;
+    }
+  }
+
+  &__ArrowIcon {
+    transform: rotate(-90deg);
+    width: 30px;
+    height: 40px;
+
+    &--collapsed {
+      transform: rotate(90deg);
+    }
+  }
+}

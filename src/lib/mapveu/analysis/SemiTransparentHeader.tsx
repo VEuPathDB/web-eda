@@ -1,59 +1,53 @@
 import React, { ReactElement, ReactNode } from 'react';
 import ArrowRight from '@veupathdb/coreui/dist/components/icons/ChevronRight';
-import Filter from '@veupathdb/coreui/dist/components/icons/Filter';
-import './SemiTransparentBanner.scss';
-import { safeHtml } from '@veupathdb/wdk-client/lib/Utils/ComponentUtils';
-import { Chip, FilledButton, Pencil } from '@veupathdb/coreui';
-import { ChevronLeft, ChevronRight } from '@material-ui/icons';
-import FilterChipList from '../../core/components/FilterChipList';
+import {
+  makeClassNameHelper,
+  safeHtml,
+} from '@veupathdb/wdk-client/lib/Utils/ComponentUtils';
 import { SaveableTextEditor } from '@veupathdb/wdk-client/lib/Components';
 import { ANALYSIS_NAME_MAX_LENGTH } from '../../core/utils/analysis';
+import './SemiTransparentHeader.scss';
 
-export type SemiTransparentBannerProps = {
+export type SemiTransparentHeaderProps = {
   analysisName?: string;
-  filterList: () => ReactElement;
+  filterList?: ReactElement;
   isExpanded: boolean;
+  logoProps: LogoProps;
   onAnalysisNameEdit: (newName: string) => void;
   onToggleExpand: () => void;
   studyName: string;
   style?: React.CSSProperties;
   totalEntitesCount: number | undefined;
   visibleEntitiesCount: number | undefined;
-  logoProps: LogoProps;
 };
-export function SemiTransparentBanner({
+
+/**
+ * <SemiTransparentHeader /> has the following responsibilities:
+ *  - Worrying about being collapsed/expanded.
+ *  - Presenting the smallest amount of information to allow the user
+ *    to make sense of a map analysis.
+ */
+export function SemiTransparentHeader({
   analysisName,
   filterList,
   isExpanded,
+  logoProps,
   onAnalysisNameEdit,
   onToggleExpand,
   studyName,
-  style,
   totalEntitesCount,
   visibleEntitiesCount,
-  logoProps,
-}: SemiTransparentBannerProps) {
+}: SemiTransparentHeaderProps) {
+  const semiTransparentHeader = makeClassNameHelper('SemiTransparentHeader');
+
   return (
-    /**
-     * The banner role is for defining a global site header, which usually
-     * includes a logo, company name, search feature, and possibly the global
-     * navigation or a slogan.
-     *
-     * It is generally located at the top of the page. By default, the HTML's
-     * <header> element has an identical meaning to the banner landmark, unless
-     * it is a descendant of <aside>, <article>, <main>, <nav>, or <section>, at
-     * which point <header> exposes a generic role, and not the equivalent of the
-     * site-wide banner.
-     */
     <header
-      className={`SemiTransparentBanner ${
-        // TODO: Rename everything to BEM
-        // TODO: Use the `makeClassNameHelper` util in this repo.
-        !isExpanded ? 'SemiTransparentBanner__collapsed' : ''
+      className={`${semiTransparentHeader()} ${
+        !isExpanded ? semiTransparentHeader('--collapsed') : ''
       }`}
     >
       <div
-        className={`SemiTransparentBanner__Contents ${
+        className={`${semiTransparentHeader('__Contents')} ${
           isExpanded ? '' : 'screenReaderOnly'
         }`}
       >
@@ -105,9 +99,9 @@ function Logo({ href, siteName, src }: LogoProps) {
 
 type BannerContentProps = {
   analysisName?: string;
-  studyName: string;
-  filterList: () => ReactElement;
+  filterList?: ReactNode;
   onAnalysisNameEdit: (newName: string) => void;
+  studyName: string;
 };
 function BannerContent({
   analysisName,
@@ -182,7 +176,7 @@ function BannerContent({
             fontWeight: 'normal',
           }}
         >
-          {filterList()}
+          {filterList}
         </div>
       </div>
     </div>
@@ -197,26 +191,25 @@ function ExpandCollapseButton({
   isExpanded,
   onToggleExpand,
 }: ExpandCollapseButtonProps) {
+  const expandToggleContainer = makeClassNameHelper('ExpandToggleContainer');
   return (
-    <div
-      className={`ExpandToggleContainer ${
-        isExpanded ? '' : 'ExpandToggleContainer--collapsed'
-      }`}
-    >
+    <div className={expandToggleContainer()}>
       <button
         className={`ExpandToggleButton ${
-          isExpanded ? '' : 'ExpandToggleButton__collapsed'
+          isExpanded ? '' : expandToggleContainer('--collapsed')
         }`}
         onClick={onToggleExpand}
       >
         <div
-          className={`SvgContainer ${
-            isExpanded ? '' : 'SvgContainer__collapsed'
+          className={`${expandToggleContainer('__SvgContainer')} ${
+            isExpanded ? '' : expandToggleContainer('__SvgContainer--collapsed')
           }`}
           aria-hidden
         >
           <ArrowRight
-            className={`ArrowIcon ${isExpanded ? '' : 'ArrowIcon__collapsed'}`}
+            className={`${expandToggleContainer('__ArrowIcon')} ${
+              isExpanded ? '' : expandToggleContainer('__ArrowIcon--collapsed')
+            }`}
           />
         </div>
 
