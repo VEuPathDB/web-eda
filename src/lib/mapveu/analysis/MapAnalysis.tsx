@@ -128,13 +128,16 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
   const geoConfigs = useGeoConfig(studyEntities);
   const analysisState = useAnalysis(analysisId, 'pass-through');
   const geoConfig = geoConfigs[0];
+
   const [isVizSelectorVisible, setIsVizSelectorVisible] = useState(false);
+
   const selectedVariables = useMemo(
     () => ({
       overlay: appState.selectedOverlayVariable,
     }),
     [appState.selectedOverlayVariable]
   );
+
   const findEntityAndVariable = useFindEntityAndVariable();
   const { entity, variable } =
     findEntityAndVariable(selectedVariables.overlay) ?? {};
