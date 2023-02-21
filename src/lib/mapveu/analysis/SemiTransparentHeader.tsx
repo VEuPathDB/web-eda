@@ -61,7 +61,7 @@ export function SemiTransparentHeader({
             <img src={logoProps.src} alt={logoProps.siteName} />
           </a>
         </div>
-        <BannerContent
+        <HeaderContent
           filterList={filterList}
           studyName={studyName}
           analysisName={analysisName}
@@ -73,7 +73,7 @@ export function SemiTransparentHeader({
           {visibleEntitiesCount} of {totalEntitesCount} samples visible
         </p>
       </div>
-      <ExpandCollapseButton
+      <OpenCloseToggleButton
         isExpanded={isExpanded}
         onToggleExpand={onToggleExpand}
       />
@@ -81,35 +81,35 @@ export function SemiTransparentHeader({
   );
 }
 
-type BannerContentProps = {
+type HeaderContentProps = {
   analysisName?: string;
   filterList?: ReactNode;
   onAnalysisNameEdit: (newName: string) => void;
   studyName: string;
 };
-function BannerContent({
+function HeaderContent({
   analysisName = '',
   filterList,
   onAnalysisNameEdit,
   studyName,
-}: BannerContentProps) {
-  const bannerContent = makeClassNameHelper('BannerContent');
+}: HeaderContentProps) {
+  const headerContent = makeClassNameHelper('HeaderContent');
 
   return (
-    <div className={bannerContent()}>
-      <div className={bannerContent('__SaveableTextEditorContainer')}>
+    <div className={headerContent()}>
+      <div className={headerContent('__SaveableTextEditorContainer')}>
         <SaveableTextEditor
           displayValue={(value: string, handleEdit: () => void) => {
             return (
               <h1
-                className={bannerContent('__AnalysisTitle')}
+                className={headerContent('__AnalysisTitle')}
                 onClick={handleEdit}
               >
                 <span
                   // This allows users to highlight the study name,
                   // without editing the analysis name.
                   onClick={(e) => e.stopPropagation()}
-                  className={bannerContent('__StudyName')}
+                  className={headerContent('__StudyName')}
                 >
                   {safeHtml(studyName, { style: { fontWeight: 'bold' } })}:{' '}
                 </span>
@@ -127,19 +127,19 @@ function BannerContent({
   );
 }
 
-type ExpandCollapseButtonProps = {
+type OpenCloseToggleButtonProps = {
   isExpanded: boolean;
   onToggleExpand: () => void;
 };
-function ExpandCollapseButton({
+function OpenCloseToggleButton({
   isExpanded,
   onToggleExpand,
-}: ExpandCollapseButtonProps) {
-  const expandToggleContainer = makeClassNameHelper('ExpandToggleContainer');
+}: OpenCloseToggleButtonProps) {
+  const expandToggleContainer = makeClassNameHelper('OpenCloseToggleButton');
   return (
     <div className={expandToggleContainer()}>
       <button
-        className={`ExpandToggleButton ${
+        className={`Button ${
           isExpanded ? '' : expandToggleContainer('--collapsed')
         }`}
         onClick={onToggleExpand}

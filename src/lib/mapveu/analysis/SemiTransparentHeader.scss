@@ -43,7 +43,7 @@ $header-background: rgba(255, 255, 255, 0.8);
   }
 }
 
-.BannerContent {
+.HeaderContent {
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -65,7 +65,7 @@ $header-background: rgba(255, 255, 255, 0.8);
   }
 }
 
-.ExpandToggleContainer {
+.OpenCloseToggleButton {
   align-items: center;
   display: flex;
   justify-content: center;
@@ -76,7 +76,7 @@ $header-background: rgba(255, 255, 255, 0.8);
   left: 50%;
   transform: translate(-50%, -50%);
 
-  .ExpandToggleButton {
+  .Button {
     align-items: center;
     background: $header-background;
     border: none;
