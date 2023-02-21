@@ -23,17 +23,18 @@ import './MapVEu.scss';
 import { SemiTransparentHeaderLogoProps } from './analysis/SemiTransparentHeader';
 
 interface Props {
+  edaServiceUrl: string;
   singleAppMode?: string;
   logoProps: SemiTransparentHeaderLogoProps;
 }
 
 export function MapVeuContainer(props: Props) {
-  const { singleAppMode, logoProps } = props;
-  const edaClient = useConfiguredSubsettingClient('/eda-subsetting-service');
-  const dataClient = useConfiguredDataClient('/eda-data-service');
-  const computeClient = useConfiguredComputeClient('/eda-data-service');
-  const analysisClient = useConfiguredAnalysisClient('/eda-user-service');
-  const downloadClient = useConfiguredDownloadClient('/eda-user-service');
+  const { singleAppMode, logoProps, edaServiceUrl } = props;
+  const edaClient = useConfiguredSubsettingClient(edaServiceUrl);
+  const dataClient = useConfiguredDataClient(edaServiceUrl);
+  const computeClient = useConfiguredComputeClient(edaServiceUrl);
+  const analysisClient = useConfiguredAnalysisClient(edaServiceUrl);
+  const downloadClient = useConfiguredDownloadClient(edaServiceUrl);
 
   // This will get the matched path of the active parent route.
   // This is useful so we don't have to hardcode the path root.
