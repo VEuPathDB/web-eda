@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode } from 'react';
+import { ReactElement, ReactNode } from 'react';
 import ArrowRight from '@veupathdb/coreui/dist/components/icons/ChevronRight';
 import {
   makeClassNameHelper,
@@ -22,7 +22,6 @@ export type SemiTransparentHeaderProps = {
   onAnalysisNameEdit: (newName: string) => void;
   onToggleExpand: () => void;
   studyName: string;
-  style?: React.CSSProperties;
   totalEntitesCount: number | undefined;
   visibleEntitiesCount: number | undefined;
 };
@@ -89,13 +88,11 @@ type BannerContentProps = {
   studyName: string;
 };
 function BannerContent({
-  analysisName,
+  analysisName = '',
   filterList,
   studyName,
   onAnalysisNameEdit,
 }: BannerContentProps) {
-  if (!analysisName) return <></>;
-
   const bannerContent = makeClassNameHelper('BannerContent');
 
   return (
@@ -112,7 +109,7 @@ function BannerContent({
                   // This allows users to highlight the study name,
                   // without editing the analysis name.
                   onClick={(e) => e.stopPropagation()}
-                  style={{ cursor: 'default' }}
+                  className={bannerContent('__StudyName')}
                 >
                   {safeHtml(studyName, { style: { fontWeight: 'bold' } })}:{' '}
                 </span>

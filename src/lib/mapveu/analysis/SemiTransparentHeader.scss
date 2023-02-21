@@ -54,6 +54,10 @@ $header-background: rgba(255, 255, 255, 0.8);
     font-size: 19px;
   }
 
+  &__StudyName {
+    cursor: default;
+  }
+
   &__AnalysisTitle {
     font-style: italic;
     padding: 10px 0;
@@ -67,7 +71,8 @@ $header-background: rgba(255, 255, 255, 0.8);
   justify-content: center;
   position: absolute;
   // Stick the expand button in the viewport's center.
-  bottom: -25px;
+  // and beneath
+  bottom: -20px;
   left: 50%;
   transform: translate(-50%, -50%);
 
@@ -76,11 +81,11 @@ $header-background: rgba(255, 255, 255, 0.8);
     background: $header-background;
     border: none;
     display: flex;
-    height: 50px;
+    height: 40px;
     justify-content: center;
     margin-right: 0;
     position: absolute;
-    width: 60px;
+    width: 50px;
     z-index: 10;
 
     &--collapsed {
