@@ -324,10 +324,11 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
   const FilterChipListForHeader = () => {
     const filters = analysisState.analysis?.descriptor.subset.descriptor;
 
-    const variableLinkConfig: VariableLinkConfig = {
+    const filterChipConfig: VariableLinkConfig = {
       type: 'button',
       onClick(value) {
-        alert(`No implementation yet! ${JSON.stringify(value)}`);
+        setIsSubsetPanelOpen && setIsSubsetPanelOpen(true);
+        setSubsetVariableAndEntity(value);
       },
     };
 
@@ -357,7 +358,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                 )
               )
             }
-            variableLinkConfig={variableLinkConfig}
+            variableLinkConfig={filterChipConfig}
             entities={studyEntities}
             // selectedEntityId={studyEntities.id}
             // selectedVariableId={selectedVariables.id}
