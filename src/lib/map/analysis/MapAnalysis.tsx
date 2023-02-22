@@ -322,8 +322,6 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
   const classes = useStyles();
 
   const FilterChipListForHeader = () => {
-    const filters = analysisState.analysis?.descriptor.subset.descriptor;
-
     const filterChipConfig: VariableLinkConfig = {
       type: 'button',
       onClick(value) {
@@ -332,7 +330,9 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
       },
     };
 
-    if (!studyEntities) return <></>;
+    const filters = analysisState.analysis?.descriptor.subset.descriptor;
+
+    if (!studyEntities || !filters) return <></>;
 
     return (
       <div
@@ -345,7 +345,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
         className="FilterChips"
       >
         <p className={classes.chipListLabel}>
-          {filters?.length === 0 ? `No filters applied.` : `Filters:`}
+          {filters.length === 0 ? `No filters applied.` : `Filters:`}
         </p>
         <div>
           <FilterChipList
