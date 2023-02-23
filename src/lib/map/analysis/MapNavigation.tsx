@@ -10,36 +10,49 @@ export function MapNavigation() {
         background: 'hotpink',
         width: 150,
         position: 'absolute',
-        left: isExpanded ? 0 : 100,
-        top: 130,
-        height: '80%',
+        left: isExpanded ? 0 : -150,
+        top: 150,
+        height: 'calc(100% - 200px)',
+        minHeight: 125,
         zIndex: 150,
-        // transform: `translate(0%, 50%)`,
+        transition: 'left 0.7s cubic-bezier(1,-3.99,0,2.58)',
       }}
     >
       <div
         style={{
-          height: '100%',
           position: 'relative',
-          overflow: 'scroll',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
         }}
       >
-        <h2>{siteName}</h2>
-        <ul>
-          {Array(50)
-            .fill(0)
-            .map((_, idx) => idx)
-            .map((idx) => (
-              <li key={idx}>Item {idx}</li>
-            ))}
-        </ul>
+        <h2 style={{ margin: 0, padding: 0 }}>{siteName}</h2>
+        <div
+          style={{
+            height: '100%',
+            overflow: 'scroll',
+          }}
+        >
+          <ul>
+            {Array(50)
+              .fill(0)
+              .map((_, idx) => idx)
+              .map((idx) => (
+                <li key={idx}>Item {idx}</li>
+              ))}
+          </ul>
+        </div>
       </div>
       <button
         style={{
           position: 'absolute',
-          top: 50,
-          right: 50,
-          transform: 'translate(-50%, -50%)',
+          right: -50,
+          top: '50%',
+          transform: 'translate(0%, -50%)',
+          width: 50,
+          height: 50,
         }}
         onClick={() => setIsExpanded((current) => !current)}
       >
