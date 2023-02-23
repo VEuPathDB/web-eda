@@ -70,7 +70,8 @@ export function SemiTransparentHeader({
       </div>
       <div className={semiTransparentHeader('__SampleCounter')}>
         <p>
-          {visibleEntitiesCount} of {totalEntitesCount} samples visible
+          {visibleEntitiesCount || 0} of {totalEntitesCount || 0} samples
+          visible
         </p>
       </div>
       <OpenCloseToggleButton
