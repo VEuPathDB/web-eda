@@ -23,7 +23,15 @@ import {
   FullScreenVisualization,
   NewVisualizationPickerModal,
 } from '../../core/components/visualizations/VisualizationsContainer';
-import { Close, FilledButton, FloatingButton } from '@veupathdb/coreui';
+import {
+  Close,
+  FloatingButton,
+  Share,
+  Filter,
+  Download,
+  Pencil,
+  SampleDetailsLight,
+} from '@veupathdb/coreui';
 import { Visualization } from '../../core/types/visualization';
 import { useEntityCounts } from '../../core/hooks/entityCounts';
 import { makeStyles, Tooltip } from '@material-ui/core';
@@ -60,7 +68,7 @@ import {
 } from './SemiTransparentHeader';
 import FilterChipList from '../../core/components/FilterChipList';
 import { VariableLinkConfig } from '../../core/components/VariableLink';
-import { MapNavigation } from './MapNavigation';
+import { MapSideNavigation } from './MapSideNavigation';
 
 const mapStyle: React.CSSProperties = {
   zIndex: 1,
@@ -369,6 +377,89 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
     );
   };
 
+  const buttonStyles: React.CSSProperties = {
+    background: 'transparent',
+    borderColor: 'transparent',
+    fontSize: 16,
+    margin: 0,
+    padding: 0,
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  };
+  const iconStyles: React.CSSProperties = {
+    height: 25,
+    width: 25,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  };
+  const labelStyles: React.CSSProperties = {
+    marginLeft: '0.5rem',
+  };
+  const [activeSideMenuItem, setActiveSideMenuItem] = useState<
+    number | undefined
+  >();
+
+  const sideNavigationItems = [
+    <button
+      style={buttonStyles}
+      onClick={() =>
+        setActiveSideMenuItem((current) => (current === 0 ? undefined : 0))
+      }
+    >
+      <span style={iconStyles} aria-hidden>
+        <Share />
+      </span>
+      <span style={labelStyles}>Paint by variable</span>
+    </button>,
+    <button
+      style={buttonStyles}
+      onClick={() =>
+        setActiveSideMenuItem((current) => (current === 1 ? undefined : 1))
+      }
+    >
+      <span style={iconStyles} aria-hidden>
+        <Filter />
+      </span>
+      <span style={labelStyles}>Filter data</span>
+    </button>,
+    <button
+      style={buttonStyles}
+      onClick={() =>
+        setActiveSideMenuItem((current) => (current === 2 ? undefined : 2))
+      }
+    >
+      <span style={iconStyles} aria-hidden>
+        <Download />
+      </span>
+      <span style={labelStyles}>Download map</span>
+    </button>,
+    <button
+      style={buttonStyles}
+      onClick={() =>
+        setActiveSideMenuItem((current) => (current === 3 ? undefined : 3))
+      }
+    >
+      <span style={iconStyles} aria-hidden>
+        <Pencil />
+      </span>
+      <span style={labelStyles}>Edit configuration</span>
+    </button>,
+    <button
+      style={buttonStyles}
+      onClick={() =>
+        setActiveSideMenuItem((current) => (current === 4 ? undefined : 4))
+      }
+    >
+      <span style={iconStyles} aria-hidden>
+        <SampleDetailsLight />
+      </span>
+      <span style={labelStyles}>Study Information</span>
+    </button>,
+  ];
+
   return (
     <PromiseResult state={appPromiseState}>
       {(app) => (
@@ -391,7 +482,42 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                 totalEntitesCount={totalEntityCount}
                 visibleEntitiesCount={totalVisibleEntityCount}
               />
-              <MapNavigation />
+              <MapSideNavigation logoProps={props.logoProps}>
+                <div style={{ width: '100%' }}>
+                  <ul style={{ margin: 0, padding: 0 }}>
+                    {/* {[
+                      ...sideNavigationItems,
+                      ...sideNavigationItems,
+                      ...sideNavigationItems,
+                      ...sideNavigationItems,
+                    ].map((navigationItem, idx) => { */}
+                    {sideNavigationItems.map((item, itemIndex) => {
+                      const isActive = itemIndex === activeSideMenuItem;
+                      return (
+                        <li
+                          key={itemIndex}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'flex-start',
+                            padding: '0.25rem',
+                            width: '100%',
+                            transition: 'background 0.2s ease',
+                            borderRight: `5px solid ${
+                              isActive ? 'black' : 'transparent'
+                            }`,
+                            background: isActive
+                              ? 'rgba(0, 0, 0, 0.075)'
+                              : 'transparent',
+                          }}
+                        >
+                          {item}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              </MapSideNavigation>
               <MapVEuMap
                 height="100%"
                 width="100%"
