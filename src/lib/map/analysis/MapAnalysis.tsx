@@ -60,6 +60,7 @@ import {
 } from './SemiTransparentHeader';
 import FilterChipList from '../../core/components/FilterChipList';
 import { VariableLinkConfig } from '../../core/components/VariableLink';
+import { MapNavigation } from './MapNavigation';
 
 const mapStyle: React.CSSProperties = {
   zIndex: 1,
@@ -390,6 +391,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                 totalEntitesCount={totalEntityCount}
                 visibleEntitiesCount={totalVisibleEntityCount}
               />
+              <MapNavigation />
               <MapVEuMap
                 height="100%"
                 width="100%"
@@ -423,10 +425,10 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                   />
                 )}
               </FloatingDiv>
-              <FloatingDiv
+              {/* <FloatingDiv
                 style={{
                   top: 250,
-                  left: 100,
+                  left: 500,
                 }}
               >
                 <div>
@@ -486,7 +488,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                     )
                   )}
                 </ul>
-              </FloatingDiv>
+              </FloatingDiv> */}
               <FloatingDiv
                 style={{
                   bottom: 10,
