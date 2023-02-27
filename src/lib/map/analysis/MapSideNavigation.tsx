@@ -99,7 +99,7 @@ export function MapSideNavigation({
         style={{
           position: 'absolute',
           right: -50,
-          bottom: isExpanded ? '50%' : -25,
+          bottom: '50%',
           transform: 'translate(0%, -50%)',
           width: 50,
           height: 50,
