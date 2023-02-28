@@ -329,15 +329,12 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
     const filters = analysisState.analysis?.descriptor.subset.descriptor;
 
     function makeButtonText() {
-      const { isSubsetPanelOpen } = appState;
-
-      if (isSubsetPanelOpen) {
-        return `Hide all filters`;
-      }
       if (!filters) return '';
 
+      const { isSubsetPanelOpen } = appState;
+      const showOrHide = isSubsetPanelOpen ? 'Hide' : 'Show';
       const suffix = filters.length === 1 ? '' : 's';
-      return `Show ${filters.length} filter${suffix}`;
+      return `${showOrHide} ${filters.length} filter${suffix}`;
     }
 
     if (!studyEntities || !filters) return <></>;
