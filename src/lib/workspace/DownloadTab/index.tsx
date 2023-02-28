@@ -249,15 +249,26 @@ export default function DownloadTab({
     );
   }, [WDKStudyReleases, downloadServiceStudyReleases]);
 
+  // We can't show (or sometimes even create!) my subset tables for entities with many vars. Assays in mbio often
+  // have >1000 vars. Until we can handle these cases, hide the whole My Subset section if any entites
+  // are 'assay' entities.
+  const showMySubset =
+    enhancedEntityData.filter((entity) => entity.displayName.includes('assay'))
+      .length === 0;
+
   return (
     <div style={{ display: 'flex', paddingTop: 10 }}>
       <div key="Column One" style={{ marginRight: 75 }}>
         {dataAccessDeclaration ?? ''}
-        <MySubset
-          datasetId={datasetId}
-          entities={enhancedEntityData}
-          analysisState={analysisState}
-        />
+        {showMySubset ? (
+          <MySubset
+            datasetId={datasetId}
+            entities={enhancedEntityData}
+            analysisState={analysisState}
+          />
+        ) : (
+          <br></br>
+        )}
         {mergedReleaseData.map((release, index) =>
           index === 0 ? (
             <CurrentRelease
