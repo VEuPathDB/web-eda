@@ -339,6 +339,8 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
 
     if (!studyEntities || !filters) return <></>;
 
+    const MAX_NUMBER_OF_FILTER_CHIPS_IN_HEADER = 5;
+
     return (
       <div
         style={{
@@ -372,7 +374,10 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
         )}
         <div>
           <FilterChipList
-            filters={filters.slice(0).reverse().slice(0, 5)}
+            filters={filters
+              .slice(0)
+              .reverse()
+              .slice(0, MAX_NUMBER_OF_FILTER_CHIPS_IN_HEADER)}
             removeFilter={(filter) =>
               analysisState.analysis &&
               analysisState.setFilters(
@@ -383,8 +388,8 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
             }
             variableLinkConfig={filterChipConfig}
             entities={studyEntities}
-            // selectedEntityId={studyEntities.id}
-            // selectedVariableId={selectedVariables.id}
+            selectedEntityId={subsetVariableAndEntity.entityId}
+            selectedVariableId={subsetVariableAndEntity.variableId}
           />
         </div>
       </div>
