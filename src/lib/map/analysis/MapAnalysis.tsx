@@ -339,7 +339,9 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
 
     if (!studyEntities || !filters) return <></>;
 
-    const MAX_NUMBER_OF_FILTER_CHIPS_IN_HEADER = 5;
+    // At the time of writing, 90%+ users have ≤ 5 filters
+    // applied to their analysis.
+    const MAX_NUMBER_OF_FILTER_CHIPS_IN_HEADER = 6;
 
     return (
       <div
