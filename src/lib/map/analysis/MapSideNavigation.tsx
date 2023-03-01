@@ -43,19 +43,64 @@ export function MapSideNavigation({
         zIndex: 150,
       }}
     >
+      <button
+        style={{
+          // This makes the button
+          background: menuBackground,
+          borderColor: 'transparent',
+          height: 50,
+          width: 50,
+          // These styles pin the expand/collapse to the right of
+          // the lefthand side menu at the nav's vertical center.
+          position: 'absolute',
+          right: -50,
+          top: '50%',
+          transform: 'translate(0%, -50%)',
+          transition: 'all 0.1s ease',
+          // These styles make sure that the button's SVG
+          // is centered on x and y-axis.
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        onClick={() => setIsExpanded((current) => !current)}
+      >
+        <ChevronRight
+          style={{
+            transform: `rotate(${isExpanded ? -180 : 0}deg)`,
+            height: 30,
+            width: 40,
+          }}
+          aria-hidden
+        />
+        <span className="screenReaderOnly">
+          {isExpanded ? 'Close' : 'Open'} {logoProps.siteName} side menu
+        </span>
+      </button>
       <div
         style={{
+          // The navigation items are put into a container
+          // which takes up 100% of available space and
+          // allows users to scroll through navigation whenever
+          // there are lots of navigation items and/or the user's
+          // viewport is short.
           height: '100%',
-          overflow: 'scroll',
+          overflowY: 'scroll',
+          position: 'relative',
         }}
       >
         <h2
           style={{
+            // This heading presents the site name and accent color.
+            // If the navigation items exceed available vertical
+            // space, the user will be allowed to scroll on the y-axis.
+            // This heading is `sticky` to ensure that the header remains
+            // "stuck" to the top of the navigation whilst scrolling.
             background: siteAccent,
             margin: 0,
             padding: '1rem 0',
-            textAlign: 'center',
             position: 'sticky',
+            textAlign: 'center',
             top: 0,
           }}
         >
@@ -104,6 +149,7 @@ export function MapSideNavigation({
             <li>
               <a
                 style={bottomLinkStyles}
+                // {/* 👇 Don't hardcode this. */}
                 href="https://eupathdb.org/oauth/assets/eupathdb-login.html"
               >
                 <LockOpen />
@@ -111,38 +157,8 @@ export function MapSideNavigation({
               </a>
             </li>
           </ul>
-          {/* 👇 Don't hardcode this. */}
         </div>
       </div>
-      <button
-        style={{
-          position: 'absolute',
-          right: -50,
-          bottom: '50%',
-          transform: 'translate(0%, -50%)',
-          width: 50,
-          height: 50,
-          borderColor: 'transparent',
-          background: menuBackground,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          transition: 'all 0.1s ease',
-        }}
-        onClick={() => setIsExpanded((current) => !current)}
-      >
-        <ChevronRight
-          style={{
-            transform: `rotate(${isExpanded ? -180 : 0}deg)`,
-            height: 30,
-            width: 40,
-          }}
-          aria-hidden
-        />
-        <span className="screenReaderOnly">
-          {isExpanded ? 'Close' : 'Open'} {logoProps.siteName} side menu
-        </span>
-      </button>
     </nav>
   );
 }
