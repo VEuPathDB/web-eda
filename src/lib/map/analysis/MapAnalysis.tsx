@@ -485,13 +485,12 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
               <MapSideNavigation logoProps={props.logoProps}>
                 <div style={{ width: '100%' }}>
                   <ul style={{ margin: 0, padding: 0 }}>
-                    {/* {[
+                    {[
                       ...sideNavigationItems,
                       ...sideNavigationItems,
                       ...sideNavigationItems,
                       ...sideNavigationItems,
-                    ].map((navigationItem, idx) => { */}
-                    {sideNavigationItems.map((item, itemIndex) => {
+                    ].map((item, itemIndex) => {
                       const isActive = itemIndex === activeSideMenuItem;
                       return (
                         <li

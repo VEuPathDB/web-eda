@@ -8,13 +8,6 @@ export type MapSideNavigationProps = {
   logoProps: SemiTransparentHeaderLogoProps;
 };
 
-const navigationItems: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'flex-start',
-};
-
 const menuBackground = 'rgba(255, 255, 255, 0.8)';
 
 const bottomLinkStyles: React.CSSProperties = {
@@ -25,7 +18,7 @@ const bottomLinkStyles: React.CSSProperties = {
   marginBottom: '1rem',
 };
 
-const siteAccent = 'rgba(197, 223, 207, 0.5)';
+const siteAccent = 'rgba(197, 223, 207, 1)';
 
 export function MapSideNavigation({
   logoProps,
@@ -36,6 +29,9 @@ export function MapSideNavigation({
   return (
     <nav
       style={{
+        // These styles define the look of the navigation,
+        // including its width, height, and location on the
+        // page (which depends on the `isExpanded` piece of state.
         background: menuBackground,
         height: 'calc(100% - 200px)',
         left: isExpanded ? 0 : -200,
@@ -49,34 +45,41 @@ export function MapSideNavigation({
     >
       <div
         style={{
-          position: 'relative',
           height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-start',
-          alignItems: 'space-between',
+          overflow: 'scroll',
         }}
       >
         <h2
           style={{
+            background: siteAccent,
             margin: 0,
             padding: '1rem 0',
             textAlign: 'center',
-            background: siteAccent,
+            position: 'sticky',
+            top: 0,
           }}
         >
           {logoProps.siteName}
         </h2>
-        <div style={{ height: '80%', overflow: 'scroll', ...navigationItems }}>
+        <div
+          style={{
+            // This ensures that the children nav items are contained to
+            // 70% of the navigation, leaving 30% for the navigation
+            // footer items.
+            height: '70%',
+            overflow: 'scroll',
+          }}
+        >
           {children}
         </div>
         <hr
           style={{
-            width: '90%',
-            marginBottom: '1.5rem',
+            // Styles for the <hr />
             backgroundColor: `rgba(0, 0, 0,0.25)`,
             border: 0,
             height: '1px',
+            marginBottom: '1.5rem',
+            width: '90%',
           }}
         />
         <div
@@ -85,27 +88,30 @@ export function MapSideNavigation({
             // content inside the div to be scrollable if it exceeds the
             // height contraints of a short viewport.
             marginLeft: '0.5rem',
-            height: '100%',
-            minHeight: '30px',
-            overflow: 'scroll',
             // This pins the items to the bottom of the navigation
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'flex-end',
           }}
         >
-          <a style={bottomLinkStyles} href={logoProps.href}>
-            <Launch />
-            <p style={{ margin: '0 0 0 5px' }}>{logoProps.siteName} home</p>
-          </a>
+          <ul style={{ margin: 0, padding: 0, listStyleType: 'none' }}>
+            <li>
+              <a style={bottomLinkStyles} href={logoProps.href}>
+                <Launch />
+                <p style={{ margin: '0 0 0 5px' }}>{logoProps.siteName} home</p>
+              </a>
+            </li>
+            <li>
+              <a
+                style={bottomLinkStyles}
+                href="https://eupathdb.org/oauth/assets/eupathdb-login.html"
+              >
+                <LockOpen />
+                <p style={{ margin: '0 0 0 5px' }}>Login</p>
+              </a>
+            </li>
+          </ul>
           {/* 👇 Don't hardcode this. */}
-          <a
-            style={bottomLinkStyles}
-            href="https://eupathdb.org/oauth/assets/eupathdb-login.html"
-          >
-            <LockOpen />
-            <p style={{ margin: '0 0 0 5px' }}>Login</p>
-          </a>
         </div>
       </div>
       <button
