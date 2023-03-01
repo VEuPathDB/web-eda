@@ -555,6 +555,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                 style={{
                   top: 250,
                   left: 500,
+                  left: 100,
                 }}
               >
                 <div>

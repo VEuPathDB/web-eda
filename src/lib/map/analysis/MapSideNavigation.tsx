@@ -37,15 +37,14 @@ export function MapSideNavigation({
     <nav
       style={{
         background: menuBackground,
-        width: 200,
-        position: 'absolute',
-        left: isExpanded ? 0 : -200,
-        top: 150,
         height: 'calc(100% - 200px)',
+        left: isExpanded ? 0 : -200,
         minHeight: 125,
+        position: 'absolute',
+        top: 150,
+        transition: 'left 0.1s ease',
+        width: 200,
         zIndex: 150,
-        transition: 'left 0.15s ease',
-        // transition: 'left 0.7s cubic-bezier(1,-3.99,0,2.58)',
       }}
     >
       <div
@@ -80,7 +79,17 @@ export function MapSideNavigation({
             height: '1px',
           }}
         />
-        <div style={{ marginLeft: '0.5rem' }}>
+        <div
+          style={{
+            // This handles short viewports. These styles allow
+            // content inside the div to be scrollable if it exceeds the
+            // height contraints of a short viewport.
+            marginLeft: '0.5rem',
+            height: '100%',
+            minHeight: '30px',
+            overflow: 'scroll',
+          }}
+        >
           <a style={bottomLinkStyles} href={logoProps.href}>
             <Launch />
             <p style={{ margin: '0 0 0 5px' }}>{logoProps.siteName} home</p>
