@@ -88,6 +88,10 @@ export function MapSideNavigation({
             height: '100%',
             minHeight: '30px',
             overflow: 'scroll',
+            // This pins the items to the bottom of the navigation
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-end',
           }}
         >
           <a style={bottomLinkStyles} href={logoProps.href}>
