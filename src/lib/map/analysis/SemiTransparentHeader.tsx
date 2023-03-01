@@ -41,9 +41,9 @@ export function SemiTransparentHeader({
   onAnalysisNameEdit,
   onToggleExpand,
   studyName,
-  totalEntitesInSampleCount: totalEntitesInSample,
-  totalEntitiesInSubsetCount,
-  visibleEntitiesCount,
+  totalEntitesInSampleCount: totalEntitesInSample = 0,
+  totalEntitiesInSubsetCount = 0,
+  visibleEntitiesCount = 0,
 }: SemiTransparentHeaderProps) {
   const semiTransparentHeader = makeClassNameHelper('SemiTransparentHeader');
 
@@ -81,23 +81,19 @@ export function SemiTransparentHeader({
           <tbody>
             <tr title={`There are X total samples.`}>
               <td>All</td>
-              <td>{totalEntitesInSample ?? 0}</td>
+              <td>{totalEntitesInSample}</td>
             </tr>
             <tr
-              title={`You've subset all samples down to ${
-                totalEntitiesInSubsetCount ?? 0
-              } entites.`}
+              title={`You've subset all samples down to ${totalEntitiesInSubsetCount} entites.`}
             >
               <td>Subset</td>
-              <td>{totalEntitiesInSubsetCount ?? 0}</td>
+              <td>{totalEntitiesInSubsetCount}</td>
             </tr>
             <tr
-              title={`${
-                visibleEntitiesCount ?? 0
-              } samples of your subset samples visible at your current viewport.`}
+              title={`${visibleEntitiesCount} samples of your subset samples visible at your current viewport.`}
             >
               <td>Visible</td>
-              <td>{visibleEntitiesCount ?? 0}</td>
+              <td>{visibleEntitiesCount}</td>
             </tr>
           </tbody>
         </table>
