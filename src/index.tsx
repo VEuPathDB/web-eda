@@ -189,10 +189,11 @@ initialize({
       component: () => (
         <MapApp
           logoProps={{
-            href: 'https://veupathdb.org',
-            src:
+            siteHomeUrl: 'https://veupathdb.org',
+            siteLogoSrc:
               'https://veupathdb.org/veupathdb/images/VEuPathDB/icons-footer/vectorbase.png',
             siteName: 'VectorBase',
+            loginUrl: 'https://eupathdb.org/oauth/assets/eupathdb-login.html',
           }}
           singleAppMode={singleAppMode}
           edaServiceUrl={edaEndpoint}

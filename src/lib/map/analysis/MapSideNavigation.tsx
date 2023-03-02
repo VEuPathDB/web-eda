@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { MapNavigationLogoProps } from './MapNavigation';
+import { SiteProps } from './MapNavigation';
 import { ChevronRight } from '@veupathdb/coreui';
 import { Launch, LockOpen } from '@material-ui/icons';
 
 export type MapSideNavigationProps = {
   children: React.ReactNode;
-  logoProps: MapNavigationLogoProps;
+  logoProps: SiteProps;
 };
 
 const menuBackground = 'rgba(255, 255, 255, 0.8)';
@@ -17,8 +17,6 @@ const bottomLinkStyles: React.CSSProperties = {
   fontSize: 15,
   marginBottom: '1rem',
 };
-
-const siteAccent = 'rgba(197, 223, 207, 1)';
 
 export function MapSideNavigation({
   logoProps,
@@ -90,9 +88,6 @@ export function MapSideNavigation({
           position: 'relative',
         }}
       >
-        <h2 style={{ textAlign: 'center', background: siteAccent }}>
-          Mission Control
-        </h2>
         <div
           style={{
             // This ensures that the children nav items are contained to
@@ -128,17 +123,13 @@ export function MapSideNavigation({
         >
           <ul style={{ margin: 0, padding: 0, listStyleType: 'none' }}>
             <li>
-              <a style={bottomLinkStyles} href={logoProps.href}>
+              <a style={bottomLinkStyles} href={logoProps.siteHomeUrl}>
                 <Launch />
                 <p style={{ margin: '0 0 0 5px' }}>{logoProps.siteName} home</p>
               </a>
             </li>
             <li>
-              <a
-                style={bottomLinkStyles}
-                // {/* 👇 Don't hardcode this. */}
-                href="https://eupathdb.org/oauth/assets/eupathdb-login.html"
-              >
+              <a style={bottomLinkStyles} href={logoProps.loginUrl}>
                 <LockOpen />
                 <p style={{ margin: '0 0 0 5px' }}>Login</p>
               </a>

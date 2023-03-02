@@ -8,17 +8,18 @@ import { SaveableTextEditor } from '@veupathdb/wdk-client/lib/Components';
 import { ANALYSIS_NAME_MAX_LENGTH } from '../../core/utils/analysis';
 import './MapNavigation.scss';
 
-export type MapNavigationLogoProps = {
-  href: string;
+export type SiteProps = {
+  siteHomeUrl: string;
+  loginUrl: string;
   siteName: string;
-  src: string;
+  siteLogoSrc: string;
 };
 
 export type MapNavigationProps = {
   analysisName?: string;
   filterList?: ReactElement;
   isExpanded: boolean;
-  logoProps: MapNavigationLogoProps;
+  logoProps: SiteProps;
   onAnalysisNameEdit: (newName: string) => void;
   onToggleExpand: () => void;
   studyName: string;
@@ -59,8 +60,8 @@ export function SemiTransparentHeader({
         }`}
       >
         <div className={mapNavigation('__LogoContainer')}>
-          <a href={logoProps.href}>
-            <img src={logoProps.src} alt={logoProps.siteName} />
+          <a href={logoProps.siteHomeUrl}>
+            <img src={logoProps.siteLogoSrc} alt={logoProps.siteName} />
           </a>
         </div>
         <HeaderContent

@@ -63,7 +63,7 @@ import {
   useFieldTree,
   useFlattenedFields,
 } from '../../core/components/variableTrees/hooks';
-import { MapNavigationLogoProps, SemiTransparentHeader } from './MapNavigation';
+import { SiteProps, SemiTransparentHeader } from './MapNavigation';
 import FilterChipList from '../../core/components/FilterChipList';
 import { VariableLinkConfig } from '../../core/components/VariableLink';
 import { MapSideNavigation } from './MapSideNavigation';
@@ -99,7 +99,7 @@ const plugin: ComputationPlugin = {
 interface Props {
   analysisId: string;
   studyId: string;
-  logoProps: MapNavigationLogoProps;
+  logoProps: SiteProps;
 }
 
 export function MapAnalysis(props: Props) {
@@ -336,7 +336,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
     const filters = analysisState.analysis?.descriptor.subset.descriptor;
 
     function makeButtonText() {
-      if (!filters) return '';
+      if (!filters || filters.length === 0) return 'Add a filter';
 
       const { isSubsetPanelOpen } = appState;
       const showOrHide = isSubsetPanelOpen ? 'Hide' : 'Show';
@@ -356,7 +356,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
         }}
         className="FilterChips"
       >
-        {filters.length > 0 ? (
+        {filters && (
           <FilledButton
             onPress={() => {
               setIsSubsetPanelOpen &&
@@ -373,10 +373,6 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
               },
             }}
           />
-        ) : (
-          <p style={{ padding: 0, margin: '0 0 0 5px', fontSize: 16 }}>
-            No filters applied.
-          </p>
         )}
         <div>
           <FilterChipList
@@ -399,6 +395,11 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
     );
   };
 
+  /**
+   * These buttons and their styles are for demonstration purposes
+   * at this point. After #1671 is merged, we will implement these
+   * buttons and their associated panels.
+   */
   const buttonStyles: React.CSSProperties = {
     background: 'transparent',
     borderColor: 'transparent',
@@ -420,67 +421,45 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
   const labelStyles: React.CSSProperties = {
     marginLeft: '0.5rem',
   };
-  const [activeSideMenuItem, setActiveSideMenuItem] = useState<
-    number | undefined
-  >();
+
+  /** Again, for demonstration purposes. This is showing that we
+   * can keep track of the open panels and use that info to
+   * conditionally render some styles or something.
+   */
+  const [activeSideMenuItems, setActiveSideMenuItems] = useState<Set<number>>(
+    new Set()
+  );
 
   const sideNavigationItems = [
-    <button
-      style={buttonStyles}
-      onClick={() =>
-        setActiveSideMenuItem((current) => (current === 0 ? undefined : 0))
-      }
-    >
-      <span style={iconStyles} aria-hidden>
-        <Share />
-      </span>
-      <span style={labelStyles}>Paint by variable</span>
-    </button>,
-    <button
-      style={buttonStyles}
-      onClick={() =>
-        setActiveSideMenuItem((current) => (current === 1 ? undefined : 1))
-      }
-    >
-      <span style={iconStyles} aria-hidden>
-        <Filter />
-      </span>
-      <span style={labelStyles}>Filter data</span>
-    </button>,
-    <button
-      style={buttonStyles}
-      onClick={() =>
-        setActiveSideMenuItem((current) => (current === 2 ? undefined : 2))
-      }
-    >
-      <span style={iconStyles} aria-hidden>
-        <Download />
-      </span>
-      <span style={labelStyles}>Download map</span>
-    </button>,
-    <button
-      style={buttonStyles}
-      onClick={() =>
-        setActiveSideMenuItem((current) => (current === 3 ? undefined : 3))
-      }
-    >
-      <span style={iconStyles} aria-hidden>
-        <Pencil />
-      </span>
-      <span style={labelStyles}>Edit configuration</span>
-    </button>,
-    <button
-      style={buttonStyles}
-      onClick={() =>
-        setActiveSideMenuItem((current) => (current === 4 ? undefined : 4))
-      }
-    >
-      <span style={iconStyles} aria-hidden>
-        <SampleDetailsLight />
-      </span>
-      <span style={labelStyles}>Study Information</span>
-    </button>,
-  ];
+    {
+      isButton: true,
+      labelText: 'Filter Data',
+      icon: <Filter />,
+    },
+    {
+      isButton: true,
+      labelText: 'Download Map',
+      icon: <Download />,
+    },
+  ].map((item, index) => {
+    return (
+      <button
+        style={buttonStyles}
+        onClick={() => {
+          setActiveSideMenuItems((currentSet) => {
+            const newSet = new Set(currentSet);
+            newSet.has(index) ? newSet.delete(index) : newSet.add(index);
+            return newSet;
+          });
+        }}
+      >
+        <span style={iconStyles} aria-hidden>
+          {item.icon}
+        </span>
+        <span style={labelStyles}>{item.labelText}</span>
+      </button>
+    );
+  });
 
   return (
     <PromiseResult state={appPromiseState}>
@@ -522,13 +501,8 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                 <MapSideNavigation logoProps={props.logoProps}>
                   <div style={{ width: '100%' }}>
                     <ul style={{ margin: 0, padding: 0 }}>
-                      {[
-                        ...sideNavigationItems,
-                        ...sideNavigationItems,
-                        ...sideNavigationItems,
-                        ...sideNavigationItems,
-                      ].map((item, itemIndex) => {
-                        const isActive = itemIndex === activeSideMenuItem;
+                      {sideNavigationItems.map((item, itemIndex) => {
+                        const isActive = activeSideMenuItems.has(itemIndex);
                         return (
                           <li
                             key={itemIndex}
@@ -542,9 +516,6 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                               borderRight: `5px solid ${
                                 isActive ? 'black' : 'transparent'
                               }`,
-                              background: isActive
-                                ? 'rgba(0, 0, 0, 0.075)'
-                                : 'transparent',
                             }}
                           >
                             {item}
