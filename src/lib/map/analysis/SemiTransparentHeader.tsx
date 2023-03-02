@@ -22,7 +22,8 @@ export type SemiTransparentHeaderProps = {
   onAnalysisNameEdit: (newName: string) => void;
   onToggleExpand: () => void;
   studyName: string;
-  totalEntitesCount: number | undefined;
+  totalEntitesInSampleCount: number | undefined;
+  totalEntitiesInSubsetCount: number | undefined;
   visibleEntitiesCount: number | undefined;
 };
 
@@ -40,8 +41,9 @@ export function SemiTransparentHeader({
   onAnalysisNameEdit,
   onToggleExpand,
   studyName,
-  totalEntitesCount,
-  visibleEntitiesCount,
+  totalEntitesInSampleCount: totalEntitesInSample = 0,
+  totalEntitiesInSubsetCount = 0,
+  visibleEntitiesCount = 0,
 }: SemiTransparentHeaderProps) {
   const semiTransparentHeader = makeClassNameHelper('SemiTransparentHeader');
 
@@ -69,10 +71,32 @@ export function SemiTransparentHeader({
         />
       </div>
       <div className={semiTransparentHeader('__SampleCounter')}>
-        <p>
-          {visibleEntitiesCount || 0} of {totalEntitesCount || 0} samples
-          visible
-        </p>
+        <table>
+          <thead>
+            <tr>
+              <th title="Counts"></th>
+              <th title="Values">Samples</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr title={`There are X total samples.`}>
+              <td>All</td>
+              <td>{totalEntitesInSample}</td>
+            </tr>
+            <tr
+              title={`You've subset all samples down to ${totalEntitiesInSubsetCount} entites.`}
+            >
+              <td>Subset</td>
+              <td>{totalEntitiesInSubsetCount}</td>
+            </tr>
+            <tr
+              title={`${visibleEntitiesCount} samples of your subset samples visible at your current viewport.`}
+            >
+              <td>Visible</td>
+              <td>{visibleEntitiesCount}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <OpenCloseToggleButton
         isExpanded={isExpanded}
