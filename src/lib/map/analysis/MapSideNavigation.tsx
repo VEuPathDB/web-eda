@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { SemiTransparentHeaderLogoProps } from './SemiTransparentHeader';
+import { MapNavigationLogoProps } from './MapNavigation';
 import { ChevronRight } from '@veupathdb/coreui';
 import { Launch, LockOpen } from '@material-ui/icons';
 
 export type MapSideNavigationProps = {
   children: React.ReactNode;
-  logoProps: SemiTransparentHeaderLogoProps;
+  logoProps: MapNavigationLogoProps;
 };
 
 const menuBackground = 'rgba(255, 255, 255, 0.8)';

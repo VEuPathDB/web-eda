@@ -63,10 +63,7 @@ import {
   useFieldTree,
   useFlattenedFields,
 } from '../../core/components/variableTrees/hooks';
-import {
-  SemiTransparentHeaderLogoProps,
-  SemiTransparentHeader,
-} from './SemiTransparentHeader';
+import { MapNavigationLogoProps, MapNavigation } from './MapNavigation';
 import FilterChipList from '../../core/components/FilterChipList';
 import { VariableLinkConfig } from '../../core/components/VariableLink';
 import { MapSideNavigation } from './MapSideNavigation';
@@ -102,7 +99,7 @@ const plugin: ComputationPlugin = {
 interface Props {
   analysisId: string;
   studyId: string;
-  logoProps: SemiTransparentHeaderLogoProps;
+  logoProps: MapNavigationLogoProps;
 }
 
 export function MapAnalysis(props: Props) {
@@ -502,7 +499,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                 position: 'relative',
               }}
             >
-              <SemiTransparentHeader
+              <MapNavigation
                 analysisName={analysisState.analysis?.displayName}
                 filterList={<FilterChipListForHeader />}
                 isExpanded={mapHeaderIsExpanded}

@@ -20,12 +20,12 @@ import {
 } from '../core/hooks/client';
 
 import './MapVEu.scss';
-import { SemiTransparentHeaderLogoProps } from './analysis/SemiTransparentHeader';
+import { MapNavigationLogoProps } from './analysis/MapNavigation';
 
 interface Props {
   edaServiceUrl: string;
   singleAppMode?: string;
-  logoProps: SemiTransparentHeaderLogoProps;
+  logoProps: MapNavigationLogoProps;
 }
 
 export function MapVeuContainer(props: Props) {

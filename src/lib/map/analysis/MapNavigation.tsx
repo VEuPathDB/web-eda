@@ -6,19 +6,19 @@ import {
 } from '@veupathdb/wdk-client/lib/Utils/ComponentUtils';
 import { SaveableTextEditor } from '@veupathdb/wdk-client/lib/Components';
 import { ANALYSIS_NAME_MAX_LENGTH } from '../../core/utils/analysis';
-import './SemiTransparentHeader.scss';
+import './MapNavigation.scss';
 
-export type SemiTransparentHeaderLogoProps = {
+export type MapNavigationLogoProps = {
   href: string;
   siteName: string;
   src: string;
 };
 
-export type SemiTransparentHeaderProps = {
+export type MapNavigationProps = {
   analysisName?: string;
   filterList?: ReactElement;
   isExpanded: boolean;
-  logoProps: SemiTransparentHeaderLogoProps;
+  logoProps: MapNavigationLogoProps;
   onAnalysisNameEdit: (newName: string) => void;
   onToggleExpand: () => void;
   studyName: string;
@@ -33,7 +33,7 @@ export type SemiTransparentHeaderProps = {
  *  - Presenting the smallest amount of information to allow the user
  *    to make sense of a map analysis.
  */
-export function SemiTransparentHeader({
+export function MapNavigation({
   analysisName,
   filterList,
   isExpanded,
@@ -44,21 +44,21 @@ export function SemiTransparentHeader({
   totalEntitesInSampleCount: totalEntitesInSample = 0,
   totalEntitiesInSubsetCount = 0,
   visibleEntitiesCount = 0,
-}: SemiTransparentHeaderProps) {
-  const semiTransparentHeader = makeClassNameHelper('SemiTransparentHeader');
+}: MapNavigationProps) {
+  const mapNavigation = makeClassNameHelper('SemiTransparentHeader');
 
   return (
     <header
-      className={`${semiTransparentHeader()} ${
-        !isExpanded ? semiTransparentHeader('--collapsed') : ''
+      className={`${mapNavigation()} ${
+        !isExpanded ? mapNavigation('--collapsed') : ''
       }`}
     >
       <div
-        className={`${semiTransparentHeader('__Contents')} ${
+        className={`${mapNavigation('__Contents')} ${
           isExpanded ? '' : 'screenReaderOnly'
         }`}
       >
-        <div className={semiTransparentHeader('__LogoContainer')}>
+        <div className={mapNavigation('__LogoContainer')}>
           <a href={logoProps.href}>
             <img src={logoProps.src} alt={logoProps.siteName} />
           </a>
@@ -70,7 +70,7 @@ export function SemiTransparentHeader({
           onAnalysisNameEdit={onAnalysisNameEdit}
         />
       </div>
-      <div className={semiTransparentHeader('__SampleCounter')}>
+      <div className={mapNavigation('__SampleCounter')}>
         <table>
           <thead>
             <tr>
