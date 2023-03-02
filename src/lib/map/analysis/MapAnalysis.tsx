@@ -349,6 +349,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
     return (
       <div
         style={{
+          // These styles format the "Show X Filters" and filter chips
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
@@ -367,9 +368,9 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
             size="small"
             styleOverrides={{
               container: {
-                marginBottom: 5,
-                marginRight: 16,
-                width: 'max-content',
+                marginBottom: 5, // Align with filter chips who apply bottom margin for stacking.
+                marginRight: 10, // Space between button and first filter chip.
+                width: 'max-content', // Prevent the button's text from getting smushed with many chips.
               },
             }}
           />
@@ -396,9 +397,9 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
   };
 
   /**
-   * These buttons and their styles are for demonstration purposes
-   * at this point. After #1671 is merged, we will implement these
-   * buttons and their associated panels.
+   * The following code and styles are for demonstration purposes
+   * at this point. After #1671 is merged, we can implement these
+   * menu buttons and their associated panels for real.
    */
   const buttonStyles: React.CSSProperties = {
     background: 'transparent',
@@ -474,16 +475,20 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
             >
               <div
                 style={{
-                  height: '100%',
-                  width: '100%',
-                  background: 'transparent',
-                  position: 'absolute',
-                  zIndex: 2,
-                  pointerEvents: 'none',
-                  top: 0,
-                  left: 0,
+                  // Make a div that completely fills its parent. Have it
+                  // layout its children with flexbox.
                   display: 'flex',
                   flexDirection: 'column',
+                  height: '100%',
+                  width: '100%',
+                  // Attach this div container to it's parent.
+                  position: 'absolute',
+                  // Remember that just about everything in the DOM is box.
+                  // This div is sitting on top of the map. By disabling
+                  // pointer events we are saying: hey, div, become porous.
+                  // If a user clicks you, don't capture it, but let it go
+                  // to the map you're covering.
+                  pointerEvents: 'none',
                 }}
               >
                 <SemiTransparentHeader
@@ -507,12 +512,16 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                           <li
                             key={itemIndex}
                             style={{
+                              // These styles format the lefthand side menu items.
+                              // Nothing special here. We can conditionally apply
+                              // styles based on in/active states, if we like.
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'flex-start',
                               padding: '0.25rem',
                               width: '100%',
                               transition: 'background 0.2s ease',
+                              // An example of an active state style.
                               borderRight: `5px solid ${
                                 isActive ? 'black' : 'transparent'
                               }`,

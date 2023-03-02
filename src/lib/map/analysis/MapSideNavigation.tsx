@@ -11,6 +11,8 @@ export type MapSideNavigationProps = {
 const menuBackground = 'rgba(255, 255, 255, 0.8)';
 
 const bottomLinkStyles: React.CSSProperties = {
+  // These are for formatting the links to the login
+  // and site URL.
   display: 'flex',
   justifyContent: 'flex-start',
   alignItems: 'center',
