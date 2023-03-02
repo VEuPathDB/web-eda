@@ -369,6 +369,8 @@ function FullScreenMap(props: FullScreenComponentProps) {
               visualizationsOverview={app.visualizations}
               geoConfigs={[geoConfig]}
               onVisualizationCreated={onVisualizationCreated}
+              // declare that this is from FSM
+              isFullScreenMap={true}
             />
           );
         }}

@@ -211,7 +211,7 @@ function ConfiguredVisualizations(props: Props) {
                                 (v) => v.visualizationId !== viz.visualizationId
                               )
                             );
-                            /* 
+                            /*
                               Here we're deleting the computation in the event we delete
                               the computation's last remaining visualization.
                             */
@@ -321,6 +321,8 @@ interface NewVisualizationPickerProps
     computationId: string
   ) => void;
   includeHeader?: boolean;
+  // add this prop to clarify whether the parent component is from FSM or not
+  isFullScreenMap?: boolean;
 }
 
 export function NewVisualizationPicker(props: NewVisualizationPickerProps) {
@@ -334,6 +336,7 @@ export function NewVisualizationPicker(props: NewVisualizationPickerProps) {
       history.replace(`../${computationId}/${visualizationId}`);
     },
     includeHeader = true,
+    isFullScreenMap = false,
   } = props;
   const colors = useVizIconColors();
   const history = useHistory();
@@ -359,6 +362,15 @@ export function NewVisualizationPicker(props: NewVisualizationPickerProps) {
           ['desc']
         ).map((vizOverview, index) => {
           const vizPlugin = visualizationPlugins[vizOverview.name!];
+
+          // hiding map-related icons under FSM
+          if (
+            isFullScreenMap &&
+            (vizOverview.name === 'map-markers' ||
+              vizOverview.name === 'map-markers-overlay')
+          )
+            return;
+
           const disabled =
             vizPlugin == null ||
             (vizPlugin.isEnabledInPicker != null &&
@@ -588,7 +600,7 @@ export function FullScreenVisualization(props: FullScreenVisualizationProps) {
                     updateVisualizations((visualizations) =>
                       visualizations.filter((v) => v.visualizationId !== id)
                     );
-                    /* 
+                    /*
                       Here we're deleting the computation in the event we delete
                       the computation's last remaining visualization.
                     */
