@@ -33,14 +33,15 @@ export function MapSideNavigation({
         // including its width, height, and location on the
         // page (which depends on the `isExpanded` piece of state.
         background: menuBackground,
-        height: 'calc(100% - 200px)',
+        // height: 'calc(100% - 150px)',
+        height: '100%',
         left: isExpanded ? 0 : -200,
         minHeight: 125,
-        position: 'absolute',
-        top: 150,
+        position: 'relative',
         transition: 'left 0.1s ease',
         width: 200,
-        zIndex: 150,
+        pointerEvents: 'auto',
+        marginTop: '2rem',
       }}
     >
       <button
@@ -89,22 +90,8 @@ export function MapSideNavigation({
           position: 'relative',
         }}
       >
-        <h2
-          style={{
-            // This heading presents the site name and accent color.
-            // If the navigation items exceed available vertical
-            // space, the user will be allowed to scroll on the y-axis.
-            // This heading is `sticky` to ensure that the header remains
-            // "stuck" to the top of the navigation whilst scrolling.
-            background: siteAccent,
-            margin: 0,
-            padding: '1rem 0',
-            position: 'sticky',
-            textAlign: 'center',
-            top: 0,
-          }}
-        >
-          {logoProps.siteName}
+        <h2 style={{ textAlign: 'center', background: siteAccent }}>
+          Mission Control
         </h2>
         <div
           style={{

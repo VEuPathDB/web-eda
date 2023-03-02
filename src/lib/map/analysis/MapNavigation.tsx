@@ -33,7 +33,7 @@ export type MapNavigationProps = {
  *  - Presenting the smallest amount of information to allow the user
  *    to make sense of a map analysis.
  */
-export function MapNavigation({
+export function SemiTransparentHeader({
   analysisName,
   filterList,
   isExpanded,
@@ -70,7 +70,11 @@ export function MapNavigation({
           onAnalysisNameEdit={onAnalysisNameEdit}
         />
       </div>
-      <div className={mapNavigation('__SampleCounter')}>
+      <div
+        className={`${mapNavigation('__SampleCounter')} ${
+          isExpanded ? '' : 'screenReaderOnly'
+        }`}
+      >
         <table>
           <thead>
             <tr>

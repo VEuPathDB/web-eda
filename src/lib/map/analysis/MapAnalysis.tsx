@@ -63,7 +63,7 @@ import {
   useFieldTree,
   useFlattenedFields,
 } from '../../core/components/variableTrees/hooks';
-import { MapNavigationLogoProps, MapNavigation } from './MapNavigation';
+import { MapNavigationLogoProps, SemiTransparentHeader } from './MapNavigation';
 import FilterChipList from '../../core/components/FilterChipList';
 import { VariableLinkConfig } from '../../core/components/VariableLink';
 import { MapSideNavigation } from './MapSideNavigation';
@@ -499,53 +499,68 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                 position: 'relative',
               }}
             >
-              <MapNavigation
-                analysisName={analysisState.analysis?.displayName}
-                filterList={<FilterChipListForHeader />}
-                isExpanded={mapHeaderIsExpanded}
-                logoProps={props.logoProps}
-                onAnalysisNameEdit={analysisState.setName}
-                onToggleExpand={() => setMapHeaderIsExpanded((c) => !c)}
-                studyName={studyRecord.displayName}
-                totalEntitesInSampleCount={totalEntitiesInSampleCount}
-                totalEntitiesInSubsetCount={totalEntityInSubsetCount}
-                visibleEntitiesCount={totalVisibleEntityCount}
-              />
-              <MapSideNavigation logoProps={props.logoProps}>
-                <div style={{ width: '100%' }}>
-                  <ul style={{ margin: 0, padding: 0 }}>
-                    {[
-                      ...sideNavigationItems,
-                      ...sideNavigationItems,
-                      ...sideNavigationItems,
-                      ...sideNavigationItems,
-                    ].map((item, itemIndex) => {
-                      const isActive = itemIndex === activeSideMenuItem;
-                      return (
-                        <li
-                          key={itemIndex}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'flex-start',
-                            padding: '0.25rem',
-                            width: '100%',
-                            transition: 'background 0.2s ease',
-                            borderRight: `5px solid ${
-                              isActive ? 'black' : 'transparent'
-                            }`,
-                            background: isActive
-                              ? 'rgba(0, 0, 0, 0.075)'
-                              : 'transparent',
-                          }}
-                        >
-                          {item}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              </MapSideNavigation>
+              <div
+                style={{
+                  height: '100%',
+                  width: '100%',
+                  background: 'transparent',
+                  position: 'absolute',
+                  zIndex: 2,
+                  pointerEvents: 'none',
+                  top: 0,
+                  left: 0,
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
+              >
+                <SemiTransparentHeader
+                  analysisName={analysisState.analysis?.displayName}
+                  filterList={<FilterChipListForHeader />}
+                  isExpanded={mapHeaderIsExpanded}
+                  logoProps={props.logoProps}
+                  onAnalysisNameEdit={analysisState.setName}
+                  onToggleExpand={() => setMapHeaderIsExpanded((c) => !c)}
+                  studyName={studyRecord.displayName}
+                  totalEntitesInSampleCount={totalEntitiesInSampleCount}
+                  totalEntitiesInSubsetCount={totalEntityInSubsetCount}
+                  visibleEntitiesCount={totalVisibleEntityCount}
+                />
+                <MapSideNavigation logoProps={props.logoProps}>
+                  <div style={{ width: '100%' }}>
+                    <ul style={{ margin: 0, padding: 0 }}>
+                      {[
+                        ...sideNavigationItems,
+                        ...sideNavigationItems,
+                        ...sideNavigationItems,
+                        ...sideNavigationItems,
+                      ].map((item, itemIndex) => {
+                        const isActive = itemIndex === activeSideMenuItem;
+                        return (
+                          <li
+                            key={itemIndex}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'flex-start',
+                              padding: '0.25rem',
+                              width: '100%',
+                              transition: 'background 0.2s ease',
+                              borderRight: `5px solid ${
+                                isActive ? 'black' : 'transparent'
+                              }`,
+                              background: isActive
+                                ? 'rgba(0, 0, 0, 0.075)'
+                                : 'transparent',
+                            }}
+                          >
+                            {item}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                </MapSideNavigation>
+              </div>
               <MapVEuMap
                 height="100%"
                 width="100%"
