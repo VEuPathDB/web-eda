@@ -369,6 +369,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
               container: {
                 marginBottom: 5,
                 marginRight: 16,
+                width: 'max-content',
               },
             }}
           />
