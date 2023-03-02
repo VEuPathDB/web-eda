@@ -29,7 +29,7 @@ export function MapSideNavigation({
   return (
     <nav
       style={{
-        // These styles define the look of the navigation,
+        // These styles define the look of the side navigation,
         // including its width, height, and location on the
         // page (which depends on the `isExpanded` piece of state.
         background: menuBackground,
@@ -40,13 +40,20 @@ export function MapSideNavigation({
         position: 'relative',
         transition: 'left 0.1s ease',
         width: 200,
-        pointerEvents: 'auto',
         marginTop: '2rem',
+        // The parent of this element probably had its pointer-events
+        // set to "none". This restores the default behavior. Without
+        // this, users cannot interact with the side menu via cursor.
+        pointerEvents: 'auto',
+        // Just as with the map header, we need to set a z-index to
+        // ensure that the side menu sits atop the map.
+        zIndex: 10,
       }}
     >
       <button
         style={{
-          // This makes the button
+          // This makes the button users will click to open/close
+          // the side navigation.
           background: menuBackground,
           borderColor: 'transparent',
           height: 50,
@@ -59,7 +66,8 @@ export function MapSideNavigation({
           transform: 'translate(0%, -50%)',
           transition: 'all 0.1s ease',
           // These styles make sure that the button's SVG
-          // is centered on x and y-axis.
+          // is centered on x and y-axis. I think 50% of the
+          // CSS I write is to center things. #tailwind
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
@@ -114,8 +122,8 @@ export function MapSideNavigation({
         <div
           style={{
             // This handles short viewports. These styles allow
-            // content inside the div to be scrollable if it exceeds the
-            // height contraints of a short viewport.
+            // content inside the div to be scrollable when it exceeds the
+            // height constraints of a short viewport.
             marginLeft: '0.5rem',
             // This pins the items to the bottom of the navigation
             display: 'flex',
@@ -123,6 +131,7 @@ export function MapSideNavigation({
             justifyContent: 'flex-end',
           }}
         >
+          {/* For now these are more for demonstration purposes. */}
           <ul style={{ margin: 0, padding: 0, listStyleType: 'none' }}>
             <li>
               <a style={bottomLinkStyles} href={logoProps.siteHomeUrl}>
