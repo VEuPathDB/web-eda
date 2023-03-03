@@ -342,24 +342,14 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
         }}
         className="FilterChips"
       >
-        {filters.length === 0 && (
-          <FilledButton
-            onPress={() => {
-              setIsSubsetPanelOpen &&
-                setIsSubsetPanelOpen(!appState.isSubsetPanelOpen);
-            }}
-            text="Add filters"
-            icon={Filter}
-            size="small"
-            styleOverrides={{
-              container: {
-                marginBottom: 5,
-                marginRight: 16,
-              },
-            }}
-          />
-        )}
-
+        <p
+          style={{ fontSize: 16, fontWeight: 'bold', margin: '0 5px 5px 5px' }}
+        >
+          Filters:{' '}
+          {filters.length < 1 && (
+            <span style={{ fontWeight: 'normal' }}>None</span>
+          )}
+        </p>
         <div>
           <FilterChipList
             filters={filters}
