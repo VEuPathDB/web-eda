@@ -91,7 +91,7 @@ interface MapMarkers {
   /** the full xAxisVariable object */
   xAxisVariable: Variable | undefined;
   /** various stats for birds eye etc */
-  totalEntityCount: number | undefined;
+  totalEntitiesCount: number | undefined;
   /** If `totalEntityCount` tells you how many entites there are, `totalVisibleEntityCount` tells you how many entities are visible at a given viewport. */
   totalVisibleEntityCount: number | undefined;
   completeCasesAllVars: number | undefined;
@@ -266,7 +266,7 @@ export function useMapMarkers(props: MapMarkersProps): MapMarkers {
     ])
   );
 
-  const totalEntityCount = basicMarkerData.value?.completeCasesGeoVar;
+  const totalEntitiesCount = basicMarkerData.value?.completeCasesGeoVar;
 
   // Marker Data is relat
   const totalVisibleEntityCount:
@@ -591,7 +591,7 @@ export function useMapMarkers(props: MapMarkersProps): MapMarkers {
     xAxisVariable: xAxisVariableAndEntity?.variable,
     outputEntity,
     totalVisibleEntityCount,
-    totalEntityCount,
+    totalEntitiesCount,
     completeCasesAllVars,
     completeCases,
     vocabulary,

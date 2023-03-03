@@ -22,7 +22,7 @@ export type SemiTransparentHeaderProps = {
   onAnalysisNameEdit: (newName: string) => void;
   onToggleExpand: () => void;
   studyName: string;
-  totalEntitesInSampleCount: number | undefined;
+  totalEntitesCount: number | undefined;
   totalEntitiesInSubsetCount: number | undefined;
   visibleEntitiesCount: number | undefined;
 };
@@ -41,7 +41,7 @@ export function SemiTransparentHeader({
   onAnalysisNameEdit,
   onToggleExpand,
   studyName,
-  totalEntitesInSampleCount: totalEntitesInSample = 0,
+  totalEntitesCount = 0,
   totalEntitiesInSubsetCount = 0,
   visibleEntitiesCount = 0,
 }: SemiTransparentHeaderProps) {
@@ -81,7 +81,7 @@ export function SemiTransparentHeader({
           <tbody>
             <tr title={`There are X total samples.`}>
               <td>All</td>
-              <td>{totalEntitesInSample}</td>
+              <td>{totalEntitesCount}</td>
             </tr>
             <tr
               title={`You've subset all samples down to ${totalEntitiesInSubsetCount} entites.`}

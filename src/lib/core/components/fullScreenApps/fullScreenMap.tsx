@@ -177,7 +177,7 @@ function FullScreenMap(props: FullScreenComponentProps) {
     vocabulary,
     basicMarkerError,
     overlayError,
-    totalEntityCount,
+    totalEntitiesCount: totalEntityCount,
   } = useMapMarkers({
     requireOverlay: false,
     boundsZoomLevel,
