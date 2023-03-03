@@ -16,6 +16,7 @@ export type SemiTransparentHeaderLogoProps = {
 
 export type SemiTransparentHeaderProps = {
   analysisName?: string;
+  entityDisplayName: string;
   filterList?: ReactElement;
   isExpanded: boolean;
   logoProps: SemiTransparentHeaderLogoProps;
@@ -35,6 +36,7 @@ export type SemiTransparentHeaderProps = {
  */
 export function SemiTransparentHeader({
   analysisName,
+  entityDisplayName,
   filterList,
   isExpanded,
   logoProps,
@@ -74,8 +76,8 @@ export function SemiTransparentHeader({
         <table>
           <thead>
             <tr>
-              <th title="Counts"></th>
-              <th title="Values">Samples</th>
+              <th></th>
+              <th>{entityDisplayName}</th>
             </tr>
           </thead>
           <tbody>

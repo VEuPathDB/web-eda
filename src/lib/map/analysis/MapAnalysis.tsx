@@ -423,6 +423,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
             >
               <SemiTransparentHeader
                 analysisName={analysisState.analysis?.displayName}
+                entityDisplayName={outputEntity?.displayNamePlural || 'Samples'}
                 filterList={<FilterChipListForHeader />}
                 isExpanded={mapHeaderIsExpanded}
                 logoProps={props.logoProps}
