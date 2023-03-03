@@ -151,7 +151,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
     basicMarkerError,
     overlayError,
     totalEntitiesCount,
-    totalVisibleEntityCount,
+    totalVisibleEntitiesCount,
   } = useMapMarkers({
     requireOverlay: false,
     boundsZoomLevel: appState.boundsZoomLevel,
@@ -407,7 +407,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                 studyName={studyRecord.displayName}
                 totalEntitesCount={totalEntitiesInSampleCount}
                 totalEntitiesInSubsetCount={totalEntitiesCount}
-                visibleEntitiesCount={totalVisibleEntityCount}
+                visibleEntitiesCount={totalVisibleEntitiesCount}
               />
               <MapVEuMap
                 height="100%"

@@ -93,7 +93,7 @@ interface MapMarkers {
   /** various stats for birds eye etc */
   totalEntitiesCount: number | undefined;
   /** If `totalEntityCount` tells you how many entites there are, `totalVisibleEntityCount` tells you how many entities are visible at a given viewport. */
-  totalVisibleEntityCount: number | undefined;
+  totalVisibleEntitiesCount: number | undefined;
   completeCasesAllVars: number | undefined;
   completeCases: CompleteCasesTable | undefined;
   /** the possible values for the overlay variable (e.g. back-end derived bin labels) */
@@ -590,7 +590,7 @@ export function useMapMarkers(props: MapMarkersProps): MapMarkers {
     markers,
     xAxisVariable: xAxisVariableAndEntity?.variable,
     outputEntity,
-    totalVisibleEntityCount,
+    totalVisibleEntitiesCount: totalVisibleEntityCount,
     totalEntitiesCount,
     completeCasesAllVars,
     completeCases,
