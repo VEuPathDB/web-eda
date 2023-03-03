@@ -439,9 +439,9 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                 onAnalysisNameEdit={analysisState.setName}
                 onToggleExpand={() => setMapHeaderIsExpanded((c) => !c)}
                 studyName={studyRecord.displayName}
-                totalEntitesCount={totalEntitiesInSampleCount}
-                totalEntitiesInSubsetCount={totalEntityCount}
-                visibleEntitiesCount={
+                totalEntityCount={totalEntitiesInSampleCount}
+                totalEntityInSubsetCount={totalEntityCount}
+                visibleEntityCount={
                   totalVisibleWithOverlayEntityCount ?? totalVisibleEntityCount
                 }
               />
