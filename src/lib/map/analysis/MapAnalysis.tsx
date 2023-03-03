@@ -149,6 +149,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
     pending,
     legendItems,
     basicMarkerError,
+    outputEntity,
     overlayError,
     totalEntitiesCount,
     totalVisibleEntitiesCount,
@@ -247,9 +248,9 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
   ]);
 
   const totalEntitiesInSampleCount = (() => {
-    if (!totalCounts.value || !subsetVariableAndEntity.entityId) return 0;
+    if (!totalCounts.value || !outputEntity) return 0;
 
-    return totalCounts.value[subsetVariableAndEntity.entityId];
+    return totalCounts.value[outputEntity.id];
   })();
 
   const fullScreenActions = (
