@@ -329,12 +329,11 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
     const filters = analysisState.analysis?.descriptor.subset.descriptor;
 
     function makeButtonText() {
-      if (!filters) return '';
+      if (!filters || filters.length === 0) return 'Add filters';
 
       const { isSubsetPanelOpen } = appState;
       const showOrHide = isSubsetPanelOpen ? 'Hide' : 'Show';
-      const suffix = filters.length === 1 ? '' : 's';
-      return `${showOrHide} ${filters.length} filter${suffix}`;
+      return `${showOrHide} filtering panel`;
     }
 
     if (!studyEntities || !filters) return <></>;
@@ -349,7 +348,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
         }}
         className="FilterChips"
       >
-        {filters.length > 0 ? (
+        {filters && (
           <FilledButton
             onPress={() => {
               setIsSubsetPanelOpen &&
@@ -365,10 +364,6 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
               },
             }}
           />
-        ) : (
-          <p style={{ padding: 0, margin: '0 0 0 5px', fontSize: 16 }}>
-            No filters applied.
-          </p>
         )}
         <div>
           <FilterChipList
