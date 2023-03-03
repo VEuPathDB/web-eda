@@ -177,7 +177,7 @@ function MapViz(props: VisualizationProps<Options>) {
 
   const {
     markers,
-    totalEntitiesCount: totalEntityCount,
+    totalEntityCount,
     completeCasesAllVars,
     completeCases,
     vocabulary,
