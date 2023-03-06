@@ -151,9 +151,11 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
     pending,
     legendItems,
     basicMarkerError,
+    outputEntity,
     overlayError,
-    totalEntityCount: totalEntityInSubsetCount,
+    totalEntityCount,
     totalVisibleEntityCount,
+    totalVisibleWithOverlayEntityCount,
   } = useMapMarkers({
     requireOverlay: false,
     boundsZoomLevel: appState.boundsZoomLevel,
@@ -249,9 +251,9 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
   ]);
 
   const totalEntitiesInSampleCount = (() => {
-    if (!totalCounts.value || !subsetVariableAndEntity.entityId) return 0;
+    if (!totalCounts.value || !outputEntity) return 0;
 
-    return totalCounts.value[subsetVariableAndEntity.entityId];
+    return totalCounts.value[outputEntity.id];
   })();
 
   const fullScreenActions = (
@@ -330,15 +332,6 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
 
     const filters = analysisState.analysis?.descriptor.subset.descriptor;
 
-    function makeButtonText() {
-      if (!filters || filters.length === 0) return 'Add a filter';
-
-      const { isSubsetPanelOpen } = appState;
-      const showOrHide = isSubsetPanelOpen ? 'Hide' : 'Show';
-      const suffix = filters.length === 1 ? '' : 's';
-      return `${showOrHide} ${filters.length} filter${suffix}`;
-    }
-
     if (!studyEntities || !filters) return <></>;
 
     return (
@@ -352,25 +345,18 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
         }}
         className="FilterChips"
       >
-        {filters && (
-          <FilledButton
-            onPress={() => {
-              setIsSubsetPanelOpen &&
-                setIsSubsetPanelOpen(!appState.isSubsetPanelOpen);
-            }}
-            text={makeButtonText()}
-            icon={Filter}
-            size="small"
-            styleOverrides={{
-              container: {
-                marginBottom: 5, // Align with filter chips who apply bottom margin for stacking.
-                marginRight: 10, // Space between button and first filter chip.
-                width: 'max-content', // Prevent the button's text from getting smushed with many chips.
-              },
-            }}
-          />
-        )}
-        <div>
+        <FilledButton
+          text="Add filters"
+          onPress={() => setIsSubsetPanelOpen(true)}
+          size="small"
+          styleOverrides={{
+            container: {
+              width: 'max-content',
+              marginBottom: '5px',
+            },
+          }}
+        />
+        <div style={{ margin: '0 10px' }}>
           <FilterChipList
             filters={filters}
             removeFilter={(filter) =>
@@ -387,6 +373,20 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
             selectedVariableId={subsetVariableAndEntity.variableId}
           />
         </div>
+        {filters.length > 0 && (
+          <FloatingButton
+            text="Remove all"
+            onPress={() => analysisState.setFilters([])}
+            size="small"
+            themeRole="secondary"
+            styleOverrides={{
+              container: {
+                width: 'max-content',
+                margin: '0 10px 5px 0',
+              },
+            }}
+          />
+        )}
       </div>
     );
   };
@@ -488,15 +488,21 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
               >
                 <SemiTransparentHeader
                   analysisName={analysisState.analysis?.displayName}
+                  entityDisplayName={
+                    outputEntity?.displayNamePlural || 'Samples'
+                  }
                   filterList={<FilterChipListForHeader />}
                   isExpanded={mapHeaderIsExpanded}
                   logoProps={props.logoProps}
                   onAnalysisNameEdit={analysisState.setName}
                   onToggleExpand={() => setMapHeaderIsExpanded((c) => !c)}
                   studyName={studyRecord.displayName}
-                  totalEntitesInSampleCount={totalEntitiesInSampleCount}
-                  totalEntitiesInSubsetCount={totalEntityInSubsetCount}
-                  visibleEntitiesCount={totalVisibleEntityCount}
+                  totalEntityCount={totalEntitiesInSampleCount}
+                  totalEntityInSubsetCount={totalEntityCount}
+                  visibleEntityCount={
+                    totalVisibleWithOverlayEntityCount ??
+                    totalVisibleEntityCount
+                  }
                 />
                 <MapSideNavigation logoProps={props.logoProps}>
                   <div style={{ width: '100%' }}>
@@ -571,8 +577,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                 }}
               >
                 <div>
-                  {safeHtml(studyRecord.displayName)} (
-                  {totalEntityInSubsetCount})
+                  {safeHtml(studyRecord.displayName)} ({totalEntityCount})
                 </div>
                 <div>
                   Showing {entity?.displayName} variable {variable?.displayName}

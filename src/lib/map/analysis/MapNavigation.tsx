@@ -17,15 +17,16 @@ export type SiteProps = {
 
 export type MapNavigationProps = {
   analysisName?: string;
+  entityDisplayName: string;
   filterList?: ReactElement;
   isExpanded: boolean;
   logoProps: SiteProps;
   onAnalysisNameEdit: (newName: string) => void;
   onToggleExpand: () => void;
   studyName: string;
-  totalEntitesInSampleCount: number | undefined;
-  totalEntitiesInSubsetCount: number | undefined;
-  visibleEntitiesCount: number | undefined;
+  totalEntityCount: number | undefined;
+  totalEntityInSubsetCount: number | undefined;
+  visibleEntityCount: number | undefined;
 };
 
 /**
@@ -36,30 +37,31 @@ export type MapNavigationProps = {
  */
 export function SemiTransparentHeader({
   analysisName,
+  entityDisplayName,
   filterList,
   isExpanded,
   logoProps,
   onAnalysisNameEdit,
   onToggleExpand,
   studyName,
-  totalEntitesInSampleCount: totalEntitesInSample = 0,
-  totalEntitiesInSubsetCount = 0,
-  visibleEntitiesCount = 0,
+  totalEntityCount = 0,
+  totalEntityInSubsetCount = 0,
+  visibleEntityCount = 0,
 }: MapNavigationProps) {
-  const mapNavigation = makeClassNameHelper('SemiTransparentHeader');
+  const semiTransparentHeader = makeClassNameHelper('SemiTransparentHeader');
 
   return (
     <header
-      className={`${mapNavigation()} ${
-        !isExpanded ? mapNavigation('--collapsed') : ''
+      className={`${semiTransparentHeader()} ${
+        !isExpanded ? semiTransparentHeader('--collapsed') : ''
       }`}
     >
       <div
-        className={`${mapNavigation('__Contents')} ${
+        className={`${semiTransparentHeader('__Contents')} ${
           isExpanded ? '' : 'screenReaderOnly'
         }`}
       >
-        <div className={mapNavigation('__LogoContainer')}>
+        <div className={semiTransparentHeader('__LogoContainer')}>
           <a href={logoProps.siteHomeUrl}>
             <img src={logoProps.siteLogoSrc} alt={logoProps.siteName} />
           </a>
@@ -72,33 +74,33 @@ export function SemiTransparentHeader({
         />
       </div>
       <div
-        className={`${mapNavigation('__SampleCounter')} ${
+        className={`${semiTransparentHeader('__SampleCounter')} ${
           isExpanded ? '' : 'screenReaderOnly'
         }`}
       >
         <table>
           <thead>
             <tr>
-              <th title="Counts"></th>
-              <th title="Values">Samples</th>
+              <th></th>
+              <th>{entityDisplayName}</th>
             </tr>
           </thead>
           <tbody>
             <tr title={`There are X total samples.`}>
               <td>All</td>
-              <td>{totalEntitesInSample}</td>
+              <td>{totalEntityCount}</td>
             </tr>
             <tr
-              title={`You've subset all samples down to ${totalEntitiesInSubsetCount} entites.`}
+              title={`You've subset all samples down to ${totalEntityInSubsetCount} entites.`}
             >
               <td>Subset</td>
-              <td>{totalEntitiesInSubsetCount}</td>
+              <td>{totalEntityInSubsetCount}</td>
             </tr>
             <tr
-              title={`${visibleEntitiesCount} samples of your subset samples visible at your current viewport.`}
+              title={`${visibleEntityCount} samples of your subset samples visible at your current viewport.`}
             >
               <td>Visible</td>
-              <td>{visibleEntitiesCount}</td>
+              <td>{visibleEntityCount}</td>
             </tr>
           </tbody>
         </table>
