@@ -22,9 +22,18 @@ import {
   useStudyMetadata,
   useStudyRecord,
 } from '../../core';
+import { useGeoConfig } from '../../core/hooks/geoConfig';
+import { useMapMarkers } from '../../core/hooks/mapMarkers';
+import { useToggleStarredVariable } from '../../core/hooks/starredVariables';
+import { DocumentationContainer } from '../../core/components/docs/DocumentationContainer';
+import {
+  FullScreenVisualization,
+  NewVisualizationPickerModal,
+} from '../../core/components/visualizations/VisualizationsContainer';
+import { Visualization } from '../../core/types/visualization';
+import { useEntityCounts } from '../../core/hooks/entityCounts';
 import { ComputationPlugin } from '../../core/components/computations/Types';
 import { ZeroConfigWithButton } from '../../core/components/computations/ZeroConfiguration';
-import { DocumentationContainer } from '../../core/components/docs/DocumentationContainer';
 import FilterChipList from '../../core/components/FilterChipList';
 import { FloatingLayout } from '../../core/components/layouts/FloatingLayout';
 import { LayoutOptions } from '../../core/components/layouts/types';
@@ -45,15 +54,6 @@ import {
 import { scatterplotVisualization } from '../../core/components/visualizations/implementations/ScatterplotVisualization';
 import { OverlayOptions } from '../../core/components/visualizations/options/types';
 import { VisualizationPlugin } from '../../core/components/visualizations/VisualizationPlugin';
-import {
-  FullScreenVisualization,
-  NewVisualizationPickerModal,
-} from '../../core/components/visualizations/VisualizationsContainer';
-import { useEntityCounts } from '../../core/hooks/entityCounts';
-import { useGeoConfig } from '../../core/hooks/geoConfig';
-import { useMapMarkers } from '../../core/hooks/mapMarkers';
-import { useToggleStarredVariable } from '../../core/hooks/starredVariables';
-import { Visualization } from '../../core/types/visualization';
 import ShowHideVariableContextProvider from '../../core/utils/show-hide-variable-context';
 import Subsetting from '../../workspace/Subsetting';
 import { findFirstVariable } from '../../workspace/Utils';
