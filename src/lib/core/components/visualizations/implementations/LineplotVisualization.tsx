@@ -2040,34 +2040,36 @@ function getRequestParams(
     showMissingness,
     binWidth = NumberVariable.is(xAxisVariableMetadata) ||
     DateVariable.is(xAxisVariableMetadata)
-      ? xAxisVariableMetadata.distributionDefaults.binWidthOverride ??
-        xAxisVariableMetadata.distributionDefaults.binWidth
+      ? vizConfig.independentAxisValueSpec === 'Full'
+        ? xAxisVariableMetadata.distributionDefaults.binWidthOverride ??
+          xAxisVariableMetadata.distributionDefaults.binWidth
+        : undefined
       : undefined,
     binWidthTimeUnit = xAxisVariableMetadata?.type === 'date'
-      ? xAxisVariableMetadata.distributionDefaults.binUnits
+      ? vizConfig.independentAxisValueSpec === 'Full' // I think we should add this to HistogramVisualization too
+        ? xAxisVariableMetadata.distributionDefaults.binUnits
+        : undefined
       : undefined,
     useBinning,
     numeratorValues,
     denominatorValues,
   } = vizConfig;
 
-  const binSpec: Pick<LineplotRequestParams['config'], 'binSpec'> = binWidth
-    ? {
-        binSpec: {
-          type: 'binWidth',
-          ...(useBinning
-            ? {
-                value: binWidth,
-                ...(xAxisVariableMetadata?.type === 'date'
-                  ? { units: binWidthTimeUnit }
-                  : {}),
-              } // not binning
-            : xAxisVariableMetadata?.type === 'date'
-            ? { value: 1, units: 'day' }
-            : { value: 0 }),
-        },
-      }
-    : { binSpec: { type: 'binWidth' } };
+  const binSpec: Pick<LineplotRequestParams['config'], 'binSpec'> = {
+    binSpec: {
+      type: 'binWidth',
+      value: useBinning
+        ? binWidth
+        : xAxisVariableMetadata?.type === 'date'
+        ? 1
+        : 0,
+      units: useBinning
+        ? binWidthTimeUnit
+        : xAxisVariableMetadata?.type === 'date'
+        ? 'day'
+        : undefined,
+    },
+  };
 
   const valueSpec = valueSpecLookup[valueSpecConfig];
 
@@ -2076,12 +2078,10 @@ function getRequestParams(
   const viewport =
     vizConfig?.independentAxisRange?.min != null &&
     vizConfig?.independentAxisRange?.max != null
-      ? vizConfig.useBinning
-        ? undefined
-        : {
-            xMin: String(vizConfig?.independentAxisRange?.min),
-            xMax: String(vizConfig?.independentAxisRange?.max),
-          }
+      ? {
+          xMin: String(vizConfig?.independentAxisRange?.min),
+          xMax: String(vizConfig?.independentAxisRange?.max),
+        }
       : undefined;
 
   return {
