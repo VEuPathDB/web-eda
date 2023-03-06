@@ -6,7 +6,7 @@ import {
 } from '@veupathdb/wdk-client/lib/Utils/ComponentUtils';
 import { SaveableTextEditor } from '@veupathdb/wdk-client/lib/Components';
 import { ANALYSIS_NAME_MAX_LENGTH } from '../../core/utils/analysis';
-import './MapNavigation.scss';
+import './SemiTransparentHeader.scss';
 
 export type SiteProps = {
   siteHomeUrl: string;

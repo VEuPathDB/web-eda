@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SiteProps } from './MapNavigation';
+import { SiteProps } from './SemiTransparentHeader';
 import { ChevronRight } from '@veupathdb/coreui';
 import { Launch, LockOpen } from '@material-ui/icons';
 

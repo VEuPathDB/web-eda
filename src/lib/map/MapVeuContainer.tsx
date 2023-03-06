@@ -20,7 +20,7 @@ import {
 } from '../core/hooks/client';
 
 import './MapVEu.scss';
-import { SiteProps } from './analysis/MapNavigation';
+import { SiteProps } from './analysis/SemiTransparentHeader';
 
 interface Props {
   edaServiceUrl: string;

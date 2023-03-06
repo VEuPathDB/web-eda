@@ -1,17 +1,7 @@
-import * as t from 'io-ts';
 import { useCallback, useMemo, useState } from 'react';
 import { v4 as uuid } from 'uuid';
+import * as t from 'io-ts';
 
-import { Tooltip } from '@material-ui/core';
-import MapVEuMap from '@veupathdb/components/lib/map/MapVEuMap';
-import {
-  Close,
-  Download,
-  FilledButton,
-  Filter,
-  FloatingButton,
-} from '@veupathdb/coreui';
-import { Link } from 'react-router-dom';
 import {
   PromiseResult,
   useAnalysis,
@@ -22,6 +12,7 @@ import {
   useStudyMetadata,
   useStudyRecord,
 } from '../../core';
+import MapVEuMap from '@veupathdb/components/lib/map/MapVEuMap';
 import { useGeoConfig } from '../../core/hooks/geoConfig';
 import { useMapMarkers } from '../../core/hooks/mapMarkers';
 import { useToggleStarredVariable } from '../../core/hooks/starredVariables';
@@ -30,37 +21,50 @@ import {
   FullScreenVisualization,
   NewVisualizationPickerModal,
 } from '../../core/components/visualizations/VisualizationsContainer';
+import {
+  Close,
+  Download,
+  FilledButton,
+  Filter,
+  FloatingButton,
+} from '@veupathdb/coreui';
 import { Visualization } from '../../core/types/visualization';
 import { useEntityCounts } from '../../core/hooks/entityCounts';
+import { Tooltip } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import { ComputationPlugin } from '../../core/components/computations/Types';
 import { ZeroConfigWithButton } from '../../core/components/computations/ZeroConfiguration';
-import FilterChipList from '../../core/components/FilterChipList';
-import { FloatingLayout } from '../../core/components/layouts/FloatingLayout';
-import { LayoutOptions } from '../../core/components/layouts/types';
-import { VariableLinkConfig } from '../../core/components/VariableLink';
-import {
-  useFeaturedFields,
-  useFieldTree,
-  useFlattenedFields,
-} from '../../core/components/variableTrees/hooks';
-import { barplotVisualization } from '../../core/components/visualizations/implementations/BarplotVisualization';
-import { boxplotVisualization } from '../../core/components/visualizations/implementations/BoxplotVisualization';
 import { histogramVisualization } from '../../core/components/visualizations/implementations/HistogramVisualization';
-import { lineplotVisualization } from '../../core/components/visualizations/implementations/LineplotVisualization';
+import { VisualizationPlugin } from '../../core/components/visualizations/VisualizationPlugin';
+import { LayoutOptions } from '../../core/components/layouts/types';
+import { OverlayOptions } from '../../core/components/visualizations/options/types';
+import { FloatingLayout } from '../../core/components/layouts/FloatingLayout';
 import {
   contTableVisualization,
   twoByTwoVisualization,
 } from '../../core/components/visualizations/implementations/MosaicVisualization';
 import { scatterplotVisualization } from '../../core/components/visualizations/implementations/ScatterplotVisualization';
-import { OverlayOptions } from '../../core/components/visualizations/options/types';
-import { VisualizationPlugin } from '../../core/components/visualizations/VisualizationPlugin';
+import { lineplotVisualization } from '../../core/components/visualizations/implementations/LineplotVisualization';
+import { barplotVisualization } from '../../core/components/visualizations/implementations/BarplotVisualization';
+import { boxplotVisualization } from '../../core/components/visualizations/implementations/BoxplotVisualization';
 import ShowHideVariableContextProvider from '../../core/utils/show-hide-variable-context';
-import Subsetting from '../../workspace/Subsetting';
-import { findFirstVariable } from '../../workspace/Utils';
+import { MapLegend } from './MapLegend';
 import { AppState, useAppState } from './appState';
 import { FloatingDiv } from './FloatingDiv';
-import { MapLegend } from './MapLegend';
-import { SemiTransparentHeader, SiteProps } from './MapNavigation';
+import Subsetting from '../../workspace/Subsetting';
+import { findFirstVariable } from '../../workspace/Utils';
+import {
+  useFeaturedFields,
+  useFieldTree,
+  useFlattenedFields,
+} from '../../core/components/variableTrees/hooks';
+import {
+  MapNavigationProps,
+  SemiTransparentHeader,
+  SiteProps,
+} from './SemiTransparentHeader';
+import FilterChipList from '../../core/components/FilterChipList';
+import { VariableLinkConfig } from '../../core/components/VariableLink';
 import { MapSideNavigation } from './MapSideNavigation';
 
 const mapStyle: React.CSSProperties = {
