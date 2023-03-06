@@ -23,7 +23,7 @@ import {
   FullScreenVisualization,
   NewVisualizationPickerModal,
 } from '../../core/components/visualizations/VisualizationsContainer';
-import { Close, FilledButton, FloatingButton, Filter } from '@veupathdb/coreui';
+import { Close, FilledButton, FloatingButton } from '@veupathdb/coreui';
 import { Visualization } from '../../core/types/visualization';
 import { useEntityCounts } from '../../core/hooks/entityCounts';
 import { Tooltip } from '@material-ui/core';
