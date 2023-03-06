@@ -342,15 +342,18 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
         }}
         className="FilterChips"
       >
-        <p
-          style={{ fontSize: 16, fontWeight: 'bold', margin: '0 5px 5px 5px' }}
-        >
-          Filters:{' '}
-          {filters.length < 1 && (
-            <span style={{ fontWeight: 'normal' }}>None</span>
-          )}
-        </p>
-        <div>
+        <FilledButton
+          text="Add filters"
+          onPress={() => setIsSubsetPanelOpen(true)}
+          size="small"
+          styleOverrides={{
+            container: {
+              width: 'max-content',
+              marginBottom: '5px',
+            },
+          }}
+        />
+        <div style={{ margin: '0 10px' }}>
           <FilterChipList
             filters={filters}
             removeFilter={(filter) =>
@@ -368,43 +371,18 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
           />
         </div>
         {filters.length > 0 && (
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              marginBottom: '5px',
+          <FloatingButton
+            text="Remove all"
+            onPress={() => analysisState.setFilters([])}
+            size="small"
+            themeRole="secondary"
+            styleOverrides={{
+              container: {
+                width: 'max-content',
+                margin: '0 10px 5px 0',
+              },
             }}
-          >
-            <FilledButton
-              text="+"
-              ariaLabel="Add a filter"
-              onPress={() => setIsSubsetPanelOpen(true)}
-              styleOverrides={{
-                default: {
-                  textColor: 'white',
-                },
-
-                container: {
-                  fontSize: 20,
-                  margin: '0 0.5rem',
-                },
-              }}
-              size="small"
-            />
-            <FilledButton
-              text="-"
-              ariaLabel="Remove all filters"
-              onPress={() => analysisState.setFilters([])}
-              styleOverrides={{
-                default: { textColor: 'white' },
-                container: {
-                  fontSize: 20,
-                },
-              }}
-              size="small"
-              themeRole="secondary"
-            />
-          </div>
+          />
         )}
       </div>
     );
