@@ -248,11 +248,8 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
     studyMetadata.rootEntity.id,
   ]);
 
-  const totalEntitiesInSampleCount = (() => {
-    if (!totalCounts.value || !outputEntity) return 0;
-
-    return totalCounts.value[outputEntity.id];
-  })();
+  const outputEntityTotalCount =
+    totalCounts.value && outputEntity ? totalCounts.value[outputEntity.id] : 0;
 
   const fullScreenActions = (
     <>
@@ -408,7 +405,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                 onAnalysisNameEdit={analysisState.setName}
                 onToggleExpand={() => setMapHeaderIsExpanded((c) => !c)}
                 studyName={studyRecord.displayName}
-                totalEntityCount={totalEntitiesInSampleCount}
+                totalEntityCount={outputEntityTotalCount}
                 totalEntityInSubsetCount={totalEntityCount}
                 visibleEntityCount={
                   totalVisibleWithOverlayEntityCount ?? totalVisibleEntityCount
