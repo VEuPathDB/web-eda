@@ -8,7 +8,7 @@ import { SaveableTextEditor } from '@veupathdb/wdk-client/lib/Components';
 import { ANALYSIS_NAME_MAX_LENGTH } from '../../core/utils/analysis';
 import './SemiTransparentHeader.scss';
 
-export type SiteProps = {
+export type SiteInformationProps = {
   siteHomeUrl: string;
   loginUrl: string;
   siteName: string;
@@ -20,7 +20,7 @@ export type MapNavigationProps = {
   entityDisplayName: string;
   filterList?: ReactElement;
   isExpanded: boolean;
-  logoProps: SiteProps;
+  siteInformation: SiteInformationProps;
   onAnalysisNameEdit: (newName: string) => void;
   onToggleExpand: () => void;
   studyName: string;
@@ -40,7 +40,7 @@ export function SemiTransparentHeader({
   entityDisplayName,
   filterList,
   isExpanded,
-  logoProps,
+  siteInformation,
   onAnalysisNameEdit,
   onToggleExpand,
   studyName,
@@ -62,8 +62,11 @@ export function SemiTransparentHeader({
         }`}
       >
         <div className={semiTransparentHeader('__LogoContainer')}>
-          <a href={logoProps.siteHomeUrl}>
-            <img src={logoProps.siteLogoSrc} alt={logoProps.siteName} />
+          <a href={siteInformation.siteHomeUrl}>
+            <img
+              src={siteInformation.siteLogoSrc}
+              alt={siteInformation.siteName}
+            />
           </a>
         </div>
         <HeaderContent

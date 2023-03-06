@@ -188,7 +188,7 @@ initialize({
       path: '/mapveu',
       component: () => (
         <MapApp
-          logoProps={{
+          siteInformationProps={{
             siteHomeUrl: 'https://veupathdb.org',
             siteLogoSrc:
               'https://veupathdb.org/veupathdb/images/VEuPathDB/icons-footer/vectorbase.png',

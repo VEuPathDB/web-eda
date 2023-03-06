@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { SiteProps } from './SemiTransparentHeader';
+import { SiteInformationProps } from './SemiTransparentHeader';
 import { ChevronRight } from '@veupathdb/coreui';
 import { Launch, LockOpen } from '@material-ui/icons';
 
 export type MapSideNavigationProps = {
   children: React.ReactNode;
-  logoProps: SiteProps;
+  siteInformationProps: SiteInformationProps;
 };
 
 const menuBackground = 'rgba(255, 255, 255, 0.8)';
@@ -21,7 +21,7 @@ const bottomLinkStyles: React.CSSProperties = {
 };
 
 export function MapSideNavigation({
-  logoProps,
+  siteInformationProps,
   children,
 }: MapSideNavigationProps) {
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
@@ -83,7 +83,8 @@ export function MapSideNavigation({
           aria-hidden
         />
         <span className="screenReaderOnly">
-          {isExpanded ? 'Close' : 'Open'} {logoProps.siteName} side menu
+          {isExpanded ? 'Close' : 'Open'} {siteInformationProps.siteName} side
+          menu
         </span>
       </button>
       <div
@@ -134,13 +135,18 @@ export function MapSideNavigation({
           {/* For now these are more for demonstration purposes. */}
           <ul style={{ margin: 0, padding: 0, listStyleType: 'none' }}>
             <li>
-              <a style={bottomLinkStyles} href={logoProps.siteHomeUrl}>
+              <a
+                style={bottomLinkStyles}
+                href={siteInformationProps.siteHomeUrl}
+              >
                 <Launch />
-                <p style={{ margin: '0 0 0 5px' }}>{logoProps.siteName} home</p>
+                <p style={{ margin: '0 0 0 5px' }}>
+                  {siteInformationProps.siteName} home
+                </p>
               </a>
             </li>
             <li>
-              <a style={bottomLinkStyles} href={logoProps.loginUrl}>
+              <a style={bottomLinkStyles} href={siteInformationProps.loginUrl}>
                 <LockOpen />
                 <p style={{ margin: '0 0 0 5px' }}>Login</p>
               </a>

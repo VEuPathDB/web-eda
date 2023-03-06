@@ -59,9 +59,8 @@ import {
   useFlattenedFields,
 } from '../../core/components/variableTrees/hooks';
 import {
-  MapNavigationProps,
   SemiTransparentHeader,
-  SiteProps,
+  SiteInformationProps,
 } from './SemiTransparentHeader';
 import FilterChipList from '../../core/components/FilterChipList';
 import { VariableLinkConfig } from '../../core/components/VariableLink';
@@ -98,7 +97,7 @@ const plugin: ComputationPlugin = {
 interface Props {
   analysisId: string;
   studyId: string;
-  logoProps: SiteProps;
+  siteInformationProps: SiteInformationProps;
 }
 
 export function MapAnalysis(props: Props) {
@@ -494,7 +493,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                   }
                   filterList={<FilterChipListForHeader />}
                   isExpanded={mapHeaderIsExpanded}
-                  logoProps={props.logoProps}
+                  siteInformation={props.siteInformationProps}
                   onAnalysisNameEdit={analysisState.setName}
                   onToggleExpand={() => setMapHeaderIsExpanded((c) => !c)}
                   studyName={studyRecord.displayName}
@@ -505,7 +504,9 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
                     totalVisibleEntityCount
                   }
                 />
-                <MapSideNavigation logoProps={props.logoProps}>
+                <MapSideNavigation
+                  siteInformationProps={props.siteInformationProps}
+                >
                   <div style={{ width: '100%' }}>
                     <ul style={{ margin: 0, padding: 0 }}>
                       {sideNavigationItems.map((item, itemIndex) => {
