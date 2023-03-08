@@ -92,17 +92,14 @@ export function MapSideNavigation({
       </button>
       <div
         style={{
-          // The navigation items are put into a container
-          // which takes up 100% of available space and
-          // allows users to scroll through navigation whenever
-          // there are lots of navigation items and/or the user's
-          // viewport is short.
           position: 'relative',
+          // Ensures that the div takes up all the available height.
+          height: '100%',
         }}
       >
         <div
           style={{
-            // This ensures that the children nav items are contained to
+            // Ensures that these children nav items are contained to
             // 70% of the navigation, leaving 30% for the navigation
             // footer items.
             height: '70%',
