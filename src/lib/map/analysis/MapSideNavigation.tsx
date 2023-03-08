@@ -94,8 +94,6 @@ export function MapSideNavigation({
           // allows users to scroll through navigation whenever
           // there are lots of navigation items and/or the user's
           // viewport is short.
-          height: '100%',
-          overflowY: 'scroll',
           position: 'relative',
         }}
       >
