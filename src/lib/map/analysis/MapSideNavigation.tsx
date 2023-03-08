@@ -26,6 +26,9 @@ export function MapSideNavigation({
 }: MapSideNavigationProps) {
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
+  const sideMenuWidth = 200;
+  const sideMenuExpandButtonWidth = 50;
+
   return (
     <nav
       style={{
@@ -35,11 +38,11 @@ export function MapSideNavigation({
         background: menuBackground,
         // height: 'calc(100% - 150px)',
         height: '100%',
-        left: isExpanded ? 0 : -200,
+        left: isExpanded ? 0 : -sideMenuWidth,
         minHeight: 125,
         position: 'relative',
         transition: 'left 0.1s ease',
-        width: 200,
+        width: sideMenuWidth,
         marginTop: '2rem',
         // The parent of this element probably had its pointer-events
         // set to "none". This restores the default behavior. Without
@@ -57,11 +60,11 @@ export function MapSideNavigation({
           background: menuBackground,
           borderColor: 'transparent',
           height: 50,
-          width: 50,
+          width: sideMenuExpandButtonWidth,
           // These styles pin the expand/collapse to the right of
           // the lefthand side menu at the nav's vertical center.
           position: 'absolute',
-          right: -50,
+          right: -sideMenuExpandButtonWidth,
           top: '50%',
           transform: 'translate(0%, -50%)',
           transition: 'all 0.1s ease',
