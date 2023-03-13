@@ -7,13 +7,7 @@ import {
 import { SaveableTextEditor } from '@veupathdb/wdk-client/lib/Components';
 import { ANALYSIS_NAME_MAX_LENGTH } from '../../core/utils/analysis';
 import './SemiTransparentHeader.scss';
-
-export type SiteInformationProps = {
-  siteHomeUrl: string;
-  loginUrl: string;
-  siteName: string;
-  siteLogoSrc: string;
-};
+import { SiteInformationProps } from '..';
 
 export type MapNavigationProps = {
   analysisName?: string;

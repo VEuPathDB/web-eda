@@ -58,13 +58,11 @@ import {
   useFieldTree,
   useFlattenedFields,
 } from '../../core/components/variableTrees/hooks';
-import {
-  SemiTransparentHeader,
-  SiteInformationProps,
-} from './SemiTransparentHeader';
+import { SemiTransparentHeader } from './SemiTransparentHeader';
 import FilterChipList from '../../core/components/FilterChipList';
 import { VariableLinkConfig } from '../../core/components/VariableLink';
 import { MapSideNavigation } from './MapSideNavigation';
+import { SiteInformationProps } from '..';
 
 const mapStyle: React.CSSProperties = {
   zIndex: 1,

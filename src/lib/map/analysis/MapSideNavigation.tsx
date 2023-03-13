@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { SiteInformationProps } from './SemiTransparentHeader';
 import { ChevronRight } from '@veupathdb/coreui';
 import { Launch, LockOpen } from '@material-ui/icons';
+import { SiteInformationProps } from '..';
 
 export type MapSideNavigationProps = {
   children: React.ReactNode;
