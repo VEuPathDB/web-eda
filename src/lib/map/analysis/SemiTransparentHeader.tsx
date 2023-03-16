@@ -7,7 +7,7 @@ import {
 import { SaveableTextEditor } from '@veupathdb/wdk-client/lib/Components';
 import { ANALYSIS_NAME_MAX_LENGTH } from '../../core/utils/analysis';
 import './SemiTransparentHeader.scss';
-import { SiteInformationProps } from '..';
+import { mapNavigationBackgroundColor, SiteInformationProps } from '..';
 
 export type MapNavigationProps = {
   analysisName?: string;
@@ -46,6 +46,7 @@ export function SemiTransparentHeader({
 
   return (
     <header
+      style={{ background: mapNavigationBackgroundColor }}
       className={`${semiTransparentHeader()} ${
         !isExpanded ? semiTransparentHeader('--collapsed') : ''
       }`}
@@ -78,8 +79,7 @@ export function SemiTransparentHeader({
         <table>
           <thead>
             <tr>
-              <th></th>
-              <th>{entityDisplayName}</th>
+              <th colSpan={2}>{entityDisplayName}</th>
             </tr>
           </thead>
           <tbody>
@@ -166,7 +166,10 @@ function OpenCloseToggleButton({
 }: OpenCloseToggleButtonProps) {
   const expandToggleContainer = makeClassNameHelper('OpenCloseToggleButton');
   return (
-    <div className={expandToggleContainer()}>
+    <div
+      style={{ background: mapNavigationBackgroundColor }}
+      className={expandToggleContainer()}
+    >
       <button
         className={`Button ${
           isExpanded ? '' : expandToggleContainer('--collapsed')
