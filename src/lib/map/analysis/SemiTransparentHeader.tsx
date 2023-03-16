@@ -8,6 +8,7 @@ import { SaveableTextEditor } from '@veupathdb/wdk-client/lib/Components';
 import { ANALYSIS_NAME_MAX_LENGTH } from '../../core/utils/analysis';
 import './SemiTransparentHeader.scss';
 import { mapNavigationBackgroundColor, SiteInformationProps } from '..';
+import { ReactComponent as LeftBracket } from './LeftBracket.svg';
 
 export type MapNavigationProps = {
   analysisName?: string;
@@ -76,11 +77,11 @@ export function SemiTransparentHeader({
           isExpanded ? '' : 'screenReaderOnly'
         }`}
       >
+        <p>{entityDisplayName}</p>
+        <LeftBracket aria-hidden height={60} style={{ marginRight: -15 }} />
         <table>
           <thead>
-            <tr>
-              <th colSpan={2}>{entityDisplayName}</th>
-            </tr>
+            <tr>{/* <th colSpan={2}>{entityDisplayName}</th> */}</tr>
           </thead>
           <tbody>
             <tr title={`There are X total samples.`}>
@@ -166,11 +167,9 @@ function OpenCloseToggleButton({
 }: OpenCloseToggleButtonProps) {
   const expandToggleContainer = makeClassNameHelper('OpenCloseToggleButton');
   return (
-    <div
-      style={{ background: mapNavigationBackgroundColor }}
-      className={expandToggleContainer()}
-    >
+    <div className={expandToggleContainer()}>
       <button
+        style={{ background: mapNavigationBackgroundColor }}
         className={`Button ${
           isExpanded ? '' : expandToggleContainer('--collapsed')
         }`}
