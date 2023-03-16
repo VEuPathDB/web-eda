@@ -78,7 +78,7 @@ export function SemiTransparentHeader({
         }`}
       >
         <p>{entityDisplayName}</p>
-        <LeftBracket aria-hidden height={60} style={{ marginRight: -15 }} />
+        <LeftBracket aria-hidden height={60} style={{ marginRight: -5 }} />
         <table>
           <thead>
             <tr>{/* <th colSpan={2}>{entityDisplayName}</th> */}</tr>
