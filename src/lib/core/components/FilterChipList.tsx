@@ -44,6 +44,26 @@ export default function FilterChipList(props: Props) {
     variableLinkConfig,
   } = props;
 
+  function RemoveAllFiltersButtonOrNull() {
+    if (!filters || !onRemoveAllFilters || filters.length < 1) return null;
+
+    return (
+      <FloatingButton
+        text="Remove all"
+        onPress={onRemoveAllFilters}
+        size="small"
+        themeRole="secondary"
+        textTransform="unset"
+        styleOverrides={{
+          container: {
+            width: 'max-content',
+            margin: '0 10px 5px 0',
+          },
+        }}
+      />
+    );
+  }
+
   if (filters) {
     return (
       <div className={classes.chips}>
@@ -134,23 +154,7 @@ export default function FilterChipList(props: Props) {
               return null;
             }
           })
-          .concat([
-            onRemoveAllFilters && filters.length > 0 ? (
-              <FloatingButton
-                text="Remove all"
-                onPress={onRemoveAllFilters}
-                size="small"
-                themeRole="secondary"
-                textTransform="unset"
-                styleOverrides={{
-                  container: {
-                    width: 'max-content',
-                    margin: '0 10px 5px 0',
-                  },
-                }}
-              />
-            ) : null,
-          ])}
+          .concat([<RemoveAllFiltersButtonOrNull />])}
       </div>
     );
   } else {

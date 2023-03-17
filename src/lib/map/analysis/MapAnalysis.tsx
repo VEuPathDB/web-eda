@@ -373,20 +373,6 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
             onRemoveAllFilters={() => analysisState.setFilters([])}
           />
         </div>
-        {/* {filters.length > 0 && (
-          <FloatingButton
-            text="Remove all"
-            onPress={() => analysisState.setFilters([])}
-            size="small"
-            themeRole="secondary"
-            styleOverrides={{
-              container: {
-                width: 'max-content',
-                margin: '0 10px 5px 0',
-              },
-            }}
-          />
-        )} */}
       </div>
     );
   };
