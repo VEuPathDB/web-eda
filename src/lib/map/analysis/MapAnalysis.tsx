@@ -347,7 +347,7 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
           text="Add filters"
           onPress={() => setIsSubsetPanelOpen(true)}
           size="small"
-          textTransform="capitalize"
+          textTransform="unset"
           styleOverrides={{
             container: {
               width: 'max-content',
