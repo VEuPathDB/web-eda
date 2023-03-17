@@ -141,7 +141,7 @@ export default function FilterChipList(props: Props) {
                 onPress={onRemoveAllFilters}
                 size="small"
                 themeRole="secondary"
-                textTransform="capitalize"
+                textTransform="unset"
                 styleOverrides={{
                   container: {
                     width: 'max-content',

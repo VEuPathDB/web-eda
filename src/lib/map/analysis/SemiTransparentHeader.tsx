@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode } from 'react';
+import { CSSProperties, ReactElement, ReactNode } from 'react';
 import ArrowRight from '@veupathdb/coreui/dist/components/icons/ChevronRight';
 import {
   makeClassNameHelper,
@@ -8,7 +8,6 @@ import { SaveableTextEditor } from '@veupathdb/wdk-client/lib/Components';
 import { ANALYSIS_NAME_MAX_LENGTH } from '../../core/utils/analysis';
 import './SemiTransparentHeader.scss';
 import { mapNavigationBackgroundColor, SiteInformationProps } from '..';
-import { ReactComponent as LeftBracket } from './LeftBracket.svg';
 
 export type MapNavigationProps = {
   analysisName?: string;
@@ -78,7 +77,14 @@ export function SemiTransparentHeader({
         }`}
       >
         <p>{entityDisplayName}</p>
-        <LeftBracket aria-hidden height={60} style={{ marginRight: -5 }} />
+        <LeftBracket
+          styles={{
+            // Bring closer the content of the righthand side of
+            // the bracket.
+            marginLeft: 10,
+            marginRight: -5,
+          }}
+        />
         <table>
           <thead>
             <tr>{/* <th colSpan={2}>{entityDisplayName}</th> */}</tr>
@@ -193,5 +199,24 @@ function OpenCloseToggleButton({
         </span>
       </button>
     </div>
+  );
+}
+
+type LeftBracketProps = {
+  /** Should you need to adjust anything! */
+  styles?: CSSProperties;
+};
+function LeftBracket(props: LeftBracketProps) {
+  return (
+    <div
+      style={{
+        border: '2px solid black',
+        borderRight: 'none',
+        height: '90%',
+        width: 5,
+        ...props.styles,
+      }}
+      aria-hidden
+    ></div>
   );
 }
