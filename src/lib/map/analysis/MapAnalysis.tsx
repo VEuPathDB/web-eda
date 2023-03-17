@@ -370,7 +370,6 @@ export function MapAnalysisImpl(props: Props & CompleteAppState) {
             entities={studyEntities}
             selectedEntityId={subsetVariableAndEntity.entityId}
             selectedVariableId={subsetVariableAndEntity.variableId}
-            onRemoveAllFilters={() => analysisState.setFilters([])}
           />
         </div>
       </div>
