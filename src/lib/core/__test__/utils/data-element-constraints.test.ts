@@ -68,9 +68,9 @@ const leafB1 = studyEntities.find((e) => (e.id = 'leafB1'))!;
 const leafB2 = studyEntities.find((e) => (e.id = 'leafB2'))!;
 
 describe('leastAncestralEntity', () => {
-  it('should find branchA to be least ancestral in [branchA, leafA1]', () => {
+  it('should find leafA1 to be least ancestral in [branchA, leafA1]', () => {
     expect(leastAncestralEntity([branchA, leafA1], studyEntities)).toEqual(
-      branchA
+      leafA1
     );
   });
 });
