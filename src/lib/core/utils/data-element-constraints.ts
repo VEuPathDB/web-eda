@@ -502,8 +502,6 @@ export function leastAncestralEntity(
   if (query.length === 0)
     throw new Error('Error: empty array passed to leastAncestralEntity');
 
-  console.log(entities);
-
   // The least ancestral node has the most ancestors, so let's count them.
   // And sort by the counts, most-first
   const leastAncestralFirst = sortBy(query, (queryEntity) => {
