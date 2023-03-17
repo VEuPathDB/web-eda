@@ -49,7 +49,7 @@ export default function FilterChipList(props: Props) {
 
     return (
       <FloatingButton
-        text="Remove all"
+        text="Remove all filters"
         onPress={onRemoveAllFilters}
         size="small"
         themeRole="secondary"
