@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { uniq } from 'lodash';
 import Path from 'path';
 import {
@@ -55,6 +55,7 @@ import { FullScreenAppPlugin } from '../core/types/fullScreenApp';
 import FullScreenContainer from '../core/components/fullScreenApps/FullScreenContainer';
 import useUITheme from '@veupathdb/coreui/dist/components/theming/useUITheme';
 import { VariableLinkConfig } from '../core/components/VariableLink';
+import FilterChipList from '../core/components/FilterChipList';
 
 const AnalysisTabErrorBoundary = ({
   children,
@@ -148,6 +149,18 @@ export function AnalysisPanel({
   const [sharingModalVisible, setSharingModalVisible] = useState<boolean>(
     false
   );
+
+  /** Logic for FilterChipList */
+  const filtersReversed = useMemo(
+    () => (filters ? [...filters].reverse() : undefined),
+    [filters]
+  );
+  const selectedEntityId = location.pathname.includes('variables')
+    ? lastVarPath.split('/')[1]
+    : undefined;
+  const selectedVariableId = location.pathname.includes('variables')
+    ? lastVarPath.split('/')[2]
+    : undefined;
 
   const permissionsValue = usePermissions();
   const approvalStatus: ApprovalStatus = permissionsValue.loading
@@ -254,9 +267,9 @@ export function AnalysisPanel({
             deleteAnalysis={
               hideSavedAnalysisButtons ? undefined : deleteAnalysis
             }
-            onFilterIconClick={() =>
-              setGlobalFiltersDialogOpen(!globalFiltersDialogOpen)
-            }
+            // onFilterIconClick={() =>
+            //   setGlobalFiltersDialogOpen(!globalFiltersDialogOpen)
+            // }
             globalFiltersDialogOpen={globalFiltersDialogOpen}
             displaySharingModal={
               hideSavedAnalysisButtons
@@ -264,7 +277,7 @@ export function AnalysisPanel({
                 : () => setSharingModalVisible(true)
             }
           />
-          <GlobalFiltersDialog
+          {/* <GlobalFiltersDialog
             open={globalFiltersDialogOpen}
             setOpen={setGlobalFiltersDialogOpen}
             entities={entities}
@@ -278,7 +291,7 @@ export function AnalysisPanel({
               )
             }
             variableLinkConfig={variableLinkConfig}
-          />
+          /> */}
           <Route
             path={[
               `${routeBase}/variables/:entityId?/:variableId?`,
@@ -313,40 +326,59 @@ export function AnalysisPanel({
               </div>
             )}
           />
-          <WorkspaceNavigation
-            heading={<></>}
-            routeBase={routeBase}
-            items={[
-              {
-                display: 'View Study Details',
-                route: `/details`,
-                exact: false,
-              },
-              {
-                display: 'Browse and Subset',
-                route: `/variables${lastVarPath}`,
-                exact: false,
-              },
-              {
-                display: 'Visualize',
-                // check whether user is at viz
-                route: location.pathname
-                  .replace(routeBase, '')
-                  .startsWith('/visualizations')
-                  ? '/visualizations'
-                  : `/visualizations${lastVizPath}`,
-                exact: false,
-              },
-              {
-                display: 'Download',
-                route: '/download',
-              },
-              {
-                display: 'Record Notes',
-                route: '/notes',
-              },
-            ]}
-          />
+          <div className="EDAWorkspaceNavigation">
+            <div className="FilterChips">
+              <FilterChipList
+                filters={filtersReversed}
+                removeFilter={(filter) =>
+                  analysis &&
+                  setFilters(
+                    analysis.descriptor.subset.descriptor.filter(
+                      (f) => f !== filter
+                    )
+                  )
+                }
+                variableLinkConfig={variableLinkConfig}
+                entities={entities}
+                selectedEntityId={selectedEntityId}
+                selectedVariableId={selectedVariableId}
+              />
+            </div>
+            <WorkspaceNavigation
+              heading={<></>}
+              routeBase={routeBase}
+              items={[
+                {
+                  display: 'View Study Details',
+                  route: `/details`,
+                  exact: false,
+                },
+                {
+                  display: 'Browse and Subset',
+                  route: `/variables${lastVarPath}`,
+                  exact: false,
+                },
+                {
+                  display: 'Visualize',
+                  // check whether user is at viz
+                  route: location.pathname
+                    .replace(routeBase, '')
+                    .startsWith('/visualizations')
+                    ? '/visualizations'
+                    : `/visualizations${lastVizPath}`,
+                  exact: false,
+                },
+                {
+                  display: 'Download',
+                  route: '/download',
+                },
+                {
+                  display: 'Record Notes',
+                  route: '/notes',
+                },
+              ]}
+            />
+          </div>
           <Route
             path={routeBase}
             exact
