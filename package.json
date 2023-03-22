@@ -88,6 +88,7 @@
     "@veupathdb/tsconfig": "^2.0.0",
     "@veupathdb/wdk-client": "^0.9.29",
     "assert": "^2.0.0",
+    "babel-jest": "^29.5.0",
     "bubleify": "^2.0.0",
     "buffer": "^6.0.3",
     "http-proxy-middleware": "^2.0.6",
