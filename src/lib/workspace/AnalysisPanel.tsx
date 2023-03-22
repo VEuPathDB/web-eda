@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { uniq } from 'lodash';
 import Path from 'path';
 import {
@@ -150,16 +150,19 @@ export function AnalysisPanel({
     false
   );
 
-  /** Logic for FilterChipList */
-  const filtersReversed = useMemo(
-    () => (filters ? [...filters].reverse() : undefined),
-    [filters]
-  );
-  const selectedEntityId = location.pathname.includes('variables')
-    ? lastVarPath.split('/')[1]
+  /**
+   * Used in FilterChipList to highlight filter chip if/when an on-view Browse & Subset
+   * var matches a filter chip. Logic is:
+   * 1. check pathname to determine if Browse & Subset tab is selected
+   * 2. split lastVarPath into an array structured as ['', entityId, variableId]
+   */
+  const isSubsetTabSelected = location.pathname.includes('variables');
+  const splitLastVarPath = lastVarPath.split('/');
+  const selectedEntityId = isSubsetTabSelected
+    ? splitLastVarPath[1]
     : undefined;
-  const selectedVariableId = location.pathname.includes('variables')
-    ? lastVarPath.split('/')[2]
+  const selectedVariableId = isSubsetTabSelected
+    ? splitLastVarPath[2]
     : undefined;
 
   const permissionsValue = usePermissions();
@@ -329,7 +332,7 @@ export function AnalysisPanel({
           <div className="EDAWorkspaceNavigation">
             <div className="FilterChips">
               <FilterChipList
-                filters={filtersReversed}
+                filters={filters}
                 removeFilter={(filter) =>
                   analysis &&
                   setFilters(
